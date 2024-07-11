@@ -21,10 +21,25 @@ export default {
             colors: {
                 green: colors.green,
                 gray: colors.neutral,
+                'tory-blue': {
+                    '50': '#f0f7ff',
+                    '100': '#e0edfe',
+                    '200': '#b9dbfe',
+                    '300': '#7bbffe',
+                    '400': '#369ffa',
+                    '500': '#0b82ec',
+                    '600': '#0065c9',
+                    '700': '#014fa1',
+                    '800': '#054487',
+                    '900': '#0b3a6f',
+                    '950': '#07244a',
+                },
+                
             },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],
             },
+
         },
     },
 

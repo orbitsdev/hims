@@ -1,5 +1,7 @@
 <?php
 
+use App\Livewire\Dashboard;
+use App\Livewire\Users\ListUser;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -22,7 +24,9 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    Route::get('/dashboard', function () {
-        return view('dashboard');
-    })->name('dashboard');
+    // Route::get('/dashboard', function () {
+    //     return view('dashboard');
+    // })->name('dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/users', ListUser::class)->name('users');
 });

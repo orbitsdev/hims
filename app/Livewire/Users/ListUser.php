@@ -55,6 +55,10 @@ class ListUser extends Component implements HasForms, HasTable
             ->actions([
                 //delete actions
                 Tables\Actions\DeleteAction::make(),
+                //edit actions
+                Tables\Actions\EditAction::make(),
+                //view actions
+                Tables\Actions\ViewAction::make(),
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

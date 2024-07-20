@@ -3,6 +3,7 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Student;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\HasProfilePhoto;
@@ -101,6 +102,14 @@ class User extends Authenticatable
         public function scopeNotAdmin($query)
         {
             return $query->where('role', '!=', User::ADMIN);
+        }
+        public function scopeStudentAccountNotRegistered($query)
+        {
+            return $query->where('role', User::STUDENT)->whereDoesntHave('student');
+        }
+
+        public function student(){
+            return $this->hasOne(Student::class);
         }
 
 }

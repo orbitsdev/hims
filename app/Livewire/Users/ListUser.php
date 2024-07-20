@@ -90,28 +90,26 @@ class ListUser extends Component implements HasForms, HasTable
                 ->form([
                     
                     TextInput::make('username')->required()
+                    ->unique(ignoreRecord: true)->label('USERNAME')
+                     ->columnSpanFull(),
+                    TextInput::make('email')->required()->label('EMAIL')
                     ->unique(ignoreRecord: true)
                      ->columnSpanFull(),
-                    TextInput::make('email')->required()
-                    ->unique(ignoreRecord: true)
-                     ->columnSpanFull(),
-                    TextInput::make('name')->required()
+                    TextInput::make('name')->required()->label('NAME')
                     ->columnSpanFull(),
 
                     Select::make('role')
                     ->default(User::STUDENT)
                     ->required()
-                    ->label('Role')
-                    ->default('Teacher')
+                    ->label('ROLE')
                     ->options(User::ROLES)
-
                     ->columnSpan(4)
                     ->searchable()
                     ->live()
                     ->hidden(fn (string $operation): bool => $operation === 'edit'),
 
                     Password::make('password')
-                    ->label('Password')
+                    ->label('PASSWORD')
                     ->required()
                     ->columnSpanFull()
                     ,
@@ -123,7 +121,7 @@ class ListUser extends Component implements HasForms, HasTable
                     ->imageEditor()
                     ->required()
                     ->columnSpanFull()
-                    ->label('Profile')
+                    ->label('PROFILE')
 
 
                 ])
@@ -141,20 +139,19 @@ class ListUser extends Component implements HasForms, HasTable
                 //edit actions
                 Tables\Actions\EditAction::make()->button()->form([
                     
-                   TextInput::make('username')->required()
+                   TextInput::make('username')->required()->label('USERNAME')
                    ->unique(ignoreRecord: true)
                     ->columnSpanFull(),
-                   TextInput::make('email')->required()
+                   TextInput::make('email')->required()->label('EMAIL')
                    ->unique(ignoreRecord: true)
                     ->columnSpanFull(),
-                   TextInput::make('name')->required()
+                   TextInput::make('name')->required()->label('NAME')
                    ->columnSpanFull(),
 
                    Select::make('role')
                    ->default(User::STUDENT)
                    ->required()
-                   ->label('Role')
-                   ->default('Teacher')
+                   ->label('ROLE')
                    ->options(User::ROLES)
 
                    ->columnSpan(4)
@@ -162,13 +159,12 @@ class ListUser extends Component implements HasForms, HasTable
                    ->live()
                    ->hidden(fn (string $operation): bool => $operation === 'edit'),
                    Password::make('password')
-                   ->label('Password')
                    ->required()
                    ->columnSpanFull()
                    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
                             ->dehydrated(fn (?string $state): bool => filled($state))
                             ->required(fn (string $operation): bool => $operation === 'create')
-                            ->label(fn (string $operation) => $operation == 'create' ? 'Password' : 'New Password')
+                            ->label(fn (string $operation) => $operation == 'create' ? 'PASSWORD' : 'NEW PASSWORD')
                             ,
                    
                    
@@ -179,7 +175,7 @@ class ListUser extends Component implements HasForms, HasTable
                    ->imageEditor()
                    ->required()
                    ->columnSpanFull()
-                   ->label('Profile')
+                   ->label('PROFILE')
                 ]),
                 Action::make('view')
                 ->color('primary')

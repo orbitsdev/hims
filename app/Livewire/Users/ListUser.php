@@ -3,15 +3,30 @@
 namespace App\Livewire\Users;
 
 use App\Models\User;
-use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Forms\Contracts\HasForms;
 use Filament\Tables;
-use Filament\Tables\Concerns\InteractsWithTable;
-use Filament\Tables\Contracts\HasTable;
-use Filament\Tables\Table;
 use Livewire\Component;
+use Filament\Tables\Table;
+use Filament\Actions\StaticAction;
+use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
+use Filament\Support\Enums\MaxWidth;
+use Illuminate\Support\Facades\Hash;
+use Filament\Forms\Components\Select;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Contracts\HasTable;
+use Illuminate\Support\Facades\Storage;
+use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Forms\Components\FileUpload;
+use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Rawilk\FilamentPasswordInput\Password;
+use Illuminate\Database\Eloquent\Collection;
+use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Tables\Concerns\InteractsWithTable;
 
 class ListUser extends Component implements HasForms, HasTable
 {
@@ -21,49 +36,178 @@ class ListUser extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(User::query())
+            ->query(User::query()->notAdmin()->latest())
             ->columns([
+                ImageColumn::make('profile_photo_path')
+                ->disk('public')
+                ->label('Profile')
+                ->width(60)->height(60)
+                ->url(fn (User $record): null|string => $record->profile_photo_path ?  Storage::disk('public')->url($record->profile_photo_path) : null)
+                ->defaultImageUrl(url('/images/placeholder-image.jpg'))
+                ->openUrlInNewTab()
+                ->circular(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('username')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('email')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('email_verified_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('two_factor_confirmed_at')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('current_team_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('profile_photo_path')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                Tables\Columns\TextColumn::make('role')->label('Role')
+                ->color(fn (string $state): string => match ($state) {
+                    User::ADMIN => 'primary',
+                    User::PERSONNEL => 'info',
+                    User::STAFF => 'warning',
+                    User::STUDENT => 'success', 
+                    default => 'gray',
+                })
+                ->searchable(),
+
+                
+              
+                Tables\Columns\TextColumn::make('created_at')->date(),
+                   
+                // ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+                ->date(),
+                    // ->toggleable(isToggledHiddenByDefault: true),
+
+                    
             ])
             ->filters([
-                //
+                SelectFilter::make('role')
+                ->label('Role')
+                    ->options(User::ROLES),
+
+            ],layout: FiltersLayout::AboveContent)
+            ->headerActions([
+                CreateAction::make('create')
+                ->mutateFormDataUsing(function (array $data): array {
+             
+                    return $data;
+                })
+                ->icon('heroicon-s-user-plus')
+                ->label('New Account')
+                ->form([
+                    
+                    TextInput::make('username')->required()
+                    ->unique(ignoreRecord: true)
+                     ->columnSpanFull(),
+                    TextInput::make('email')->required()
+                    ->unique(ignoreRecord: true)
+                     ->columnSpanFull(),
+                    TextInput::make('name')->required()
+                    ->columnSpanFull(),
+
+                    Select::make('role')
+                    ->default(User::STUDENT)
+                    ->required()
+                    ->label('Role')
+                    ->default('Teacher')
+                    ->options(User::ROLES)
+
+                    ->columnSpan(4)
+                    ->searchable()
+                    ->live()
+                    ->hidden(fn (string $operation): bool => $operation === 'edit'),
+
+                    Password::make('password')
+                    ->label('Password')
+                    ->required()
+                    ->columnSpanFull()
+                    ,
+
+                    FileUpload::make('profile_photo_path')
+                    ->disk('public')
+                    ->directory('accounts')
+                    ->image()
+                    ->imageEditor()
+                    ->required()
+                    ->columnSpanFull()
+                    ->label('Profile')
+
+
+                ])
+                    ->modalWidth('6xl')
+                    ->createAnother(false)
+
+
+
+        
             ])
             ->actions([
+              
                 //delete actions
-                Tables\Actions\DeleteAction::make(),
+                Tables\Actions\DeleteAction::make()->button(),
                 //edit actions
-                Tables\Actions\EditAction::make(),
+                Tables\Actions\EditAction::make()->button()->form([
+                    
+                   TextInput::make('username')->required()
+                   ->unique(ignoreRecord: true)
+                    ->columnSpanFull(),
+                   TextInput::make('email')->required()
+                   ->unique(ignoreRecord: true)
+                    ->columnSpanFull(),
+                   TextInput::make('name')->required()
+                   ->columnSpanFull(),
+
+                   Select::make('role')
+                   ->default(User::STUDENT)
+                   ->required()
+                   ->label('Role')
+                   ->default('Teacher')
+                   ->options(User::ROLES)
+
+                   ->columnSpan(4)
+                   ->searchable()
+                   ->live()
+                   ->hidden(fn (string $operation): bool => $operation === 'edit'),
+                   Password::make('password')
+                   ->label('Password')
+                   ->required()
+                   ->columnSpanFull()
+                   ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                            ->dehydrated(fn (?string $state): bool => filled($state))
+                            ->required(fn (string $operation): bool => $operation === 'create')
+                            ->label(fn (string $operation) => $operation == 'create' ? 'Password' : 'New Password')
+                            ,
+                   
+                   
+                   FileUpload::make('profile_photo_path')
+                   ->disk('public')
+                   ->directory('accounts')
+                   ->image()
+                   ->imageEditor()
+                   ->required()
+                   ->columnSpanFull()
+                   ->label('Profile')
+                ]),
+                Action::make('view')
+                ->color('primary')
+                ->icon('heroicon-m-eye')
+                ->label('View Details')
+                ->modalContent(function (User $record) {
+                    return view('livewire.user.user-details', ['record' => $record]);
+                })
+                ->modalHeading('Account Details')
+                ->modalSubmitAction(false)
+                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                ->disabledForm()
+                 ->slideOver()
+                 ->closeModalByClickingAway(true)
+                ->modalWidth(MaxWidth::SevenExtraLarge),
                 //view actions
-                Tables\Actions\ViewAction::make(),
+                // Tables\Actions\ViewAction::make()->button(),
             ])
             ->bulkActions([
+
                 Tables\Actions\BulkActionGroup::make([
-                    //
-                ]),
+                    BulkAction::make('delete')
+                        ->requiresConfirmation()
+                        ->action(fn (Collection $records) => $records->each->delete())
+                ])
+                ->label('ACTION')
+                ,
+               
             ]);
     }
 

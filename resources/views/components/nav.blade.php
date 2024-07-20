@@ -1,47 +1,50 @@
 <nav class="flex flex-1 flex-col">
+    
     <ul role="list" class="flex flex-1 flex-col gap-y-7">
         <li>
             <ul role="list" class="-mx-2 space-y-1">
                 <li>
-                    <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
+                    <!-- Current: "bg-gray-50 text-tory-blue-600", Default: "text-gray-700 hover:text-tory-blue-600 hover:bg-gray-50" -->
                     <a href="#"
-                        class="group flex gap-x-3 rounded-md bg-gray-50 p-2 text-sm font-semibold leading-6 text-indigo-600">
-                        <svg class="h-6 w-6 shrink-0 text-indigo-600" fill="none" viewBox="0 0 24 24"
+                        class="{{RouteManager::isCurrentPage('dashboard',['dashboard'])}}">
+                        {{-- <svg class="h-6 w-6 shrink-0 text-tory-blue-600" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
-                        </svg>
-                        Dashboard
+                        </svg> --}}
+
+                        <i class="fa-solid fa-users text-2xl" ></i>
+                       System Account
                     </a>
                 </li>
                 <li>
                     <a href="#"
-                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                        class="inactive-link">
+                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-tory-blue-600"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" />
                         </svg>
-                        Team
+                        Students
                     </a>
                 </li>
                 <li>
-                    <a href="#"
-                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                    <a href=""
+                        class="inactive-link">
+                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-tory-blue-600"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round"
                                 d="M2.25 12.75V12A2.25 2.25 0 014.5 9.75h15A2.25 2.25 0 0121.75 12v.75m-8.69-6.44l-2.12-2.12a1.5 1.5 0 00-1.061-.44H4.5A2.25 2.25 0 002.25 6v12a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9a2.25 2.25 0 00-2.25-2.25h-5.379a1.5 1.5 0 01-1.06-.44z" />
                         </svg>
-                        Projects
+                        Personnels
                     </a>
                 </li>
                 <li>
                     <a href="#"
-                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                        class="inactive-link">
+                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-tory-blue-600"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -52,8 +55,8 @@
                 </li>
                 <li>
                     <a href="#"
-                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                        class="inactive-link">
+                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-tory-blue-600"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -64,8 +67,8 @@
                 </li>
                 <li>
                     <a href="#"
-                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
-                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-indigo-600"
+                        class="inactive-link">
+                        <svg class="h-6 w-6 shrink-0 text-gray-400 group-hover:text-tory-blue-600"
                             fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
                             aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -82,27 +85,27 @@
             <div class="text-xs font-semibold leading-6 text-gray-400">Your teams</div>
             <ul role="list" class="-mx-2 mt-2 space-y-1">
                 <li>
-                    <!-- Current: "bg-gray-50 text-indigo-600", Default: "text-gray-700 hover:text-indigo-600 hover:bg-gray-50" -->
+                    <!-- Current: "bg-gray-50 text-tory-blue-600", Default: "text-gray-700 hover:text-tory-blue-600 hover:bg-gray-50" -->
                     <a href="#"
-                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
+                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-tory-blue-600">
                         <span
-                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600">H</span>
+                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-tory-blue-600 group-hover:text-tory-blue-600">H</span>
                         <span class="truncate">Heroicons</span>
                     </a>
                 </li>
                 <li>
                     <a href="#"
-                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
+                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-tory-blue-600">
                         <span
-                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600">T</span>
+                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-tory-blue-600 group-hover:text-tory-blue-600">T</span>
                         <span class="truncate">Tailwind Labs</span>
                     </a>
                 </li>
                 <li>
                     <a href="#"
-                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-indigo-600">
+                        class="group flex gap-x-3 rounded-md p-2 text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-tory-blue-600">
                         <span
-                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600">W</span>
+                            class="flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border border-gray-200 bg-white text-[0.625rem] font-medium text-gray-400 group-hover:border-tory-blue-600 group-hover:text-tory-blue-600">W</span>
                         <span class="truncate">Workcation</span>
                     </a>
                 </li>

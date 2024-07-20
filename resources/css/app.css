@@ -5,3 +5,13 @@
 [x-cloak] {
     display: none;
 }
+
+/* Custom link styles using Tailwind's @apply directive */
+
+.active-link {
+    @apply  flex items-center p-2 gap-x-3 rounded-md bg-gray-50  text-sm font-semibold leading-6 text-tory-blue-600;
+}
+
+.inactive-link {
+    @apply  flex items-center p-2 gap-x-3 rounded-md  text-sm font-semibold leading-6 text-gray-700 hover:bg-gray-50 hover:text-tory-blue-600;
+}

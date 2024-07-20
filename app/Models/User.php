@@ -3,12 +3,14 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
-use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
+use Laravel\Jetstream\HasProfilePhoto;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Laravel\Jetstream\HasProfilePhoto;
-use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -23,6 +25,13 @@ class User extends Authenticatable
     const STAFF = 'Staff';
     const PERSONNEL = 'Personnel';
     const STUDENT = 'Student';
+
+    const ROLES = [
+    //   User::ADMIN => User::ADMIN, 
+      User::STAFF => User::STAFF, 
+      User::PERSONNEL => User::PERSONNEL, 
+      User::STUDENT => User::STUDENT, 
+    ];
     /**
      * The attributes that are mass assignable.
      *
@@ -64,4 +73,34 @@ class User extends Authenticatable
     protected $appends = [
         'profile_photo_url',
     ];
+
+
+    public function fullName(){
+        return $this->name;
+    }
+
+    public function dashBoardBaseOnRole(){
+        switch($this->role){
+            case User::ADMIN :
+            return redirect()->route('users');
+            default:
+            return redirect()->route('unauthorizepage');
+        }
+    }
+
+    public function getImage()
+        {
+            if (!empty($this->profile_photo_path) && Storage::disk('public')->exists($this->profile_photo_path)) {
+                return Storage::disk('public')->url($this->profile_photo_path);
+            } else {
+                return asset('images/placeholder-image.jpg'); // Return default image URL
+            }
+        }
+
+
+        public function scopeNotAdmin($query)
+        {
+            return $query->where('role', '!=', User::ADMIN);
+        }
+
 }

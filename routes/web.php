@@ -1,7 +1,10 @@
+
 <?php
 
 use App\Livewire\Dashboard;
+use App\Livewire\User\UserDetails;
 use App\Livewire\Users\ListUser;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +19,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    
+    return redirect()->route('dashboard');
 });
 
 Route::middleware([
@@ -24,9 +28,24 @@ Route::middleware([
     config('jetstream.auth_session'),
     'verified',
 ])->group(function () {
-    // Route::get('/dashboard', function () {
-    //     return view('dashboard');
-    // })->name('dashboard');
-    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+
+    Route::get('/dashboard', function(){
+        
+        return Auth::user()->dashBoardBaseOnRole();
+
+    })->name('dashboard');
+
+    Route::get('/unauthorizepage', function(){
+        
+        return 'UnAuthorize';
+
+    })->name('unauthorizepage');
+
+
+
+    Route::middleware('')->group(function(){
+
+    });
     Route::get('/users', ListUser::class)->name('users');
+    Route::get('/user-details/{record}', UserDetails::class)->name('details');
 });

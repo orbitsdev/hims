@@ -11,6 +11,7 @@
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css" integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 
     <!-- Scripts -->
 
@@ -29,23 +30,16 @@
 
 <body class="font-sans antialiased bg-tory-blue-50 min-h-screen flex flex-col">
 
-    <nav class="bg-white">
-        <x-main-header />
-    </nav>
+    
 
-    <div class="relative flex flex-1">
-        <div class="w-[20rem] bg-white px-6 pb-2 flex-shrink-0">
-            <div class="flex h-16 items-center">
-                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company">
-            </div>
-            <x-nav/>
-        </div>
-        <div class="flex-1 p-6">
-            Lorem, ipsum dolor sit amet consectetur adipisicing elit. Obcaecati tempora accusantium at nam expedita
-            alias magnam maiores inventore qui quasi, ut vero, beatae magni repudiandae eos fugiat doloribus recusandae
-            quisquam.
-        </div>
-    </div>
+    {{$slot}}
+{{-- 
+    @can('admin')    
+
+    <x-admin-layout/>
+    @endcan --}}
+
+
 
     @livewireScripts
     @livewire('notifications')

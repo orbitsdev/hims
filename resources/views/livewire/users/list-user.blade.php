@@ -1,3 +1,4 @@
-<div>
+<x-admin-layout>
     {{ $this->table }}
-</div>
+
+</x-admin-layout>

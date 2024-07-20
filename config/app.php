@@ -212,6 +212,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'ExampleClass' => App\Example\ExampleClass::class,
+        'RouteManager' => App\Facades\RouteManager::class,
     ])->toArray(),
 
 ];

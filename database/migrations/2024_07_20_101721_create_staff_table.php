@@ -14,7 +14,20 @@ return new class extends Migration
         Schema::create('staff', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->nullable();
-            // $table->text('image')->nullable();
+            $table->string('name')->nullable();
+            $table->string('position')->nullable();
+            $table->string('department')->nullable();
+            $table->string('phone')->nullable();
+            $table->string('email')->nullable();
+            $table->text('address')->nullable();
+            $table->string('employment_type')->nullable();
+            // $table->decimal('salary', 10, 2)->nullable();
+            $table->string('emergency_contact')->nullable();
+            $table->text('notes')->nullable();
+            $table->date('started_at')->nullable();
+            $table->date('end_at')->nullable();
+            $table->boolean('status')->default(true)->nullable();
+            $table->text('photo')->nullable();
             $table->timestamps();
         });
     }

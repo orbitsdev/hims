@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Student;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Department extends Model
@@ -26,4 +27,19 @@ class Department extends Model
     public function students(){
         return $this->hasMany(Student::class);
     }
+
+    public function getImage()
+    {
+        if (!empty($this->image) && Storage::disk('public')->exists($this->image)) {
+            return Storage::disk('public')->url($this->image);
+        } else {
+            return asset('images/placeholder-image.jpg'); // Return default image URL
+        }
+    }
+
+    public function getNameWithAbbreviation()
+    {
+        return ($this->name ?? '') . ' (' . ($this->abbreviation ?? '') . ')';
+    }
+    
 }

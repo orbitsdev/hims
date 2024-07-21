@@ -12,9 +12,11 @@ use Illuminate\Contracts\View\View;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Facades\Hash;
 use Filament\Forms\Components\Select;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
@@ -80,107 +82,46 @@ class ListUser extends Component implements HasForms, HasTable
 
             ],layout: FiltersLayout::AboveContent)
             ->headerActions([
-                CreateAction::make('create')
-                ->mutateFormDataUsing(function (array $data): array {
-             
-                    return $data;
-                })
+
+
+                Action::make('create')
+                ->color('primary')
                 ->icon('heroicon-s-user-plus')
-                ->label('New Account')
-                ->form([
+                ->button()
+                ->url(function(){
+                    return route('user-create');
+                }),
+
+
+                // CreateAction::make('create')
+                // ->mutateFormDataUsing(function (array $data): array {
+             
+                //     return $data;
+                // })
+                // ->icon('heroicon-s-user-plus')
+                // ->label('New Account')
+                // ->form([
                     
-                    TextInput::make('username')->required()
-                    ->unique(ignoreRecord: true)->label('USERNAME')
-                     ->columnSpanFull(),
-                    TextInput::make('email')->required()->label('EMAIL')
-                    ->unique(ignoreRecord: true)
-                     ->columnSpanFull(),
-                    TextInput::make('name')->required()->label('NAME')
-                    ->columnSpanFull(),
-
-                    Select::make('role')
-                    ->default(User::STUDENT)
-                    ->required()
-                    ->label('ROLE')
-                    ->options(User::ROLES)
-                    ->columnSpan(4)
-                    ->searchable()
-                    ->live()
-                    ->hidden(fn (string $operation): bool => $operation === 'edit'),
-
-                    Password::make('password')
-                    ->label('PASSWORD')
-                    ->required()
-                    ->columnSpanFull()
-                    ,
-
-                    FileUpload::make('profile_photo_path')
-                    ->disk('public')
-                    ->directory('accounts')
-                    ->image()
-                    ->imageEditor()
-                    ->required()
-                    ->columnSpanFull()
-                    ->label('PROFILE')
+                
+                    
+                   
 
 
-                ])
-                    ->modalWidth('6xl')
-                    ->createAnother(false)
+
+                // // ])
+                // //     ->modalWidth('7xl')
+                // //     ->createAnother(false)
 
 
 
         
             ])
             ->actions([
-              
-                //delete actions
-                Tables\Actions\DeleteAction::make()->button(),
-                //edit actions
-                Tables\Actions\EditAction::make()->button()->form([
-                    
-                   TextInput::make('username')->required()->label('USERNAME')
-                   ->unique(ignoreRecord: true)
-                    ->columnSpanFull(),
-                   TextInput::make('email')->required()->label('EMAIL')
-                   ->unique(ignoreRecord: true)
-                    ->columnSpanFull(),
-                   TextInput::make('name')->required()->label('NAME')
-                   ->columnSpanFull(),
 
-                   Select::make('role')
-                   ->default(User::STUDENT)
-                   ->required()
-                   ->label('ROLE')
-                   ->options(User::ROLES)
-
-                   ->columnSpan(4)
-                   ->searchable()
-                   ->live()
-                   ->hidden(fn (string $operation): bool => $operation === 'edit'),
-                   Password::make('password')
-                   ->required()
-                   ->columnSpanFull()
-                   ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
-                            ->dehydrated(fn (?string $state): bool => filled($state))
-                            ->required(fn (string $operation): bool => $operation === 'create')
-                            ->label(fn (string $operation) => $operation == 'create' ? 'PASSWORD' : 'NEW PASSWORD')
-                            ,
-                   
-                   
-                   FileUpload::make('profile_photo_path')
-                   ->disk('public')
-                   ->directory('accounts')
-                   ->image()
-                   ->imageEditor()
-                   ->required()
-                   ->columnSpanFull()
-                   ->label('PROFILE')
-                ]),
                 Action::make('view')
-                ->color('primary')
+                ->color('success')
                 ->icon('heroicon-m-eye')
-                ->label('View Details')
+                ->label('View')
                 ->modalContent(function (User $record) {
                     return view('livewire.user.user-details', ['record' => $record]);
                 })
@@ -190,8 +131,58 @@ class ListUser extends Component implements HasForms, HasTable
                 ->disabledForm()
                  ->slideOver()
                  ->closeModalByClickingAway(true)
-                ->modalWidth(MaxWidth::SevenExtraLarge),
-                //view actions
+           
+                
+                ->modalWidth(MaxWidth::Full),
+                 Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
+                            return route('user-edit', ['record'=> $record]);
+             }),
+              
+                //delete actions
+                
+                //edit actions
+                // Tables\Actions\EditAction::make()->button()->form([
+                    
+                //    TextInput::make('username')->required()->label('USERNAME')
+                //    ->unique(ignoreRecord: true)
+                //     ->columnSpanFull(),
+                //    TextInput::make('email')->required()->label('EMAIL')
+                //    ->unique(ignoreRecord: true)
+                //     ->columnSpanFull(),
+                //    TextInput::make('name')->required()->label('NAME')
+                //    ->columnSpanFull(),
+
+                //    Select::make('role')
+                //    ->default(User::STUDENT)
+                //    ->required()
+                //    ->label('ROLE')
+                //    ->options(User::ROLES)
+
+                //    ->columnSpan(4)
+                //    ->searchable()
+                //    ->live()
+                //    ->hidden(fn (string $operation): bool => $operation === 'edit'),
+                //    Password::make('password')
+                //    ->columnSpanFull()
+                //    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                //             ->dehydrated(fn (?string $state): bool => filled($state))
+                //             ->required(fn (string $operation): bool => $operation === 'create')
+                //             ->label(fn (string $operation) => $operation == 'create' ? 'PASSWORD' : 'NEW PASSWORD')
+                //             ,
+                   
+                   
+                //    FileUpload::make('profile_photo_path')
+                //    ->disk('public')
+                //    ->directory('accounts')
+                //    ->image()
+                //    ->imageEditor()
+                //    ->required()
+                //    ->columnSpanFull()
+                //    ->label('PROFILE')
+                // ]),
+               
+                Tables\Actions\DeleteAction::make(),
+                //view actions -m
                 // Tables\Actions\ViewAction::make()->button(),
             ])
             ->bulkActions([

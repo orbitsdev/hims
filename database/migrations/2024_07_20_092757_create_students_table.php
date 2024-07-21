@@ -18,7 +18,7 @@ return new class extends Migration
             $table->string('unique_id')->unique()->nullable();
             $table->string('id_number')->unique()->nullable();
             $table->foreignId('department_id')->nullable();
-            $table->string('department')->nullable();
+            $table->string('department_name')->nullable();
             $table->text('image')->nullable();
             $table->timestamps();
         });

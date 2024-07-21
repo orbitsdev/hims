@@ -6,12 +6,16 @@ use Filament\Tables;
 use App\Models\Student;
 use Livewire\Component;
 use Filament\Tables\Table;
+use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -27,15 +31,26 @@ class ListStudents extends Component implements HasForms, HasTable
         return $table
             ->query(Student::query())
             ->columns([
+
+                ImageColumn::make('image')
+                ->disk('public')
+                ->label('Profile')
+                ->width(60)->height(60)
+                ->url(fn (Student $record): null|string => $record->image ?  Storage::disk('public')->url($record->image) : null)
+                ->defaultImageUrl(url('/images/placeholder-image.jpg'))
+                ->openUrlInNewTab()
+                ->circular(),
                 Tables\Columns\TextColumn::make('user.name')->formatStateUsing(function (Model $record) {
                     return $record->user->fullName() ?? '';
                 })->searchable(),
               
                 Tables\Columns\TextColumn::make('id_number')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('department.name')
-                    ->numeric()
-                    ->sortable()->label('Department'),
+                Tables\Columns\TextColumn::make('department_id')
+                ->formatStateUsing(function (Model $record) {
+                    return $record->department->getNameWithAbbreviation() ?? '';
+                })->searchable(),
+                   
 
                 // Tables\Columns\TextColumn::make('department')
                 //     ->searchable(),
@@ -57,16 +72,32 @@ class ListStudents extends Component implements HasForms, HasTable
                 ->color('primary')
                 ->label('Add New Student')
                 ->icon('heroicon-s-plus')
-                ->button()
+               
                 ->url(function(){
                     return route('create-student');
                 }),
             ])
             ->actions([
-                Tables\Actions\DeleteAction::make()->button(),
-                Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->button()->url(function(Model $record){
-                    return route('edit-student', ['record'=> $record]);
-                }),
+                Action::make('view')
+                ->color('success')
+                ->icon('heroicon-m-eye')
+                ->label('View')
+                ->modalContent(function (Student $record) {
+                    return view('livewire.students.view-student', ['record' => $record]);
+                })
+                ->modalHeading('Details')
+                ->modalSubmitAction(false)
+                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                ->disabledForm()
+                 ->slideOver()
+                 ->closeModalByClickingAway(true)
+                
+                ->modalWidth(MaxWidth::Full),
+                 Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
+                            return route('user-edit', ['record'=> $record]);
+             }),
+                Tables\Actions\DeleteAction::make(),
+                
               
             ])
             ->bulkActions([

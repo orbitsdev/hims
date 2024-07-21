@@ -3,13 +3,17 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use App\Models\Staff;
 use App\Models\Student;
+use App\Models\Personnel;
+use App\Models\PersonalDetail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
@@ -79,6 +83,9 @@ class User extends Authenticatable
     public function fullName(){
         return $this->name;
     }
+    public function fullNameWithEmail(){
+        return ($this->name ?? '') . ' ('. ($this->email ?? '') . ')';
+    }
 
     public function dashBoardBaseOnRole(){
         switch($this->role){
@@ -103,13 +110,35 @@ class User extends Authenticatable
         {
             return $query->where('role', '!=', User::ADMIN);
         }
-        public function scopeStudentAccountNotRegistered($query)
+        public function scopeNotRegisteredStudents($query)
         {
             return $query->where('role', User::STUDENT)->whereDoesntHave('student');
         }
+        public function scopeNotRegisteredStaff($query)
+        {
+            return $query->where('role', User::STAFF)->whereDoesntHave('staff');
+        }
+        public function scopeNotRegisteredPersonnel($query)
+        {
+            return $query->where('role', User::PERSONNEL)->whereDoesntHave('personnel');
+        }
 
+        public function personalDetail(): MorphOne
+        {
+            return $this->morphOne(PersonalDetail::class, 'personaldetailable');
+        }
+
+        
         public function student(){
             return $this->hasOne(Student::class);
         }
+        public function staff(){
+            return $this->hasOne(Staff::class);
+        }
+        
+        public function personnel(){
+            return $this->hasOne(Personnel::class);
+        }
+
 
 }

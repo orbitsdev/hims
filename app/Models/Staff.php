@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\User;
 use App\Models\PersonalDetail;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -16,8 +17,17 @@ class Staff extends Model
         return $this->belongsTo(User::class);
     }
     
-    public function personalDetail(): MorphOne
+    // public function personalDetail(): MorphOne
+    // {
+    //     return $this->morphOne(PersonalDetail::class, 'personaldetailable');
+    // }
+
+    public function getImage()
     {
-        return $this->morphOne(PersonalDetail::class, 'personaldetailable');
+        if (!empty($this->photo) && Storage::disk('public')->exists($this->photo)) {
+            return Storage::disk('public')->url($this->photo);
+        } else {
+            return asset('images/placeholder-image.jpg'); // Return default image URL
+        }
     }
 }

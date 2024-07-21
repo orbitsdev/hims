@@ -1,5 +1,15 @@
 <nav class="flex flex-1 flex-col">
-    
+
+    <div  class="mb-4">
+
+        <div class="flex items-center justify-center">
+            <img src="{{asset('images/logo.png')}}" alt="" class="h-40 w-40">
+        </div>
+        <div class="flex items-center justify-center ">
+
+            <h1 class="text-6xl font-bold"> HIMS</h1>
+        </div>
+    </div>
     <ul role="list" class="flex flex-1 flex-col gap-y-7">
         <li>
             <div class="text-xs font-semibold leading-6 text-gray-400">RECORD MANAGEMENT</div>
@@ -39,6 +49,13 @@
                         class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['personnels','personnel-edit','personnel-create'])}} ">
                         <i class="fa-solid fa-user text-2xl w-6"></i>
                         PERSONNELS
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('events')}}"
+                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['events','event-create','event-edit','event-view'])}}">
+                        <i class="fa-solid fa-calendar-check text-2xl w-6"></i>
+                      EVENTS
                     </a>
                 </li>
                 <li>

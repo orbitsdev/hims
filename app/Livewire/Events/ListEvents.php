@@ -1,9 +1,9 @@
 <?php
 
-namespace App\Livewire\Students;
+namespace App\Livewire\Events;
 
 use Filament\Tables;
-use App\Models\Student;
+use App\Models\Event;
 use Livewire\Component;
 use Filament\Tables\Table;
 use Filament\Actions\StaticAction;
@@ -11,17 +11,15 @@ use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Notifications\Collection;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Support\Facades\Storage;
-use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
-class ListStudents extends Component implements HasForms, HasTable
+class ListEvents extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
     use InteractsWithTable;
@@ -29,40 +27,30 @@ class ListStudents extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(Student::query())
+            ->query(Event::query())
             ->columns([
-
-                ImageColumn::make('image')
-                ->disk('public')
-                ->label('Profile')
-                ->width(60)->height(60)
-                ->url(fn (Student $record): null|string => $record->image ?  Storage::disk('public')->url($record->image) : null)
-                ->defaultImageUrl(url('/images/placeholder-image.jpg'))
-                ->openUrlInNewTab()
-                ->circular(),
-                Tables\Columns\TextColumn::make('user.name')->formatStateUsing(function (Model $record) {
-                    return $record->user->fullName() ?? '';
-                })->searchable(),
-              
-                Tables\Columns\TextColumn::make('id_number')
-                    ->searchable(),
-                Tables\Columns\TextColumn::make('department_id')
-                ->formatStateUsing(function (Model $record) {
-                    return $record->department->getNameWithAbbreviation() ?? '';
-                })->searchable(),
-                   
-
-                // Tables\Columns\TextColumn::make('department')
-                //     ->searchable(),
+                Tables\Columns\TextColumn::make('academic_year_id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('semester_id')
+                    ->numeric()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('event_date')
+                    ->dateTime()
+                    ->sortable(),
+                Tables\Columns\TextColumn::make('event_date_time')
+                    ->date()
+                    ->sortable(),
+                Tables\Columns\IconColumn::make('is_published')
+                    ->boolean(),
                 Tables\Columns\TextColumn::make('created_at')
-                    ->date(),
-                    // ->sortable()
-                    // ->toggleable(isToggledHiddenByDefault: true),
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
-                ->date()
-                    // ->dateTime()
-                    // ->sortable()
-                    // ->toggleable(isToggledHiddenByDefault: true),
+                    ->dateTime()
+                    ->sortable()
+                    ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
                 //
@@ -71,11 +59,12 @@ class ListStudents extends Component implements HasForms, HasTable
                 Action::make('view')
                 ->size('lg')
                 ->color('primary')
-                ->label('Add New Student')
+                
+                ->label('New Event')
                 ->icon('heroicon-s-plus')
                
                 ->url(function(){
-                    return route('create-student');
+                    return route('event-create');
                 }),
             ])
             ->actions([
@@ -83,8 +72,8 @@ class ListStudents extends Component implements HasForms, HasTable
                 ->color('success')
                 ->icon('heroicon-m-eye')
                 ->label('View')
-                ->modalContent(function (Student $record) {
-                    return view('livewire.students.view-student', ['record' => $record]);
+                ->modalContent(function (Event $record) {
+                    return view('livewire.events.view-event', ['record' => $record]);
                 })
                 ->modalHeading('Details')
                 ->modalSubmitAction(false)
@@ -95,7 +84,7 @@ class ListStudents extends Component implements HasForms, HasTable
                 
                 ->modalWidth(MaxWidth::Full),
                  Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
-                            return route('user-edit', ['record'=> $record]);
+                            return route('event-edit', ['record'=> $record]);
              }),
                 Tables\Actions\DeleteAction::make(),
                 
@@ -113,6 +102,6 @@ class ListStudents extends Component implements HasForms, HasTable
 
     public function render(): View
     {
-        return view('livewire.students.list-students');
+        return view('livewire.events.list-events');
     }
 }

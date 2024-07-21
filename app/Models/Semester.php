@@ -13,4 +13,8 @@ class Semester extends Model
     public function academicYear(){
         return $this->belongsTo(AcademicYear::class);
     }
+
+    public function semesterWithYear(){
+        return $this->name_in_number.' ('.$this->academicYear->name.')';   
+    }
 }

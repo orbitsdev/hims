@@ -49,8 +49,9 @@ class ListPersonnels extends Component implements HasForms, HasTable
             ])
             ->headerActions([
                 Action::make('view')
+                ->size('lg')
                 ->color('primary')
-                ->label('New')
+                ->label('New Personnel')
                 ->icon('heroicon-s-plus')
                 ->button()
                 ->url(function(){

@@ -5,7 +5,9 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Filament\Forms\Get;
 use Filament\Forms\Set;
+use App\Models\Semester;
 use App\Models\Department;
+use App\Models\AcademicYear;
 use Illuminate\Http\Request;
 use Filament\Forms\Components\Group;
 use Illuminate\Support\Facades\Hash;
@@ -18,11 +20,65 @@ use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
 use Rawilk\FilamentPasswordInput\Password;
+use Filament\Forms\Components\DateTimePicker;
 
 class FilamentForm extends Controller
 {
 
 
+    public static function editProfileForm()
+    {
+        return [
+            Section::make('ACCOUNT DETAILS ')
+                ->columns([
+                    'sm' => 3,
+                    'xl' => 6,
+                    '2xl' => 12,
+                ])
+                ->schema([
+                    TextInput::make('name')->required()->label('NAME')
+                        ->columnSpanFull(),
+
+
+                    TextInput::make('username')->required()
+                        ->unique(ignoreRecord: true)->label('USERNAME')
+                        ->columnSpan(4),
+                    TextInput::make('email')->required()->label('EMAIL')
+                        ->unique(ignoreRecord: true)
+                        ->columnSpan(4),
+
+
+                    // Select::make('role')
+                    //     ->default(User::STUDENT)
+                    //     ->required()
+                    //     ->label('ROLE')
+                    //     ->options(User::ROLES)
+                    //     ->columnSpan(3)
+                    //     ->searchable()
+                    //     ->live()
+                    //     ->hidden(fn (string $operation): bool => $operation === 'edit'),
+
+                    Password::make('password')
+                        ->columnSpan(4)
+                        ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                        ->dehydrated(fn (?string $state): bool => filled($state))
+                        ->required(fn (string $operation): bool => $operation === 'create')
+                        ->label(fn (string $operation) => $operation == 'create' ? 'PASSWORD' : 'NEW PASSWORD'),
+
+                    FileUpload::make('profile_photo_path')
+                        ->disk('public')
+                        ->directory('accounts')
+                        ->image()
+                        ->imageEditor()
+                        // ->required()
+                        ->columnSpanFull()
+                        ->label('PROFILE'),
+
+
+                ])->columnSpanFull(),
+           
+        ];
+    }
     public static function userForm()
     {
         return [
@@ -191,7 +247,7 @@ class FilamentForm extends Controller
                             //     //     ->maxLength(191),
                             TextInput::make('id_number')->label('ID NUMBER')
                                 ->required()
-                                
+
                                 ->unique(ignoreRecord: true)
                                 ->columnSpan(3),
 
@@ -269,7 +325,7 @@ class FilamentForm extends Controller
                                 ->searchable(),
                             FileUpload::make('image')
                                 ->disk('public')
-                                
+
                                 ->directory('personnel')
                                 ->image()
                                 ->imageEditor()
@@ -296,15 +352,15 @@ class FilamentForm extends Controller
                 ])
                 ->schema([
 
-                   
-  FileUpload::make('photo')
-                ->disk('public')
-                ->directory('staffs')
-                ->image()
-                ->imageEditor()
-                // ->required()
-                ->columnSpanFull()
-                ->label('PHOTO'),
+
+                    FileUpload::make('photo')
+                        ->disk('public')
+                        ->directory('staffs')
+                        ->image()
+                        ->imageEditor()
+                        // ->required()
+                        ->columnSpanFull()
+                        ->label('PHOTO'),
                     Section::make('')
                         ->columns([
                             'sm' => 3,
@@ -334,13 +390,13 @@ class FilamentForm extends Controller
 
                                 ->columnSpan(4)
                                 ->searchable(),
-                                TextInput::make('name')
+                            TextInput::make('name')
                                 ->label('NAME')
                                 ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()'])
 
                                 ->columnSpan(4)
                                 ->maxLength(191),
-                          
+
                         ]),
 
                     Section::make('EMPLOYMENT & CONTACTS')
@@ -350,53 +406,143 @@ class FilamentForm extends Controller
                             '2xl' => 8,
                         ])
                         ->schema([
-                         
+
                             // TextInput::make('department')
                             //             ->columnSpan(2)
                             //             ->maxLength(191),
-                                    TextInput::make('phone')
-                                    ->label('PHONE')
+                            TextInput::make('phone')
+                                ->label('PHONE')
                                 ->mask(99999999999)
-                                        ->columnSpan(2)
-        
-                                        ->tel()
-                                        ->maxLength(191),
-                                        TextInput::make('employment_type')
-                                        ->label('EMPLOYMENT TYPE')
-                                        ->default('OJT')
-                                        ->columnSpan(2)
-        
-                                        ->maxLength(191),
-                                        TextInput::make('emergency_contact')
-                                        ->label('EMERGENCY CONTACT')
+                                ->columnSpan(2)
 
-                                        ->columnSpan(2)
-        
-                                        ->maxLength(191),
-                                      
-                                        TextInput::make('position')
-                                        ->label('POSITION')
-                                        ->default('Assistant')
-                                        ->columnSpan(2)
-                                        ->maxLength(191),
-                                    Textarea::make('address')
-                                    ->label('ADDRESS')
-                                        ->columnSpanFull(),
-                                    Textarea::make('notes')
-                                    ->label('NOTES')
-                                        ->columnSpanFull(),
+                                ->tel()
+                                ->maxLength(191),
+                            TextInput::make('employment_type')
+                                ->label('EMPLOYMENT TYPE')
+                                ->default('OJT')
+                                ->columnSpan(2)
+
+                                ->maxLength(191),
+                            TextInput::make('emergency_contact')
+                                ->label('EMERGENCY CONTACT')
+
+                                ->columnSpan(2)
+
+                                ->maxLength(191),
+
+                            TextInput::make('position')
+                                ->label('POSITION')
+                                ->default('Assistant')
+                                ->columnSpan(2)
+                                ->maxLength(191),
+                            Textarea::make('address')
+                                ->label('ADDRESS')
+                                ->columnSpanFull(),
+                            Textarea::make('notes')
+                                ->label('NOTES')
+                                ->columnSpanFull(),
                         ]),
 
 
                 ]),
 
-          
+
 
             // DatePicker::make('started_at'),
             // DatePicker::make('end_at'),
             // Toggle::make('status'),
             // Textarea::make('photo')
             //     ->columnSpanFull(),
+        ];
+    }
+
+    public static function eventForm(): array
+    {
+        return [
+            Group::make()
+            ->schema([
+                Section::make('EVENTS DETAILS')
+                ->columns([
+                    'sm' => 3,
+                    'xl' => 6,
+                    '2xl' => 8,
+                ])
+                ->schema([
+                    Select::make('academic_year_id')
+                        ->live(debounce: 500)
+                        ->afterStateUpdated(function ($state, Get $get, Set $set) {
+
+                            $set('semester_id', null);
+                        })
+                        ->required()
+                        ->label('ACADEMIC YEAR')
+
+                        ->options(AcademicYear::pluck('name', 'id'))
+                        ->preload()
+                        ->columnSpan(4)
+                        ->searchable(),
+
+                    Select::make('semester_id')->options(function (Get $get) {
+                        if (!empty($get('academic_year_id'))) {
+                            return Semester::where('academic_year_id', $get('academic_year_id'))->get()->map(function ($a) {
+                                return [
+                                    'name_in_number' => $a->semesterWithYear(),
+                                    'id' => $a->id,
+                                ];
+                            })->pluck('name_in_number', 'id');
+                        } else {
+                            return [];
+                        }
+                    })
+                        ->native(false)
+                        ->label('SEMESTER')
+                        ->columnSpan(4)
+
+                        ->searchable(),
+                    Textarea::make('title')
+                        ->columnSpanFull(),
+                    Textarea::make('content')
+                        ->columnSpanFull(),
+                    Textarea::make('description')
+                        ->columnSpanFull(),
+                   
+
+                ]),
+                
+            ])->columnSpan(['lg' => 2]),
+            Group::make()
+            ->schema([
+
+                Section::make('')
+                ->columns([
+                    'sm' => 3,
+                    'xl' => 6,
+                    '2xl' => 8,
+                ])
+                ->schema([
+                    FileUpload::make('image')
+                    ->disk('public')
+                    ->directory('events')
+                    ->image()
+                    ->imageEditor()
+                    // ->required()
+                    ->columnSpanFull()
+                    ->label('FEATURED IMAGE'),
+                    DateTimePicker::make('event_date')->native(false)->columnSpan(4),
+                    DatePicker::make('event_date_time')->columnSpan(4),
+              
+                    Toggle::make('is_published')
+                    ->live()
+                    ->columnSpanFull()->afterStateUpdated(function ($record, $state) {
+                        FilamentForm::notification($state ?'Status set to Active' : 'Status set to in active');
+                    }),
+                ]),
+
+               
+            ])->columnSpan(['lg' => 1]),
+           
+
+
         ];
     }
 }

@@ -21,7 +21,7 @@ return new class extends Migration
             $table->dateTime('event_date')->nullable(); // Se
             $table->date('event_date_time')->nullable(); // Se
             $table->text('image')->nullable();
-            $table->boolean('status')->nullable();
+            $table->boolean('is_published')->nullable();
             $table->timestamps();
         });
     }

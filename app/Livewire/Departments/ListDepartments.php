@@ -71,6 +71,7 @@ class ListDepartments extends Component implements HasForms, HasTable
             ->headerActions([
                
                     CreateAction::make('create')
+                    ->size('lg')
                     ->mutateFormDataUsing(function (array $data): array {
                  
                         return $data;

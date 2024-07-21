@@ -87,7 +87,9 @@ class ListStaffs extends Component implements HasForms, HasTable
                 
             ])
             ->headerActions([
-                Action::make('view')
+                Action::make('create')
+
+                ->size('lg')
                 ->color('primary')
                 ->label('New Staff')
                 ->icon('heroicon-s-plus')

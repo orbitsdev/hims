@@ -71,10 +71,12 @@ class ListContacts extends Component implements HasForms, HasTable
             ->headerActions([
                
                 CreateAction::make('create')
+                ->size('lg')
                 ->mutateFormDataUsing(function (array $data): array {
              
                     return $data;
                 })
+                ->modalHeading('CREATE CONTACT')
                 ->icon('heroicon-s-sparkles')
                 ->label('New Conract')
                 ->form($this->emergencyContactForm())->modalWidth('7xl')

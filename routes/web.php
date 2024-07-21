@@ -3,6 +3,7 @@
 
 use App\Livewire\AcademicYear\ListAcademicYear;
 use App\Livewire\Dashboard;
+use App\Livewire\Events\ListEvents;
 use App\Livewire\Users\EditUser;
 use App\Livewire\Users\ListUser;
 use App\Livewire\Staffs\EditStaff;
@@ -23,6 +24,10 @@ use App\Livewire\Personels\CreatePersonnel;
 use App\Livewire\Personnels\ListPersonnels;
 use App\Livewire\Departments\ListDepartments;
 use App\Livewire\Emergency\ListContacts;
+use App\Livewire\Events\CreateEvent;
+use App\Livewire\Events\EditEvent;
+use App\Livewire\Events\ViewEvent;
+use App\Livewire\Usesr\EditProfile;
 
 /*
 |--------------------------------------------------------------------------
@@ -66,6 +71,7 @@ Route::middleware([
 
     // SYSTEM SUERS
     Route::get('/users', ListUser::class)->name('users');
+    Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
     Route::get('/user-create', CreateUser::class)->name('user-create');
     Route::get('/user-edit/{record}', EditUser::class)->name('user-edit');
     Route::get('/user-details/{record}', UserDetails::class)->name('details');
@@ -89,6 +95,10 @@ Route::middleware([
 
     Route::get('/emergency-contacts', ListContacts::class)->name('emergency-contacts');
     Route::get('/academic-year', ListAcademicYear::class)->name('academic-year');
+    Route::get('/events', ListEvents::class)->name('events');
+    Route::get('/event/create', CreateEvent::class)->name('event-create');
+    Route::get('/event/edit/{record}', EditEvent::class)->name('event-edit');
+    Route::get('/event/vew/{record}', ViewEvent::class)->name('event-view');
     
 
 

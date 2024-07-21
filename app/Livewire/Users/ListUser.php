@@ -85,6 +85,7 @@ class ListUser extends Component implements HasForms, HasTable
 
 
                 Action::make('create')
+                ->size('lg')
                 ->color('primary')
                 ->icon('heroicon-s-user-plus')
                 ->button()

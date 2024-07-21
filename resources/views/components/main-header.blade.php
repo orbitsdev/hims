@@ -17,10 +17,14 @@
                                 <img class="h-8 w-8 rounded-full" src="{{Auth::user()->getImage()}}" alt="">
                             </button>
                         </div>
-                    
+
                         <!-- Dropdown menu -->
                         <div x-show="dropdownOpen" @click.outside="dropdownOpen = false" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                            
+                           
+                            <x-dropdown-link href="{{ route('edit-profile',['record'=> Auth::user()]) }}" >
+                                Edit Profile
+
+                            </x-dropdown-link>
                             <form method="POST" action="{{ route('logout') }}" x-data>
                                 @csrf
                                 <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
@@ -28,6 +32,7 @@
                                 </x-dropdown-link>
                             </form>
                         </div>
+                        
                     </div>
                     
                     <!-- Mobile menu button -->

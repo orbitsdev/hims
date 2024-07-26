@@ -14,6 +14,14 @@ class DepartmentSeeder extends Seeder
     public function run(): void
     {
         Department::create([
+            'name'=> 'ALL',
+            'abbreviation'=> '',           
+         ]);
+        Department::create([
+            'name'=> 'FACULTY',
+            'abbreviation'=> '',           
+         ]);
+        Department::create([
             'name'=> 'COLLEGE OF COMPUTER STUDY',
             'abbreviation'=> 'CCS',           
          ]);

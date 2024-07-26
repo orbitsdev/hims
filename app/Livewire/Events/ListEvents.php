@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Events;
 
+use App\Http\Controllers\FilamentForm;
 use Filament\Tables;
 use App\Models\Event;
 use Livewire\Component;
@@ -15,6 +16,7 @@ use Filament\Notifications\Collection;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -29,28 +31,27 @@ class ListEvents extends Component implements HasForms, HasTable
         return $table
             ->query(Event::query())
             ->columns([
-                Tables\Columns\TextColumn::make('academic_year_id')
-                    ->numeric()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('semester_id')
-                    ->numeric()
-                    ->sortable(),
+                Tables\Columns\TextColumn::make('title')->searchable(),
+                Tables\Columns\TextColumn::make('academicYear.name')->searchable(),
+                Tables\Columns\TextColumn::make('semester')->formatStateUsing(function(Model $record){
+                    return $record->semester->semesterWithYear();
+                })->searchable(),
+                    // ->numeric()
                 Tables\Columns\TextColumn::make('event_date')
-                    ->dateTime()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('event_date_time')
-                    ->date()
-                    ->sortable(),
+                    ->date(),
+                // Tables\Columns\TextColumn::make('event_date_time')
+                //     ->date()
+                //     ->sortable(),
                 Tables\Columns\IconColumn::make('is_published')
                     ->boolean(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                    ->dateTime()
-                    ->sortable()
-                    ->toggleable(isToggledHiddenByDefault: true),
+
+                    ToggleColumn::make('is_published')
+   
+    ->afterStateUpdated(function ($record, $state) {
+          FilamentForm::notification($record->title.''. ($state ? 'Event was Published' : 'Event was Unpublished'));
+
+    })
+              
             ])
             ->filters([
                 //

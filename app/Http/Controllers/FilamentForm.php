@@ -19,6 +19,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\FileUpload;
+use Filament\Forms\Components\RichEditor;
 use Rawilk\FilamentPasswordInput\Password;
 use Filament\Forms\Components\DateTimePicker;
 
@@ -501,10 +502,29 @@ class FilamentForm extends Controller
                         ->searchable(),
                     Textarea::make('title')
                         ->columnSpanFull(),
-                    Textarea::make('content')
+                        Textarea::make('description')
                         ->columnSpanFull(),
-                    Textarea::make('description')
-                        ->columnSpanFull(),
+                   
+                        RichEditor::make('content') ->toolbarButtons([
+        'attachFiles',
+        'blockquote',
+        'bold',
+        'bulletList',
+        'codeBlock',
+        'h2',
+        'h3',
+        'italic',
+        'link',
+        'orderedList',
+        'redo',
+        'strike',
+        'underline',
+        'undo',
+    ])
+           ->columnSpanFull(),
+    
+                    // Textarea::make('content')
+                    //     ->columnSpanFull(),
                    
 
                 ]),
@@ -528,8 +548,8 @@ class FilamentForm extends Controller
                     // ->required()
                     ->columnSpanFull()
                     ->label('FEATURED IMAGE'),
-                    DateTimePicker::make('event_date')->native(false)->columnSpan(4),
-                    DatePicker::make('event_date_time')->columnSpan(4),
+                    DatePicker::make('event_date')->native(false)->columnSpanFull()->date()->required(),
+                    // DatePicker::make('event_date_time')->columnSpan(4),
               
                     Toggle::make('is_published')
                     ->live()

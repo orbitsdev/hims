@@ -47,6 +47,7 @@ class ListStudents extends Component implements HasForms, HasTable
                 Tables\Columns\TextColumn::make('id_number')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('department_id')
+                
                 ->formatStateUsing(function (Model $record) {
                     return $record->department->getNameWithAbbreviation() ?? '';
                 })->searchable(),

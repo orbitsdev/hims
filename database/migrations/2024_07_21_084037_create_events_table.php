@@ -18,13 +18,13 @@ return new class extends Migration
             $table->text('title')->nullable();
             $table->text('content')->nullable();
             $table->text('description')->nullable();
-            $table->dateTime('event_date')->nullable(); // Se
-            $table->date('event_date_time')->nullable(); // Se
+            // $table->dateTime('event_date')->nullable(); // Se
+            $table->date('event_date')->nullable(); // Se
             $table->text('image')->nullable();
             $table->boolean('is_published')->nullable();
             $table->timestamps();
         });
-    }
+    }   
 
     /**
      * Reverse the migrations.

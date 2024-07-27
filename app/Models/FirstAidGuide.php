@@ -9,13 +9,11 @@ use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
-class Treatment extends Model
+class FirstAidGuide extends Model
 {
     use HasFactory;
 
-    public function condition(){
-        return $this->belongsTo(Condition::class, 'condition_id');
-    }
+    
 
    
 
@@ -26,5 +24,9 @@ class Treatment extends Model
     public function file(): MorphOne
     {
         return $this->morphOne(File::class, 'fileable');
+    }
+
+    public function condition(){
+        return $this->belongsTo(Condition::class);
     }
 }

@@ -17,7 +17,7 @@
                 <li>
                     <!-- Current: "bg-gray-50 text-tory-blue-600", Default: "text-gray-700 hover:text-tory-blue-600 hover:bg-gray-50" -->
                     <a href="{{route('dashboard')}}"
-                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['users','user-create','user-edit'])}}">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['users','user-create','user-edit'])}}">
                         {{-- <svg class="h-6 w-6 shrink-0 text-tory-blue-600" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" aria-hidden="true">
                             <path stroke-linecap="round" stroke-linejoin="round"
@@ -32,35 +32,36 @@
                
                 <li>
                     <a href="{{route('students')}}"
-                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['students','create-student','edit-student','view-student'])}}">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['students','create-student','edit-student','view-student'])}}">
                         <i class="fa-solid fa-graduation-cap text-2xl w-6"></i>
                         STUDENTS
                     </a>
                 </li>
                 <li>
                     <a href="{{route('staffs')}}"
-                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['staffs','staffs-edit','staffs-create','staffs-view'])}} ">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['staffs','staffs-edit','staffs-create','staffs-view'])}} ">
                         <i class="fa-solid fa-clipboard-user text-2xl w-6"></i>
                         STAFFS
                     </a>
                 </li>
                 <li>
                     <a href="{{route('personnels')}}"
-                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['personnels','personnel-edit','personnel-create'])}} ">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['personnels','personnel-edit','personnel-create'])}} ">
                         <i class="fa-solid fa-user text-2xl w-6"></i>
                         PERSONNELS
                     </a>
                 </li>
                 <li>
+                    {{Session::get('current_route_name')}}
                     <a href="{{route('events')}}"
-                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['events','event-create','event-edit','event-view'])}}">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['events','event-create','event-edit','event-view'])}}">
                         <i class="fa-solid fa-calendar-check text-2xl w-6"></i>
                       EVENTS
                     </a>
                 </li>
                 <li>
                     <a href="{{route('emergency-contacts')}}"
-                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['emergency-contacts'])}}">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['emergency-contacts'])}}">
                         <i class="fa-solid fa-kit-medical text-2xl w-6"></i>
                       EMERGENCY CONTACTS
                     </a>
@@ -69,11 +70,11 @@
             </ul>
         </li>
         <li>
-            <div class="text-xs font-semibold leading-6 text-gray-400">FORM MANAGEMENT</div>
+            <div class="text-xs font-semibold leading-6 text-gray-400">DISPLAY MANAGEMENT</div>
             <ul role="list" class="-mx-2 mt-2 space-y-1">
                 <li>
                     <a href="{{route('academic-year')}}"
-                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['academic-year'])}}">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['academic-year'])}}">
                         {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
                         <i class="fa-solid fa-calendar text-2xl"></i>
                       ACADEMIC YEAR
@@ -81,16 +82,38 @@
                 </li>
                 <li>
                     <a href="{{route('departments')}}"
-                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['departments'])}}">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['departments'])}}">
                         <i class="fa-solid fa-building-columns text-2xl"></i>
                         COLLEGE DEPARMENT
                     </a>
                 </li>
                 <li>
                     <a href="{{route('conditions')}}"
-                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['conditions'])}}">
-                        <i class="fa-solid fa-building-columns text-2xl"></i>
-                        CONDITIONS
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                        'conditions',
+                        'manage-condition',
+                        'view-condition',
+                        'condition-treatments-lists',
+                        'condition-treatment-view',
+                        'condition-symptoms-list',
+
+                        ])}}">
+                        {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+                        <i class="fa-solid fa-notes-medical text-2xl"></i>
+                        CONDITIONS | TREATMENTS | SYMPTOMS
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('first-aid-guides')}}"
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                        'first-aid-guides'
+                       
+
+                        ])}}">
+                        {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+                        
+                        <i class="fa-solid fa-briefcase-medical text-2xl"></i>
+                        FIRSTAID & GUIDE
                     </a>
                 </li>
             </ul>

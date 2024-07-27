@@ -15,7 +15,9 @@ use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
@@ -32,12 +34,29 @@ class ListConditions extends Component implements HasForms, HasTable
         return $table
             ->query(Condition::query())
             ->columns([
+
+                ImageColumn::make('file.file')
+                ->disk('public')
+                ->label('Profile')
+                ->width(60)->height(60)
+                ->url(fn (Model $record): null|string => $record->file ?  Storage::disk('public')->url($record->file) : null)
+                ->defaultImageUrl(url('/images/placeholder-image.jpg'))
+                ->openUrlInNewTab(),
+               
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
 
-                TextColumn::make('treatments_count')->counts([
-                    'treatments' => fn (Builder $query) => $query,
-                ])->label('Treatments'),
+                TextColumn::make('symptoms.name')
+                ->listWithLineBreaks()
+                ->bulleted()
+                ,
+                TextColumn::make('treatments.name')
+                ->listWithLineBreaks()
+                ->bulleted()
+                ,
+                // TextColumn::make('treatments_count')->counts([
+                //     'treatments' => fn (Builder $query) => $query,
+                // ])->label('Treatments'),
 
 
 

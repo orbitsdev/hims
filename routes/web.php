@@ -38,7 +38,12 @@ use App\Livewire\Departments\ListDepartments;
 use App\Livewire\AcademicYear\ListAcademicYear;
 use App\Livewire\Condition\ViewTreatmentCondition;
 use App\Livewire\Conditions\CondtionTreatmentLists;
+use App\Livewire\Conditions\ListConditionSymptoms;
 use App\Livewire\Conditions\ListConditionTreatments;
+use App\Livewire\FirstAidFuides\ViewFirstAidGuide;
+use App\Livewire\FirstAidGuides\ListFirstAidGuide;
+use App\Livewire\FirstAidGuides\ListFirstAidGuides;
+use App\Livewire\Symptoms\ListSymptoms;
 
 /*
 |--------------------------------------------------------------------------
@@ -113,9 +118,16 @@ Route::middleware([
     
     Route::get('/conditions', ListConditions::class)->name('conditions');
     Route::get('/condition/{record}', ManageCondition::class)->name('manage-condition');
- Route::get('/condition/view/{record}', ViewCondition::class)->name('view-condition');
+    Route::get('/condition/view/{record}', ViewCondition::class)->name('view-condition');
+    
+
     Route::get('/condition/treatments/{record}', ListConditionTreatments::class)->name('condition-treatments-lists');
     Route::get('/condition/treatment/{record}', ViewTreatmentCondition::class)->name('condition-treatment-view');
+    Route::get('/condition/symptoms/{record}', ListConditionSymptoms::class)->name('condition-symptoms-list');
+    Route::get('/symptoms', ListSymptoms::class)->name('symptoms');
 
+    //FIRT AID GUIDES
+    Route::get('/first-aid-guides', ListFirstAidGuides::class)->name('first-aid-guides');
+    Route::get('/first-aid-guide/view/${record}', ViewFirstAidGuide::class)->name('first-aid-guide-view');
 
 });

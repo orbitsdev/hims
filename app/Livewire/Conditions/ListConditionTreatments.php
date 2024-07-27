@@ -16,6 +16,8 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
+use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -34,6 +36,13 @@ class ListConditionTreatments extends Component implements HasForms, HasTable
             ->query(Treatment::query()->latest()->where('condition_id', $this->record->id))
             ->columns([
                
+                ImageColumn::make('file.file')
+                ->disk('public')
+                ->label('Profile')
+                ->width(60)->height(60)
+                ->url(fn (Model $record): null|string => $record->file ?  Storage::disk('public')->url($record->file) : null)
+                ->defaultImageUrl(url('/images/placeholder-image.jpg'))
+                ->openUrlInNewTab(),
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
               

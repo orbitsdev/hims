@@ -28,7 +28,7 @@
     @livewireStyles
 </head>
 
-<body class="font-sans antialiased bg-tory-blue-50 min-h-screen flex flex-col">
+<body class="font-sans antialiased bg-gradient-to-br  from-tory-blue-50 to-tory-blue-200  min-h-screen flex flex-col">
 
     
 

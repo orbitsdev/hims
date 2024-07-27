@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('first_aid_guides', function (Blueprint $table) {
             $table->id();
             $table->foreignId('condition_id')->nullable();
-            $table->text('title')->nullable();
+            $table->string('title')->nullable();
             $table->text('content')->nullable();
             $table->timestamps();
         });

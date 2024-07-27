@@ -5,10 +5,12 @@ namespace App\Models;
 use App\Models\File;
 use App\Models\Symptom;
 use App\Models\Treatment;
+use App\Models\FirstAidGuide;
+use App\Models\ConditionSymptom;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Database\Eloquent\Relations\MorphOne;
 
 class Condition extends Model
 {
@@ -24,11 +26,19 @@ class Condition extends Model
     }
 
     public function treatments(){
-        return $this->hasMany(Treatment::class);
+        return $this->hasMany(Treatment::class, 'condition_id');
     }
 
     public function symptoms()
     {
         return $this->belongsToMany(Symptom::class, 'condition_symptom');
+    }
+    public function conditionSymptoms()
+    {
+        return $this->hasMany(ConditionSymptom::class);
+    }
+
+    public function firstAidGuides(){
+        return $this->hasMany(FirstAidGuide::class);
     }
 }

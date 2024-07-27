@@ -680,4 +680,85 @@ class FilamentForm extends Controller
 
         ];
     }
+    public static function symptomForm(): array
+    {
+        return [
+            TextInput::make('name')
+            ->columnSpanFull()
+            ->required()
+            ->maxLength(191),
+
+
+        RichEditor::make('description')->toolbarButtons([
+            'attachFiles',
+            'blockquote',
+            'bold',
+            'bulletList',
+            'codeBlock',
+            'h2',
+            'h3',
+            'italic',
+            'link',
+            'orderedList',
+            'redo',
+            'strike',
+            'underline',
+            'undo',
+        ])
+                    ->required()
+
+            ->columnSpanFull(),
+
+      
+
+       
+        Group::make()
+        ->relationship('file')
+        ->schema([
+
+            FileUpload::make('file')
+            ->disk('public')
+            ->directory('events')
+            ->image()
+            ->imageEditor()
+                                            
+            ->columnSpanFull()
+            ->label('IMAGE'),
+
+        ])->columnSpanFull(),
+
+
+
+        ];
+    }
+
+    public static function firstAidGuideForm():array{
+        return [
+ TextInput::make('title')
+            ->columnSpanFull()
+            ->required()
+            ->maxLength(191),
+
+
+        RichEditor::make('content')->toolbarButtons([
+            'attachFiles',
+            'blockquote',
+            'bold',
+            'bulletList',
+            'codeBlock',
+            'h2',
+            'h3',
+            'italic',
+            'link',
+            'orderedList',
+            'redo',
+            'strike',
+            'underline',
+            'undo',
+        ])
+                    ->required()
+
+            ->columnSpanFull(),
+        ];
+    }
 }

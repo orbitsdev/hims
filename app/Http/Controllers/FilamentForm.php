@@ -38,7 +38,7 @@ class FilamentForm extends Controller
                 ])
                 ->schema([
                     TextInput::make('name')->required()->label('NAME')
-                        ->columnSpanFull(),
+                        ->columnSpan(4),
 
 
                     TextInput::make('username')->required()
@@ -46,6 +46,7 @@ class FilamentForm extends Controller
                         ->columnSpan(4),
                     TextInput::make('email')->required()->label('EMAIL')
                         ->unique(ignoreRecord: true)
+                        ->disabled()
                         ->columnSpan(4),
 
 
@@ -59,12 +60,12 @@ class FilamentForm extends Controller
                     //     ->live()
                     //     ->hidden(fn (string $operation): bool => $operation === 'edit'),
 
-                    Password::make('password')
-                        ->columnSpan(4)
-                        ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
-                        ->dehydrated(fn (?string $state): bool => filled($state))
-                        ->required(fn (string $operation): bool => $operation === 'create')
-                        ->label(fn (string $operation) => $operation == 'create' ? 'PASSWORD' : 'NEW PASSWORD'),
+                    // Password::make('password')
+                    //     ->columnSpan(4)
+                    //     ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
+                    //     ->dehydrated(fn (?string $state): bool => filled($state))
+                    //     ->required(fn (string $operation): bool => $operation === 'create')
+                    //     ->label(fn (string $operation) => $operation == 'create' ? 'PASSWORD' : 'NEW PASSWORD'),
 
                     FileUpload::make('profile_photo_path')
                         ->disk('public')
@@ -77,7 +78,7 @@ class FilamentForm extends Controller
 
 
                 ])->columnSpanFull(),
-           
+
         ];
     }
     public static function userForm()
@@ -461,106 +462,220 @@ class FilamentForm extends Controller
     {
         return [
             Group::make()
-            ->schema([
-                Section::make('EVENTS DETAILS')
-                ->columns([
-                    'sm' => 3,
-                    'xl' => 6,
-                    '2xl' => 8,
-                ])
                 ->schema([
-                    Select::make('academic_year_id')
-                        ->live(debounce: 500)
-                        ->afterStateUpdated(function ($state, Get $get, Set $set) {
+                    Section::make('EVENTS DETAILS')
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 8,
+                        ])
+                        ->schema([
+                            Select::make('academic_year_id')
+                                ->live(debounce: 500)
+                                ->afterStateUpdated(function ($state, Get $get, Set $set) {
 
-                            $set('semester_id', null);
-                        })
-                        ->required()
-                        ->label('ACADEMIC YEAR')
+                                    $set('semester_id', null);
+                                })
+                                ->required()
+                                ->label('ACADEMIC YEAR')
 
-                        ->options(AcademicYear::pluck('name', 'id'))
-                        ->preload()
-                        ->columnSpan(4)
-                        ->searchable(),
+                                ->options(AcademicYear::pluck('name', 'id'))
+                                ->preload()
+                                ->columnSpan(4)
+                                ->searchable(),
 
-                    Select::make('semester_id')->options(function (Get $get) {
-                        if (!empty($get('academic_year_id'))) {
-                            return Semester::where('academic_year_id', $get('academic_year_id'))->get()->map(function ($a) {
-                                return [
-                                    'name_in_number' => $a->semesterWithYear(),
-                                    'id' => $a->id,
-                                ];
-                            })->pluck('name_in_number', 'id');
-                        } else {
-                            return [];
-                        }
-                    })
-                        ->native(false)
-                        ->label('SEMESTER')
-                        ->columnSpan(4)
+                            Select::make('semester_id')->options(function (Get $get) {
+                                if (!empty($get('academic_year_id'))) {
+                                    return Semester::where('academic_year_id', $get('academic_year_id'))->get()->map(function ($a) {
+                                        return [
+                                            'name_in_number' => $a->semesterWithYear(),
+                                            'id' => $a->id,
+                                        ];
+                                    })->pluck('name_in_number', 'id');
+                                } else {
+                                    return [];
+                                }
+                            })
+                                ->native(false)
+                                ->label('SEMESTER')
+                                ->columnSpan(4)
 
-                        ->searchable(),
-                    Textarea::make('title')
-                        ->columnSpanFull(),
-                        Textarea::make('description')
-                        ->columnSpanFull(),
-                   
-                        RichEditor::make('content') ->toolbarButtons([
-        'attachFiles',
-        'blockquote',
-        'bold',
-        'bulletList',
-        'codeBlock',
-        'h2',
-        'h3',
-        'italic',
-        'link',
-        'orderedList',
-        'redo',
-        'strike',
-        'underline',
-        'undo',
-    ])
-           ->columnSpanFull(),
-    
-                    // Textarea::make('content')
-                    //     ->columnSpanFull(),
-                   
+                                ->searchable(),
+                            Textarea::make('title')
+                                ->columnSpanFull(),
+                            Textarea::make('description')
+                                ->columnSpanFull(),
 
-                ]),
-                
-            ])->columnSpan(['lg' => 2]),
+                            RichEditor::make('content')->toolbarButtons([
+                                'attachFiles',
+                                'blockquote',
+                                'bold',
+                                'bulletList',
+                                'codeBlock',
+                                'h2',
+                                'h3',
+                                'italic',
+                                'link',
+                                'orderedList',
+                                'redo',
+                                'strike',
+                                'underline',
+                                'undo',
+                            ])
+                                ->columnSpanFull(),
+
+                            // Textarea::make('content')
+                            //     ->columnSpanFull(),
+
+
+                        ]),
+
+                ])->columnSpan(['lg' => 2]),
             Group::make()
-            ->schema([
-
-                Section::make('')
-                ->columns([
-                    'sm' => 3,
-                    'xl' => 6,
-                    '2xl' => 8,
-                ])
                 ->schema([
-                    FileUpload::make('image')
-                    ->disk('public')
-                    ->directory('events')
-                    ->image()
-                    ->imageEditor()
-                    // ->required()
-                    ->columnSpanFull()
-                    ->label('FEATURED IMAGE'),
-                    DatePicker::make('event_date')->native(false)->columnSpanFull()->date()->required(),
-                    // DatePicker::make('event_date_time')->columnSpan(4),
-              
-                    Toggle::make('is_published')
-                    ->live()
-                    ->columnSpanFull()->afterStateUpdated(function ($record, $state) {
-                        FilamentForm::notification($state ?'Status set to Active' : 'Status set to in active');
-                    }),
-                ]),
 
-               
-            ])->columnSpan(['lg' => 1]),
-           
+                    Section::make('')
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 8,
+                        ])
+                        ->schema([
+                            FileUpload::make('image')
+                                ->disk('public')
+                                ->directory('events')
+                                ->image()
+                                ->imageEditor()
+                                // ->required()
+                                ->columnSpanFull()
+                                ->label('FEATURED IMAGE'),
+                            DatePicker::make('event_date')->native(false)->columnSpanFull()->date()->required(),
+                            // DatePicker::make('event_date_time')->columnSpan(4),
+
+                            Toggle::make('is_published')
+                                ->live()
+                                ->columnSpanFull()->afterStateUpdated(function ($record, $state) {
+                                    FilamentForm::notification($state ? 'Status set to Active' : 'Status set to in active');
+                                }),
+                        ]),
+
+
+                ])->columnSpan(['lg' => 1]),
+
+
+
+        ];
+    }
+    public static function conditionForm(): array
+    {
+        return [
+            Group::make()
+                ->schema([
+                    Section::make('CONDITION DETAILS')
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 8,
+                        ])
+                        ->schema([
+                            TextInput::make('name')
+                                ->columnSpanFull()
+                                ->maxLength(191),
+
+
+                            RichEditor::make('description')->toolbarButtons([
+                                'attachFiles',
+                                'blockquote',
+                                'bold',
+                                'bulletList',
+                                'codeBlock',
+                                'h2',
+                                'h3',
+                                'italic',
+                                'link',
+                                'orderedList',
+                                'redo',
+                                'strike',
+                                'underline',
+                                'undo',
+                            ])
+                                ->columnSpanFull(),
+
+                            // Textarea::make('content')
+                            //     ->columnSpanFull(),
+
+                           
+                            Group::make()
+                            ->relationship('file')
+                            ->schema([
+            
+                                FileUpload::make('file')
+                                ->disk('public')
+                                ->directory('events')
+                                ->image()
+                                ->imageEditor()
+                                                                // ->required()
+                                ->columnSpanFull()
+                                ->label('IMAGE'),
+            
+                            ])->columnSpanFull(),
+
+                        ]),
+
+                ])->columnSpan(['lg' => 3]),
+                      
+
+
+
+        ];
+    }
+    public static function treatmentForm(): array
+    {
+        return [
+            TextInput::make('name')
+            ->columnSpanFull()
+            ->required()
+            ->maxLength(191),
+
+
+        RichEditor::make('description')->toolbarButtons([
+            'attachFiles',
+            'blockquote',
+            'bold',
+            'bulletList',
+            'codeBlock',
+            'h2',
+            'h3',
+            'italic',
+            'link',
+            'orderedList',
+            'redo',
+            'strike',
+            'underline',
+            'undo',
+        ])
+                    ->required()
+
+            ->columnSpanFull(),
+
+      
+
+       
+        Group::make()
+        ->relationship('file')
+        ->schema([
+
+            FileUpload::make('file')
+            ->disk('public')
+            ->directory('events')
+            ->image()
+            ->imageEditor()
+                                            
+            ->columnSpanFull()
+            ->label('IMAGE'),
+
+        ])->columnSpanFull(),
+
 
 
         ];

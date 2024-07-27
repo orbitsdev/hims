@@ -39,7 +39,10 @@ class Department extends Model
 
     public function getNameWithAbbreviation()
     {
-        return ($this->name ?? '') . ' (' . ($this->abbreviation ?? '') . ')';
+        $name = $this->name ?? '';
+    $abbreviation = $this->abbreviation ? ' (' . $this->abbreviation . ')' : '';
+    
+    return $name . $abbreviation;
     }
     
 }

@@ -138,53 +138,10 @@ class ListUser extends Component implements HasForms, HasTable
                  Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
                             return route('user-edit', ['record'=> $record]);
              }),
-              
-                //delete actions
-                
-                //edit actions
-                // Tables\Actions\EditAction::make()->button()->form([
-                    
-                //    TextInput::make('username')->required()->label('USERNAME')
-                //    ->unique(ignoreRecord: true)
-                //     ->columnSpanFull(),
-                //    TextInput::make('email')->required()->label('EMAIL')
-                //    ->unique(ignoreRecord: true)
-                //     ->columnSpanFull(),
-                //    TextInput::make('name')->required()->label('NAME')
-                //    ->columnSpanFull(),
-
-                //    Select::make('role')
-                //    ->default(User::STUDENT)
-                //    ->required()
-                //    ->label('ROLE')
-                //    ->options(User::ROLES)
-
-                //    ->columnSpan(4)
-                //    ->searchable()
-                //    ->live()
-                //    ->hidden(fn (string $operation): bool => $operation === 'edit'),
-                //    Password::make('password')
-                //    ->columnSpanFull()
-                //    ->dehydrateStateUsing(fn (string $state): string => Hash::make($state))
-                //             ->dehydrated(fn (?string $state): bool => filled($state))
-                //             ->required(fn (string $operation): bool => $operation === 'create')
-                //             ->label(fn (string $operation) => $operation == 'create' ? 'PASSWORD' : 'NEW PASSWORD')
-                //             ,
-                   
-                   
-                //    FileUpload::make('profile_photo_path')
-                //    ->disk('public')
-                //    ->directory('accounts')
-                //    ->image()
-                //    ->imageEditor()
-                //    ->required()
-                //    ->columnSpanFull()
-                //    ->label('PROFILE')
-                // ]),
+                         
                
                 Tables\Actions\DeleteAction::make(),
-                //view actions -m
-                // Tables\Actions\ViewAction::make()->button(),
+   
             ])
             ->bulkActions([
 

@@ -86,6 +86,13 @@
                         COLLEGE DEPARMENT
                     </a>
                 </li>
+                <li>
+                    <a href="{{route('conditions')}}"
+                        class="{{RouteManager::isCurrentPage(Route::currentRouteName(),['conditions'])}}">
+                        <i class="fa-solid fa-building-columns text-2xl"></i>
+                        CONDITIONS
+                    </a>
+                </li>
             </ul>
         </li>
     </ul>

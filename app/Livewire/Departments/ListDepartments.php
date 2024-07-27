@@ -31,7 +31,7 @@ class ListDepartments extends Component implements HasForms, HasTable
             TextInput::make('name')->required()->label('NAME')
             ->unique(ignoreRecord: true)
              ->columnSpanFull(),
-            TextInput::make('abbreviation')->required()->label('ABBREVIATION')
+            TextInput::make('abbreviation')->label('ABBREVIATION')
             ->unique(ignoreRecord: true),
             FileUpload::make('image')
                     ->disk('public')

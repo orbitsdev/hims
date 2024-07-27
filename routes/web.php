@@ -1,33 +1,44 @@
 
 <?php
 
-use App\Livewire\AcademicYear\ListAcademicYear;
+
 use App\Livewire\Dashboard;
-use App\Livewire\Events\ListEvents;
 use App\Livewire\Users\EditUser;
 use App\Livewire\Users\ListUser;
+use App\Livewire\Events\EditEvent;
+use App\Livewire\Events\ViewEvent;
 use App\Livewire\Staffs\EditStaff;
 use App\Livewire\Staffs\ViewStaff;
 use App\Livewire\User\UserDetails;
 use App\Livewire\Users\CreateUser;
+use App\Livewire\Events\ListEvents;
 use App\Livewire\Staffs\ListStaffs;
+use App\Livewire\Usesr\EditProfile;
+use App\Livewire\Events\CreateEvent;
 use App\Livewire\Staffs\CreateStaff;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Students\EditStudent;
 use App\Livewire\Students\ViewStudent;
 use App\Livewire\Students\ListStudents;
+use Filament\Tables\Actions\EditAction;
+use App\Livewire\Emergency\ListContacts;
 use App\Livewire\Students\CreateStudent;
 use App\Livewire\Personels\EditPersonnel;
+use App\Livewire\Conditions\EditCondition;
+use App\Livewire\Conditions\ListCondtions;
+use App\Livewire\Conditions\ViewCondition;
 use App\Livewire\Personnels\ViewPersonnel;
+use App\Livewire\Conditions\ListConditions;
 use App\Livewire\Personels\CreatePersonnel;
 use App\Livewire\Personnels\ListPersonnels;
+use App\Livewire\Conditions\ManageCondition;
+use App\Livewire\Conditions\ManageConditions;
 use App\Livewire\Departments\ListDepartments;
-use App\Livewire\Emergency\ListContacts;
-use App\Livewire\Events\CreateEvent;
-use App\Livewire\Events\EditEvent;
-use App\Livewire\Events\ViewEvent;
-use App\Livewire\Usesr\EditProfile;
+use App\Livewire\AcademicYear\ListAcademicYear;
+use App\Livewire\Condition\ViewTreatmentCondition;
+use App\Livewire\Conditions\CondtionTreatmentLists;
+use App\Livewire\Conditions\ListConditionTreatments;
 
 /*
 |--------------------------------------------------------------------------
@@ -100,6 +111,11 @@ Route::middleware([
     Route::get('/event/edit/{record}', EditEvent::class)->name('event-edit');
     Route::get('/event/vew/{record}', ViewEvent::class)->name('event-view');
     
+    Route::get('/conditions', ListConditions::class)->name('conditions');
+    Route::get('/condition/{record}', ManageCondition::class)->name('manage-condition');
+ Route::get('/condition/view/{record}', ViewCondition::class)->name('view-condition');
+    Route::get('/condition/treatments/{record}', ListConditionTreatments::class)->name('condition-treatments-lists');
+    Route::get('/condition/treatment/{record}', ViewTreatmentCondition::class)->name('condition-treatment-view');
 
 
 });

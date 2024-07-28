@@ -52,7 +52,7 @@
                     </a>
                 </li>
                 <li>
-                    {{Session::get('current_route_name')}}
+                    {{-- {{Session::get('current_route_name')}} --}}
                     <a href="{{route('events')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['events','event-create','event-edit','event-view'])}}">
                         <i class="fa-solid fa-calendar-check text-2xl w-6"></i>

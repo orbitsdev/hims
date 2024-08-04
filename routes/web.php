@@ -3,6 +3,7 @@
 
 
 use App\Livewire\Dashboard;
+use App\Livewire\Records\ListOfUserForIndividualScreening;
 use App\Livewire\Users\EditUser;
 use App\Livewire\Users\ListUser;
 use App\Livewire\Events\EditEvent;
@@ -47,6 +48,7 @@ use App\Livewire\FirstAidFuides\ViewFirstAidGuide;
 use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\FirstAidGuides\ListFirstAidGuide;
 use App\Livewire\FirstAidGuides\ListFirstAidGuides;
+use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\Records\CreateRecord;
 use App\Livewire\Records\EditRecord;
 use App\Livewire\Records\ListRecords;
@@ -147,5 +149,7 @@ Route::middleware([
     Route::get('/records', ListRecords::class)->name('records');
     Route::get('/record/create', CreateRecord::class)->name('record-create');
     Route::get('/record/edit/{record}', EditRecord::class)->name('record-edit');
-
+    
+    Route::get('/medical-record/user-list/{record}', ListOfUserForIndividualScreening::class)->name('individual-medical-recoding');
+    Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');
 });

@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Record;
 use App\Models\Section;
 use App\Models\Department;
+use App\Models\MedicalRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -28,5 +29,9 @@ class RecordBatch extends Model
 
     public function record(){
         return $this->belongsTo(Record::class);
+    }
+
+    public function medicalRecords(){
+        return $this->hasMany(MedicalRecord::class);
     }
 }

@@ -19,6 +19,7 @@ use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Forms\Components\FileUpload;
@@ -38,7 +39,7 @@ class ListUser extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(User::query()->notAdmin()->latest())
+            ->query(User::query()->notAdmin()->orderBy('name'))
             ->columns([
                 ImageColumn::make('profile_photo_path')
                 ->disk('public')
@@ -118,29 +119,31 @@ class ListUser extends Component implements HasForms, HasTable
         
             ])
             ->actions([
-
-                Action::make('view')
-                ->color('success')
-                ->icon('heroicon-m-eye')
-                ->label('View')
-                ->modalContent(function (User $record) {
-                    return view('livewire.user.user-details', ['record' => $record]);
-                })
-                ->modalHeading('Account Details')
-                ->modalSubmitAction(false)
-                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
-                ->disabledForm()
-                 ->slideOver()
-                 ->closeModalByClickingAway(true)
-           
-                
-                ->modalWidth(MaxWidth::Full),
-                 Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
-                            return route('user-edit', ['record'=> $record]);
-             }),
-                         
+                ActionGroup::make([
+                    Action::make('view')
+                    ->color('success')
+                    ->icon('heroicon-m-eye')
+                    ->label('View')
+                    ->modalContent(function (User $record) {
+                        return view('livewire.user.user-details', ['record' => $record]);
+                    })
+                    ->modalHeading('Account Details')
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                    ->disabledForm()
+                     ->slideOver()
+                     ->closeModalByClickingAway(true)
                
-                Tables\Actions\DeleteAction::make(),
+                    
+                    ->modalWidth(MaxWidth::Full),
+                     Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
+                                return route('user-edit', ['record'=> $record]);
+                 }),
+                             
+                   
+                    Tables\Actions\DeleteAction::make(),
+                ]),
+               
    
             ])
             ->bulkActions([

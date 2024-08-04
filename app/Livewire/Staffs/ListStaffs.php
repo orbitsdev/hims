@@ -16,6 +16,7 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
@@ -99,26 +100,30 @@ class ListStaffs extends Component implements HasForms, HasTable
                 }),
             ])
             ->actions([
-                Action::make('view')
-                ->color('success')
-                ->icon('heroicon-m-eye')
-                ->label('View')
-                ->modalContent(function (Staff $record) {
-                    return view('livewire.staffs.view-staff', ['record' => $record]);
-                })
-                ->modalHeading('Details')
-                ->modalSubmitAction(false)
-                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
-                ->disabledForm()
-                 ->slideOver()
-                 ->closeModalByClickingAway(true)
-                 
-                
-                ->modalWidth(MaxWidth::Full),
-                 Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
-                            return route('staffs-edit', ['record'=> $record]);
-             }),
-                Tables\Actions\DeleteAction::make(),
+
+                ActionGroup::make([
+                    Action::make('view')
+                    ->color('success')
+                    ->icon('heroicon-m-eye')
+                    ->label('View')
+                    ->modalContent(function (Staff $record) {
+                        return view('livewire.staffs.view-staff', ['record' => $record]);
+                    })
+                    ->modalHeading('Details')
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                    ->disabledForm()
+                     ->slideOver()
+                     ->closeModalByClickingAway(true)
+                     
+                    
+                    ->modalWidth(MaxWidth::Full),
+                     Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
+                                return route('staffs-edit', ['record'=> $record]);
+                 }),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
+               
                 
               
             ])

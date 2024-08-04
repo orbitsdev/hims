@@ -17,6 +17,7 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -59,7 +60,9 @@ class ListPersonnels extends Component implements HasForms, HasTable
                 }),
             ])
             ->actions([
-                Action::make('view')
+                
+                ActionGroup::make([
+                    Action::make('view')
                 ->color('primary')
                 ->label('View')
                 ->icon('heroicon-m-eye')
@@ -80,6 +83,8 @@ class ListPersonnels extends Component implements HasForms, HasTable
                 // }),
                 EditAction::make()->form(FilamentForm::staffForm())  ->modalWidth(MaxWidth::SevenExtraLarge),
                 Tables\Actions\DeleteAction::make(),
+                ]),
+                
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

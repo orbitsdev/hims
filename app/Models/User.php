@@ -6,6 +6,7 @@ namespace App\Models;
 use App\Models\Staff;
 use App\Models\Student;
 use App\Models\Personnel;
+use App\Models\MedicalRecord;
 use App\Models\PersonalDetail;
 use Laravel\Sanctum\HasApiTokens;
 use Illuminate\Support\Facades\Auth;
@@ -167,6 +168,21 @@ class User extends Authenticatable
                 return $query; // Return the query object to allow further chaining
         }
     }
+    public function getPersonalDetailsBaseOnRole()
+    {
+        switch ($this->role) {
+            case User::STUDENT:
+                return $this->student ? $this->student->personalDetail : null;
+            case User::STAFF:
+                return $this->staff ? $this->staff->personalDetail : null;
+            case User::PERSONNEL:
+                return $this->personnel ? $this->personnel->personalDetail : null;
+            case User::ADMIN:
+                return null;
+            default:
+                return null;
+        }
+    }
     public function displayPersonalDetailsBaseOnRole()
     {
         switch ($this->role) {
@@ -182,4 +198,19 @@ class User extends Authenticatable
                 return null;
         }
     }
+
+    public function medicalRecords(){
+        return $this->hasMany(MedicalRecord::class);
+    }
+
+    public function scopeHasAnyRoles($query, $roles){
+        $query->whereIn('role', $roles);
+    }
+
+    public function scopeNoRecordInThisAcademicYearAndSemester($query, $record){
+        return $query->hasAnyRoles([User::STUDENT,User::PERSONNEL])->whereDoesntHave('medicalRecords', function($query) use($record){
+            $query->where('record_id', $record);
+        });
+    }
+    
 }

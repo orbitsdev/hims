@@ -7,6 +7,7 @@ use App\Models\Course;
 use App\Models\Student;
 use App\Models\Personnel;
 use App\Models\RecordBatch;
+use App\Models\MedicalRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -66,4 +67,8 @@ class Department extends Model
     return $name . $abbreviation;
     }
     
+
+    public function medicalRecords(){
+        return $this->hasMany(MedicalRecord::class);
+    }
 }

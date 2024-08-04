@@ -30,14 +30,16 @@
 
 <body class="font-sans antialiased bg-gradient-to-br  from-tory-blue-50 to-tory-blue-200  min-h-screen flex flex-col">
 
-    
 
-    {{$slot}}
+            
+            {{$slot}}
+
 {{-- 
     @can('admin')    
 
     <x-admin-layout/>
     @endcan --}}
+
 
 
 

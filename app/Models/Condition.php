@@ -6,6 +6,7 @@ use App\Models\File;
 use App\Models\Symptom;
 use App\Models\Treatment;
 use App\Models\FirstAidGuide;
+use App\Models\MedicalRecord;
 use App\Models\ConditionSymptom;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
@@ -40,5 +41,9 @@ class Condition extends Model
 
     public function firstAidGuides(){
         return $this->hasMany(FirstAidGuide::class);
+    }
+
+    public function medicalRecords(){
+        return $this->hasMany(MedicalRecord::class);
     }
 }

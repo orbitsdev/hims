@@ -3,11 +3,10 @@
 namespace App\Livewire\FirstAidGuides;
 
 use Filament\Tables;
-use Filament\Tables\Enums\FiltersLayout;
 use Livewire\Component;
 use Filament\Tables\Table;
-
 use App\Models\FirstAidGuide;
+
 use Filament\Actions\CreateAction;
 use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
@@ -18,6 +17,8 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\ActionGroup;
+use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -65,28 +66,31 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                 // }),
             ])
             ->actions([
-                Action::make('view')
-                ->color('success')
-                ->label('View')
-                ->size('xl')
-                ->icon(null)
-                ->link()
-              
-                ->extraAttributes([
-                    'class' => 'border: none !imporant',
-                ])
-                ->modalContent(function (Model $record) {
-                    return view('livewire.first-aid-fuides.view-first-aid-guide', ['record' => $record]);
-                })
-                ->modalSubmitAction(false)
-                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
-                ->disabledForm()
-                 ->slideOver()
-                 ->closeModalByClickingAway(true)
-           
-                ->modalWidth(MaxWidth::Full),
-                    Tables\Actions\EditAction::make()->form(FilamentForm::firstAidGuideForm()) ->modalWidth(MaxWidth::SevenExtraLarge), 
-                    Tables\Actions\DeleteAction::make(),
+                ActionGroup::make([
+                    Action::make('view')
+                    ->color('success')
+                    ->label('View')
+                    ->size('xl')
+                    ->icon(null)
+                    ->link()
+                  
+                    ->extraAttributes([
+                        'class' => 'border: none !imporant',
+                    ])
+                    ->modalContent(function (Model $record) {
+                        return view('livewire.first-aid-fuides.view-first-aid-guide', ['record' => $record]);
+                    })
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                    ->disabledForm()
+                     ->slideOver()
+                     ->closeModalByClickingAway(true)
+               
+                    ->modalWidth(MaxWidth::Full),
+                        Tables\Actions\EditAction::make()->form(FilamentForm::firstAidGuideForm()) ->modalWidth(MaxWidth::SevenExtraLarge), 
+                        Tables\Actions\DeleteAction::make(),
+                ]),
+               
        
                 ])
                 ->bulkActions([

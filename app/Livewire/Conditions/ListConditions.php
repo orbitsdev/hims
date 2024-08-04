@@ -17,6 +17,7 @@ use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Actions\CreateAction;
 use Filament\Tables\Actions\DeleteAction;
@@ -72,39 +73,42 @@ class ListConditions extends Component implements HasForms, HasTable
 
             ])
             ->actions([
-                Action::make('viewTreatment')
-                ->color('success')
-                ->label('View')
-                ->size('xl')
-                ->icon(null)
-                
-                ->modalContent(function (Model $record) {
-                    return view('livewire.conditions.view-condition', ['record' => $record]);
-                })
-                ->modalHeading('Account Details')
-                ->modalSubmitAction(false)
-                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
-                ->disabledForm()
-                 ->slideOver()
-                 ->closeModalByClickingAway(true)
-           
-                ->modalWidth(MaxWidth::Full),
-                
-                Action::make('MANAGE')
-                ->color('info')
-                ->icon('heroicon-m-pencil-square')
-                ->label('Manage')
-                ->url(function (Model $record) {
-                        return route('manage-condition', ['record' => $record]);
-                } ),
-
-
-            
+                ActionGroup::make([
+                    Action::make('viewTreatment')
+                    ->color('success')
+                    ->label('View')
+                    ->size('xl')
+                    ->icon(null)
+                    
+                    ->modalContent(function (Model $record) {
+                        return view('livewire.conditions.view-condition', ['record' => $record]);
+                    })
+                    ->modalHeading('Account Details')
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                    ->disabledForm()
+                     ->slideOver()
+                     ->closeModalByClickingAway(true)
                
-                // EditAction::make('edit')->form([
-                // TextInput::make('name')->required(),
-                // ]),
-                DeleteAction::make(),
+                    ->modalWidth(MaxWidth::Full),
+                    
+                    Action::make('MANAGE')
+                    ->color('info')
+                    ->icon('heroicon-m-pencil-square')
+                    ->label('Manage')
+                    ->url(function (Model $record) {
+                            return route('manage-condition', ['record' => $record]);
+                    } ),
+    
+    
+                
+                   
+                    // EditAction::make('edit')->form([
+                    // TextInput::make('name')->required(),
+                    // ]),
+                    DeleteAction::make(),
+                ]),
+               
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

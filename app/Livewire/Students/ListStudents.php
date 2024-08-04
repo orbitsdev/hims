@@ -15,6 +15,7 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
@@ -93,25 +94,30 @@ class ListStudents extends Component implements HasForms, HasTable
                 }),
             ])
             ->actions([
-                Action::make('view')
-                ->color('success')
-                ->icon('heroicon-m-eye')
-                ->label('View')
-                ->modalContent(function (Student $record) {
-                    return view('livewire.students.view-student', ['record' => $record]);
-                })
-                ->modalHeading('Details')
-                ->modalSubmitAction(false)
-                ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
-                ->disabledForm()
-                 ->slideOver()
-                 ->closeModalByClickingAway(true)
+
+                ActionGroup::make([
+                    Action::make('view')
+                    ->color('success')
+                    ->icon('heroicon-m-eye')
+                    ->label('View')
+                    ->modalContent(function (Student $record) {
+                        return view('livewire.students.view-student', ['record' => $record]);
+                    })
+                    ->modalHeading('Details')
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                    ->disabledForm()
+                     ->slideOver()
+                     ->closeModalByClickingAway(true)
+                    
+                    ->modalWidth(MaxWidth::Full),
+                     Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
+                                return route('edit-student', ['record'=> $record]);
+                 }),
+                    Tables\Actions\DeleteAction::make(),
+                ]),
                 
-                ->modalWidth(MaxWidth::Full),
-                 Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
-                            return route('edit-student', ['record'=> $record]);
-             }),
-                Tables\Actions\DeleteAction::make(),
+              
                 
               
             ])

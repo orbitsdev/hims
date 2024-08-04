@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\RecordBatch;
+use App\Models\MedicalRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -23,7 +24,9 @@ class Section extends Model
         return $this->hasMany(Student::class);
     }
 
-
+    public function medicalRecords(){
+        return $this->hasMany(MedicalRecord::class);
+    }
    
 
 }

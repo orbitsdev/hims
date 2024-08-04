@@ -15,6 +15,7 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -72,9 +73,12 @@ class ListCourses extends Component implements HasForms, HasTable
                 }),
             ])
             ->actions([
-                Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
-                    return route('course-edit', ['record'=> $record]);}),
-                Tables\Actions\DeleteAction::make('delete'),
+                ActionGroup::make([
+                    Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
+                        return route('course-edit', ['record'=> $record]);}),
+                    Tables\Actions\DeleteAction::make('delete'),
+                ]),
+             
    
             ])
             ->bulkActions([

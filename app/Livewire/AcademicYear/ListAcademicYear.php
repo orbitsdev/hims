@@ -11,6 +11,7 @@ use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\CreateAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
@@ -56,9 +57,12 @@ class ListAcademicYear extends Component implements HasForms, HasTable
                 ->createAnother(false)
         ])
         ->actions([
+            ActionGroup::make([
+                Tables\Actions\EditAction::make()->form($this->academicForm())->modalWidth('7xl'),
+                Tables\Actions\DeleteAction::make(),
+            ]),
             //edit actions
-            Tables\Actions\EditAction::make()->button()->form($this->academicForm())->modalWidth('7xl'),
-            Tables\Actions\DeleteAction::make()->button(),
+          
                 // ->createAnother(false)
         ])
         ->bulkActions([

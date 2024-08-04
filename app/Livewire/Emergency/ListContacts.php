@@ -12,6 +12,7 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\CreateAction;
@@ -84,9 +85,12 @@ class ListContacts extends Component implements HasForms, HasTable
                 ->createAnother(false)
         ])
         ->actions([
+            ActionGroup::make([
+                Tables\Actions\EditAction::make()->form($this->emergencyContactForm())->modalWidth('7xl'),
+                Tables\Actions\DeleteAction::make(),
+            ]),
             //edit actions
-            Tables\Actions\EditAction::make()->button()->form($this->emergencyContactForm())->modalWidth('7xl'),
-            Tables\Actions\DeleteAction::make()->button(),
+          
                 // ->createAnother(false)
         ])
         ->bulkActions([

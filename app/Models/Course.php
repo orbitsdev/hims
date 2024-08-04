@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Section;
 use App\Models\Student;
 use App\Models\Department;
+use App\Models\MedicalRecord;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -30,5 +31,9 @@ class Course extends Model
     $abbreviation = $this->abbreviation ? ' (' . $this->abbreviation . ')' : '';
     
     return $name . $abbreviation;
+    }
+
+    public function medicalRecords(){
+        return $this->hasMany(MedicalRecord::class);
     }
 }

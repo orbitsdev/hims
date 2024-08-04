@@ -14,6 +14,7 @@ use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\CreateAction;
@@ -70,14 +71,17 @@ class ListDepartments extends Component implements HasForms, HasTable
                     ->createAnother(false)
             ])
             ->actions([
+                ActionGroup::make([
+                    Tables\Actions\EditAction::make()->button()->form(FilamentForm::departmentForm())
+                    ->hidden(function(Model $record){
+                        return $record->name == 'ALL';
+                    }) ->modalWidth('7xl'),
+                    Tables\Actions\DeleteAction::make()->button()->hidden(function(Model $record){
+                        return $record->name == 'ALL';
+                    }) ,
+                ]),
                 //edit actions
-                Tables\Actions\EditAction::make()->button()->form(FilamentForm::departmentForm())
-                ->hidden(function(Model $record){
-                    return $record->name == 'ALL';
-                }) ->modalWidth('7xl'),
-                Tables\Actions\DeleteAction::make()->button()->hidden(function(Model $record){
-                    return $record->name == 'ALL';
-                }) ,
+               
                     // ->createAnother(false)
             ])
             ->bulkActions([

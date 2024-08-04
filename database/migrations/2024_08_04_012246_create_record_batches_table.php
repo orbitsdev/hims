@@ -11,12 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('departments', function (Blueprint $table) {
+        Schema::create('record_batches', function (Blueprint $table) {
             $table->id();
-            $table->string('name')->nullable();
-            $table->string('abbreviation')->nullable();
-            $table->text('image')->nullable();
-            $table->string('role')->nullable();
+            $table->text('description')->nullable();
+            $table->foreignId('record_id')->nullable();
+            $table->foreignId('department_id')->nullable();
+            $table->foreignId('section_id')->nullable();
+            $table->string('status')->default('Pending')->nullable();
             $table->timestamps();
         });
     }
@@ -26,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('departments');
+        Schema::dropIfExists('record_batches');
     }
 };

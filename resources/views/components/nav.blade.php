@@ -3,7 +3,7 @@
     <div  class="mb-4">
 
         <div class="flex items-center justify-center">
-            <img src="{{asset('images/logo.png')}}" alt="" class="h-40 w-40">
+            <img src="{{asset('images/logo.png')}}" alt="" class="h-32 w-32">
         </div>
         <div class="flex items-center justify-center ">
 
@@ -60,6 +60,14 @@
                     </a>
                 </li>
                 <li>
+                    {{-- {{Session::get('current_route_name')}} --}}
+                    <a href="{{route('records')}}"
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['records'])}}">
+                        <i class="fa-regular fa-folder-open text-2xl w-6 "></i>
+                      MEDICAL RECORDS
+                    </a>
+                </li>
+                <li>
                     <a href="{{route('emergency-contacts')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['emergency-contacts'])}}">
                         <i class="fa-solid fa-kit-medical text-2xl w-6"></i>
@@ -81,10 +89,19 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{route('courses')}}"
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['courses'])}}">
+                        {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+                        <i class="fa-solid fa-book text-2xl"></i>
+                    COURSES & SECTIONS
+                    </a>
+                </li>
+               
+                <li>
                     <a href="{{route('departments')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['departments'])}}">
                         <i class="fa-solid fa-building-columns text-2xl"></i>
-                        COLLEGE DEPARMENT
+                        DEPARMENT/BUILDING 
                     </a>
                 </li>
                 <li>
@@ -106,7 +123,10 @@
                 <li>
                     <a href="{{route('first-aid-guides')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
-                        'first-aid-guides'
+                        'first-aid-guides',
+                        'first-aid-guide-view',
+                        'first-aid-guide-create',
+                        'first-aid-guide-edit',
                        
 
                         ])}}">
@@ -119,4 +139,6 @@
             </ul>
         </li>
     </ul>
+
+    <div class="h-[200px]"></div>
 </nav>

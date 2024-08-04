@@ -3,8 +3,11 @@
 namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+
+use App\Models\Course;
 use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
+use Database\Seeders\CourseSeeder;
 use Database\Seeders\DepartmentSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -24,6 +27,8 @@ class DatabaseSeeder extends Seeder
             ConditionSymptomSeeder::class,
             TreatmentSeeder::class,
             FirstAidGuideSeeder::class,
+            CourseSeeder::class,
+            SectionSeeder::class,
             
         ]);
         // \App\Models\User::factory(10)->create();

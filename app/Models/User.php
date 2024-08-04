@@ -32,10 +32,10 @@ class User extends Authenticatable
     const STUDENT = 'Student';
 
     const ROLES = [
-    //   User::ADMIN => User::ADMIN, 
-      User::STAFF => User::STAFF, 
-      User::PERSONNEL => User::PERSONNEL, 
-      User::STUDENT => User::STUDENT, 
+        //   User::ADMIN => User::ADMIN, 
+        User::STAFF => User::STAFF,
+        User::PERSONNEL => User::PERSONNEL,
+        User::STUDENT => User::STUDENT,
     ];
     /**
      * The attributes that are mass assignable.
@@ -80,65 +80,106 @@ class User extends Authenticatable
     ];
 
 
-    public function fullName(){
+    public function fullName()
+    {
         return $this->name;
     }
-    public function fullNameWithEmail(){
-        return ($this->name ?? '') . ' ('. ($this->email ?? '') . ')';
+    public function fullNameWithEmail()
+    {
+        return ($this->name ?? '') . ' (' . ($this->email ?? '') . ')';
     }
 
-    public function dashBoardBaseOnRole(){
-        switch($this->role){
-            case User::ADMIN :
-            return redirect()->route('users');
+    public function dashBoardBaseOnRole()
+    {
+        switch ($this->role) {
+            case User::ADMIN:
+                return redirect()->route('users');
             default:
-            return redirect()->route('unauthorizepage');
+                return redirect()->route('unauthorizepage');
         }
     }
 
     public function getImage()
-        {
-            if (!empty($this->profile_photo_path) && Storage::disk('public')->exists($this->profile_photo_path)) {
-                return Storage::disk('public')->url($this->profile_photo_path);
-            } else {
-                return asset('images/placeholder-image.jpg'); // Return default image URL
-            }
+    {
+        if (!empty($this->profile_photo_path) && Storage::disk('public')->exists($this->profile_photo_path)) {
+            return Storage::disk('public')->url($this->profile_photo_path);
+        } else {
+            return asset('images/placeholder-image.jpg'); // Return default image URL
         }
+    }
 
 
-        public function scopeNotAdmin($query)
-        {
-            return $query->where('role', '!=', User::ADMIN);
-        }
-        public function scopeNotRegisteredStudents($query)
-        {
-            return $query->where('role', User::STUDENT)->whereDoesntHave('student');
-        }
-        public function scopeNotRegisteredStaff($query)
-        {
-            return $query->where('role', User::STAFF)->whereDoesntHave('staff');
-        }
-        public function scopeNotRegisteredPersonnel($query)
-        {
-            return $query->where('role', User::PERSONNEL)->whereDoesntHave('personnel');
-        }
+    public function scopeNotAdmin($query)
+    {
+        return $query->where('role', '!=', User::ADMIN);
+    }
+    public function scopeNotRegisteredStudents($query)
+    {
+        return $query->where('role', User::STUDENT)->whereDoesntHave('student');
+    }
+    public function scopeNotRegisteredStaff($query)
+    {
+        return $query->where('role', User::STAFF)->whereDoesntHave('staff');
+    }
+    public function scopeNotRegisteredPersonnel($query)
+    {
+        return $query->where('role', User::PERSONNEL)->whereDoesntHave('personnel');
+    }
+   
+   
 
-        public function personalDetail(): MorphOne
-        {
-            return $this->morphOne(PersonalDetail::class, 'personaldetailable');
-        }
-
-        
-        public function student(){
-            return $this->hasOne(Student::class);
-        }
-        public function staff(){
-            return $this->hasOne(Staff::class);
-        }
-        
-        public function personnel(){
-            return $this->hasOne(Personnel::class);
-        }
+    public function personalDetail(): MorphOne
+    {
+        return $this->morphOne(PersonalDetail::class, 'personaldetailable');
+    }
 
 
+    public function student()
+    {
+        return $this->hasOne(Student::class);
+    }
+    public function staff()
+    {
+        return $this->hasOne(Staff::class);
+    }
+
+    public function personnel()
+    {
+        return $this->hasOne(Personnel::class);
+    }
+
+    public function scopeRoleAndDepartment($query, $role, $department)
+    {
+        switch ($role) {
+            case self::STUDENT:
+                return $query->whereHas('student', function($query) use($department) {
+                    $query->where('department_id', $department);
+                });
+            case self::STAFF:
+                return $query->whereHas('staff', function($query) use($department) {
+                    $query->where('department_id', $department);
+                });
+            case self::PERSONNEL:
+                return $query->whereHas('personnel', function($query) use($department) {
+                    $query->where('department_id', $department);
+                });
+            default:
+                return $query; // Return the query object to allow further chaining
+        }
+    }
+    public function displayPersonalDetailsBaseOnRole()
+    {
+        switch ($this->role) {
+            case User::STUDENT:
+                return $this->student ? $this->student->personalDetail : null;
+            case User::STAFF:
+                return $this->staff ? $this->staff->personalDetail : null;
+            case User::PERSONNEL:
+                return $this->personnel ? $this->personnel->personalDetail : null;
+            case User::ADMIN:
+                return null;
+            default:
+                return null;
+        }
+    }
 }

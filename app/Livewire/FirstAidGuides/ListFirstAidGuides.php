@@ -3,10 +3,12 @@
 namespace App\Livewire\FirstAidGuides;
 
 use Filament\Tables;
+use Filament\Tables\Enums\FiltersLayout;
 use Livewire\Component;
 use Filament\Tables\Table;
 
 use App\Models\FirstAidGuide;
+use Filament\Actions\CreateAction;
 use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
@@ -21,6 +23,7 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Actions\CreateAction as TCreateAction;
 
 class ListFirstAidGuides extends Component implements HasForms, HasTable
 {
@@ -32,17 +35,34 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
         return $table
             ->query(FirstAidGuide::query())
             ->columns([
+                Tables\Columns\TextColumn::make('title')
+                ->searchable(),
+
                 Tables\Columns\TextColumn::make('condition.name')
                     ->sortable(),
-                Tables\Columns\TextColumn::make('title')
-                    ->searchable(),
-
+               
             ])
             ->filters([
                 SelectFilter::make('condition')
                     ->relationship('condition', 'name')
                     ->searchable()
                     ->preload()
+            ], layout: FiltersLayout::AboveContent)
+
+            ->headerActions([
+
+                TCreateAction::make()->form(FilamentForm::firstAidGuideForm())->label('New')->size('lg')
+                ->icon('heroicon-s-sparkles')
+                // Action::make('create')
+
+                // ->size('lg')
+                // ->color('primary')
+                // ->label('First Aid')
+                // ->icon('heroicon-s-plus')
+               
+                // ->url(function(){
+                //     return route('staffs-create');
+                // }),
             ])
             ->actions([
                 Action::make('view')

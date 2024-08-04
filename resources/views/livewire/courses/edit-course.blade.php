@@ -1,17 +1,17 @@
 <x-admin-layout>
 
     <div class="flex  justify-end">
-        <x-filament::button  class="mt-4 mb-6"   href="{{route('users')}}"
+        <x-filament::button  class="mt-4 mb-6"   href="{{route('courses')}}"
         tag="a" icon="heroicon-m-backspace">
             BACK
         </x-filament::button>
     
     </div>
-    <form wire:submit="create">
+    <form wire:submit="save">
         {{ $this->form }}
 
         <x-filament::button type="submit" class="mt-4">
-            SAVE
+            UPDATE
         </x-filament::button>
     </form>
 

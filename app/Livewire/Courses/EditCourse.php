@@ -1,28 +1,23 @@
 <?php
 
-namespace App\Livewire\Students;
+namespace App\Livewire\Courses;
 
-use Filament\Forms;
-use App\Models\User;
-use App\Models\Student;
-use Livewire\Component;
-use Filament\Forms\Form;
-use App\Models\Department;
-use Illuminate\Contracts\View\View;
-use Filament\Forms\Components\Select;
 use App\Http\Controllers\FilamentForm;
-use Filament\Forms\Components\Section;
-use Filament\Forms\Contracts\HasForms;
-use Filament\Forms\Components\FileUpload;
+use App\Models\Course;
+use Filament\Forms;
 use Filament\Forms\Concerns\InteractsWithForms;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Form;
+use Livewire\Component;
+use Illuminate\Contracts\View\View;
 
-class EditStudent extends Component implements HasForms
+class EditCourse extends Component implements HasForms
 {
     use InteractsWithForms;
 
     public ?array $data = [];
 
-    public Student $record;
+    public Course $record;
 
     public function mount(): void
     {
@@ -32,7 +27,7 @@ class EditStudent extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->schema(FilamentForm::studentForm())
+            ->schema(FilamentForm::courseForm())
             ->statePath('data')
             ->model($this->record);
     }
@@ -44,11 +39,11 @@ class EditStudent extends Component implements HasForms
         $this->record->update($data);
         FilamentForm::notification();
 
-        return redirect()->route('students');
+        return redirect()->route('courses');
     }
 
     public function render(): View
     {
-        return view('livewire.students.edit-student');
+        return view('livewire.courses.edit-course');
     }
 }

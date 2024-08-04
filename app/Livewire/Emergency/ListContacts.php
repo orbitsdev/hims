@@ -77,8 +77,9 @@ class ListContacts extends Component implements HasForms, HasTable
                     return $data;
                 })
                 ->modalHeading('CREATE CONTACT')
-                ->icon('heroicon-s-sparkles')
-                ->label('New Conract')
+                ->icon('heroicon-s-plus')
+               
+                ->label('New Contact')
                 ->form($this->emergencyContactForm())->modalWidth('7xl')
                 ->createAnother(false)
         ])

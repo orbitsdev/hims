@@ -16,6 +16,8 @@ use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -42,37 +44,48 @@ class ListStudents extends Component implements HasForms, HasTable
                 ->circular(),
                 Tables\Columns\TextColumn::make('user.name')->formatStateUsing(function (Model $record) {
                     return $record->user->fullName() ?? '';
-                })->searchable(),
+                })->searchable()->label('USER'),
               
-                Tables\Columns\TextColumn::make('id_number')
+                Tables\Columns\TextColumn::make('id_number')->label('ID NUMBER')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('department_id')
-                
-                ->formatStateUsing(function (Model $record) {
-                    return $record->department->getNameWithAbbreviation() ?? '';
-                })->searchable(),
+                    
+                Tables\Columns\TextColumn::make('course.name')->label('COURSE')->wrap(),
                    
+             
+                Tables\Columns\TextColumn::make('section.name')->label('SECTION'),
 
-                // Tables\Columns\TextColumn::make('department')
-                //     ->searchable(),
-                Tables\Columns\TextColumn::make('created_at')
-                    ->date(),
-                    // ->sortable()
-                    // ->toggleable(isToggledHiddenByDefault: true),
-                Tables\Columns\TextColumn::make('updated_at')
-                ->date()
+                Tables\Columns\TextColumn::make('department.name')->label('DEPARTMENT')
+                    ->searchable(),
+                // Tables\Columns\TextColumn::make('created_at')
+                //     ->date(),
+                //     // ->sortable()
+                //     // ->toggleable(isToggledHiddenByDefault: true),
+                // Tables\Columns\TextColumn::make('updated_at')
+                // ->date()
                     // ->dateTime()
                     // ->sortable()
                     // ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
+
+                SelectFilter::make('department')
+                ->relationship('department', 'name')
+                ->searchable()
+                ->preload()
+                ,
+
+                SelectFilter::make('section')
+                
+                ->relationship('section', 'name')
+                ->searchable()
+                ->preload()
                 //
-            ])
+            ],layout: FiltersLayout::AboveContent)
             ->headerActions([
                 Action::make('view')
                 ->size('lg')
                 ->color('primary')
-                ->label('Add New Student')
+                ->label('New Student')
                 ->icon('heroicon-s-plus')
                
                 ->url(function(){
@@ -96,7 +109,7 @@ class ListStudents extends Component implements HasForms, HasTable
                 
                 ->modalWidth(MaxWidth::Full),
                  Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
-                            return route('user-edit', ['record'=> $record]);
+                            return route('edit-student', ['record'=> $record]);
              }),
                 Tables\Actions\DeleteAction::make(),
                 

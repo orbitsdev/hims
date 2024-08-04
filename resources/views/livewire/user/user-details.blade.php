@@ -38,8 +38,8 @@
                 </div>
             </dl>
         </div>
-        @if ($record->personalDetail)
-        <x-personal-detail :record="$record->personalDetail" />
+        @if ($record->displayPersonalDetailsBaseOnRole())
+        <x-personal-detail :record="$record->displayPersonalDetailsBaseOnRole()" />
     @endif
         <!-- Personal Details -->
         

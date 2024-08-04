@@ -15,6 +15,8 @@ return new class extends Migration
             $table->id();
             
             $table->foreignId('user_id')->nullable();
+            $table->foreignId('course_id')->nullable();
+            $table->foreignId('section_id')->nullable();
             $table->string('unique_id')->unique()->nullable();
             $table->string('id_number')->unique()->nullable();
             $table->foreignId('department_id')->nullable();

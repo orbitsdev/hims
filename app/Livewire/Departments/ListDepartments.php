@@ -7,9 +7,11 @@ use Livewire\Component;
 use App\Models\Department;
 use Filament\Tables\Table;
 use Illuminate\Contracts\View\View;
+use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
@@ -26,23 +28,7 @@ class ListDepartments extends Component implements HasForms, HasTable
     use InteractsWithTable;
 
 
-    public function departmentForm(): array {
-        return [
-            TextInput::make('name')->required()->label('NAME')
-            ->unique(ignoreRecord: true)
-             ->columnSpanFull(),
-            TextInput::make('abbreviation')->label('ABBREVIATION')
-            ->unique(ignoreRecord: true),
-            FileUpload::make('image')
-                    ->disk('public')
-                    ->directory('departments')
-                    ->image()
-                    ->imageEditor()
-                    // ->required()
-                    ->columnSpanFull()
-                    ->label('LOGO')
-        ];
-    }
+    
     public function table(Table $table): Table
     {
         return $table
@@ -59,9 +45,11 @@ class ListDepartments extends Component implements HasForms, HasTable
                 ->circular()
                 ,
                 
-                Tables\Columns\TextColumn::make('name')
+                Tables\Columns\TextColumn::make('name')->label('NAME')
                     ->searchable(),
-                Tables\Columns\TextColumn::make('abbreviation')
+                Tables\Columns\TextColumn::make('role')->label('GROUP')
+                    ->searchable(),
+                Tables\Columns\TextColumn::make('abbreviation')->label('ABBREVIATION')
                     ->searchable(),
                     
             ])
@@ -77,14 +65,19 @@ class ListDepartments extends Component implements HasForms, HasTable
                         return $data;
                     })
                     ->icon('heroicon-s-sparkles')
-                    ->label('New Department')
-                    ->form($this->departmentForm()) ->modalWidth('7xl')
+                    ->label('New ')
+                    ->form(FilamentForm::departmentForm()) ->modalWidth('7xl')
                     ->createAnother(false)
             ])
             ->actions([
                 //edit actions
-                Tables\Actions\EditAction::make()->button()->form($this->departmentForm()) ->modalWidth('7xl'),
-                Tables\Actions\DeleteAction::make()->button(),
+                Tables\Actions\EditAction::make()->button()->form(FilamentForm::departmentForm())
+                ->hidden(function(Model $record){
+                    return $record->name == 'ALL';
+                }) ->modalWidth('7xl'),
+                Tables\Actions\DeleteAction::make()->button()->hidden(function(Model $record){
+                    return $record->name == 'ALL';
+                }) ,
                     // ->createAnother(false)
             ])
             ->bulkActions([

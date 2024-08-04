@@ -68,6 +68,8 @@ class ListConditions extends Component implements HasForms, HasTable
                 CreateAction::make('create')->form([
                     TextInput::make('name')->required(),
                 ])  ->size('lg')
+                ->icon('heroicon-s-sparkles')
+
             ])
             ->actions([
                 Action::make('viewTreatment')

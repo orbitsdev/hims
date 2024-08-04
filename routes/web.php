@@ -40,9 +40,16 @@ use App\Livewire\Condition\ViewTreatmentCondition;
 use App\Livewire\Conditions\CondtionTreatmentLists;
 use App\Livewire\Conditions\ListConditionSymptoms;
 use App\Livewire\Conditions\ListConditionTreatments;
+use App\Livewire\Courses\CreateCourse;
+use App\Livewire\Courses\EditCourse;
+use App\Livewire\Courses\ListCourses;
 use App\Livewire\FirstAidFuides\ViewFirstAidGuide;
+use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\FirstAidGuides\ListFirstAidGuide;
 use App\Livewire\FirstAidGuides\ListFirstAidGuides;
+use App\Livewire\Records\CreateRecord;
+use App\Livewire\Records\EditRecord;
+use App\Livewire\Records\ListRecords;
 use App\Livewire\Symptoms\ListSymptoms;
 
 /*
@@ -111,6 +118,11 @@ Route::middleware([
 
     Route::get('/emergency-contacts', ListContacts::class)->name('emergency-contacts');
     Route::get('/academic-year', ListAcademicYear::class)->name('academic-year');
+
+    Route::get('/course', ListCourses::class)->name('courses');
+    Route::get('/course/create', CreateCourse::class)->name('course-create');
+    Route::get('/course/edit/{record}', EditCourse::class)->name('course-edit');
+
     Route::get('/events', ListEvents::class)->name('events');
     Route::get('/event/create', CreateEvent::class)->name('event-create');
     Route::get('/event/edit/{record}', EditEvent::class)->name('event-edit');
@@ -128,6 +140,12 @@ Route::middleware([
 
     //FIRT AID GUIDES
     Route::get('/first-aid-guides', ListFirstAidGuides::class)->name('first-aid-guides');
-    Route::get('/first-aid-guide/view/${record}', ViewFirstAidGuide::class)->name('first-aid-guide-view');
+    Route::get('/first-aid-guide/view/{record}', ViewFirstAidGuide::class)->name('first-aid-guide-view');
+    Route::get('/first-aid-guide/create', CreateFirstAidGuide::class)->name('first-aid-guide-create');
+    Route::get('/first-aid-guide/edit/{record}', CreateFirstAidGuide::class)->name('first-aid-guide-edit');
+    
+    Route::get('/records', ListRecords::class)->name('records');
+    Route::get('/record/create', CreateRecord::class)->name('record-create');
+    Route::get('/record/edit/{record}', EditRecord::class)->name('record-edit');
 
 });

@@ -33,8 +33,8 @@
         <div class="px-4 py-5 sm:px-6 bg-gray-200 border-t border-gray-300">
             <h3 class="text-lg leading-6 font-medium text-gray-900">Personal Details</h3>
         </div>
-        @if ($record->user->personalDetail)
-            <x-personal-detail :record="$record->user->personalDetail" />
+        @if ($record->personalDetail)
+            <x-personal-detail :record="$record->personalDetail" />
         @endif
     </div>
 </div>

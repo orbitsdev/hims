@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Department;
 use App\Models\PersonalDetail;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
@@ -29,5 +30,10 @@ class Personnel extends Model
         } else {
             return asset('images/placeholder-image.jpg'); // Return default image URL
         }
+    }
+
+    public function department(){
+        return $this->belongsTo(Department::class);
+
     }
 }

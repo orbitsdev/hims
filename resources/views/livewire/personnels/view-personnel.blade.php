@@ -30,8 +30,8 @@
         </div>
 
         <!-- Personal Details -->
-        @if($record->user->personalDetail)
-        <x-personal-detail :record="$record->user->personalDetail"/>
+        @if($record->personalDetail)
+        <x-personal-detail :record="$record->personalDetail"/>
             @endif
     </div>
 </div>

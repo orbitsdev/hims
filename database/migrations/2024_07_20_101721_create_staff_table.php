@@ -28,6 +28,7 @@ return new class extends Migration
             $table->date('end_at')->nullable();
             $table->boolean('status')->default(true)->nullable();
             $table->text('photo')->nullable();
+            $table->foreignId('department_id')->nullable();
             $table->timestamps();
         });
     }

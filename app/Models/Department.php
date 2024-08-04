@@ -2,7 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\Staff;
+use App\Models\Course;
 use App\Models\Student;
+use App\Models\Personnel;
+use App\Models\RecordBatch;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -27,6 +31,23 @@ class Department extends Model
     public function students(){
         return $this->hasMany(Student::class);
     }
+    public function staffs(){
+        return $this->hasMany(Staff::class);
+    }
+    public function personnels(){
+        return $this->hasMany(Personnel::class);
+    }
+
+    
+    public function recordBatches(){
+        return $this->hasMany(RecordBatch::class);
+    }
+
+    public function courses(){
+        return $this->hasMany(Course::class);
+    }
+
+    
 
     public function getImage()
     {

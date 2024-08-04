@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('user_id')->nullable();
             // $table->string('unique_id')->unique()->nullable();
             // $table->string('id_number')->unique()->nullable();
+            $table->foreignId('department_id')->nullable();
             $table->text('image')->nullable();
             $table->timestamps();
         });

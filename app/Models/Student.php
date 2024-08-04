@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Course;
+use App\Models\Section;
 use App\Models\Department;
 use App\Models\PersonalDetail;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +17,9 @@ class Student extends Model
 
     public function user(){
         return $this->belongsTo(User::class);
+    }
+    public function section(){
+        return $this->belongsTo(Section::class);
     }
     
     public function personalDetail(): MorphOne
@@ -34,6 +39,10 @@ class Student extends Model
 
     public function department(){
         return $this->belongsTo(Department::class);
+
+    }
+    public function course(){
+        return $this->belongsTo(Course::class);
 
     }
 }

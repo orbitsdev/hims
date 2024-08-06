@@ -4,11 +4,13 @@ namespace App\Providers;
 
 
 use App\Services\RouteManager;
+use App\Broadcasting\SmsChannel;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\ServiceProvider;
 use Filament\Support\Facades\FilamentColor;
 use Filament\Support\View\Components\Modal;
+use Illuminate\Notifications\ChannelManager;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -51,5 +53,8 @@ class AppServiceProvider extends ServiceProvider
         ]);
 
         Modal::closedByClickingAway(false);
+        $this->app->make(ChannelManager::class)->extend('sms', function ($app) {
+            return new SmsChannel();
+        });
     }
 }

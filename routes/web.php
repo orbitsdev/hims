@@ -3,8 +3,7 @@
 
 
 use App\Livewire\Dashboard;
-use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
-use App\Livewire\Records\ListOfUserForIndividualScreening;
+use App\Livewire\QueueMonitor;
 use App\Livewire\Users\EditUser;
 use App\Livewire\Users\ListUser;
 use App\Livewire\Events\EditEvent;
@@ -16,13 +15,20 @@ use App\Livewire\Users\CreateUser;
 use App\Livewire\Events\ListEvents;
 use App\Livewire\Staffs\ListStaffs;
 use App\Livewire\Usesr\EditProfile;
+use App\Livewire\Courses\EditCourse;
 use App\Livewire\Events\CreateEvent;
+use App\Livewire\Records\EditRecord;
 use App\Livewire\Staffs\CreateStaff;
 use Illuminate\Support\Facades\Auth;
+use App\Livewire\Courses\ListCourses;
+use App\Livewire\Records\ListRecords;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Courses\CreateCourse;
+use App\Livewire\Records\CreateRecord;
 use App\Livewire\Students\EditStudent;
 use App\Livewire\Students\ViewStudent;
 use App\Livewire\Students\ListStudents;
+use App\Livewire\Symptoms\ListSymptoms;
 use Filament\Tables\Actions\EditAction;
 use App\Livewire\Emergency\ListContacts;
 use App\Livewire\Students\CreateStudent;
@@ -39,21 +45,16 @@ use App\Livewire\Conditions\ManageConditions;
 use App\Livewire\Departments\ListDepartments;
 use App\Livewire\AcademicYear\ListAcademicYear;
 use App\Livewire\Condition\ViewTreatmentCondition;
-use App\Livewire\Conditions\CondtionTreatmentLists;
 use App\Livewire\Conditions\ListConditionSymptoms;
-use App\Livewire\Conditions\ListConditionTreatments;
-use App\Livewire\Courses\CreateCourse;
-use App\Livewire\Courses\EditCourse;
-use App\Livewire\Courses\ListCourses;
 use App\Livewire\FirstAidFuides\ViewFirstAidGuide;
-use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\FirstAidGuides\ListFirstAidGuide;
+use App\Livewire\Conditions\CondtionTreatmentLists;
 use App\Livewire\FirstAidGuides\ListFirstAidGuides;
+use App\Livewire\Conditions\ListConditionTreatments;
+use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\MedicalRecords\CreateMedicalRecord;
-use App\Livewire\Records\CreateRecord;
-use App\Livewire\Records\EditRecord;
-use App\Livewire\Records\ListRecords;
-use App\Livewire\Symptoms\ListSymptoms;
+use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
+use App\Livewire\Records\ListOfUserForIndividualScreening;
 
 /*
 |--------------------------------------------------------------------------
@@ -155,5 +156,8 @@ Route::middleware([
     Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');
     
     Route::get('/event-announcement-status', EventsAnouncmentSMSStatus::class)->name('event-announcement');
+
+
+    Route::get('/monito-queue', QueueMonitor::class);
 
 });

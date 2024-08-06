@@ -44,6 +44,10 @@ class ListPersonnels extends Component implements HasForms, HasTable
                 Tables\Columns\TextColumn::make('user.name')->formatStateUsing(function (Model $record) {
                     return $record->user->fullName() ?? '';
                 })->searchable(),
+
+                
+                Tables\Columns\TextColumn::make('department.name')->label('DEPARTMENT')
+                    ->searchable(),
             ])
             ->filters([
                 //

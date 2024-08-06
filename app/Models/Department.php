@@ -2,12 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Event;
 use App\Models\Staff;
 use App\Models\Course;
 use App\Models\Student;
 use App\Models\Personnel;
 use App\Models\RecordBatch;
 use App\Models\MedicalRecord;
+use App\Models\DepartmentEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -71,4 +73,19 @@ class Department extends Model
     public function medicalRecords(){
         return $this->hasMany(MedicalRecord::class);
     }
+
+    public function departments(){
+        return $this->belongsToMany(Department::class);
+    }
+
+    public function events(){
+        return $this->belongsToMany(Event::class, 'department_events','department_id', 'event_id');
+    }
+
+    
+
+    public function departmentEvents(){
+        return $this->hasMany(DepartmentEvent::class);
+    }
+
 }

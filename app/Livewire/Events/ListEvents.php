@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Events;
 
+use App\Models\User;
 use Filament\Tables;
 use App\Models\Event;
 use Livewire\Component;
@@ -25,6 +26,7 @@ use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
@@ -42,7 +44,15 @@ class ListEvents extends Component implements HasForms, HasTable
                 Tables\Columns\TextColumn::make('academicYear.name')->searchable()->label('ACADEMIC YEAR'),
                 Tables\Columns\TextColumn::make('semester')->formatStateUsing(function(Model $record){
                     return $record->semester->semesterWithYear();
-                })->searchable()->label('SEMESTER'),
+                })->label('SEMESTER')
+                ->searchable(query: function (Builder $query, string $search): Builder {
+                    return $query->whereHas('semester',function($query) use($search){
+                        $query->where('name_in_text', 'like', "%{$search}%")
+                        ->orWhere('name_in_number', 'like', "%{$search}%");
+                    });
+                       
+                })
+                ,
                     // ->numeric()
                 Tables\Columns\TextColumn::make('event_date')
                     ->date()->label('EVENT DATE'),
@@ -61,6 +71,7 @@ class ListEvents extends Component implements HasForms, HasTable
               
             ])
             ->filters([
+            
                 SelectFilter::make('ACADEMIC YEAR')
                 ->label('ACADEMIC YEAR')
                 ->relationship('academicYear', 'name')
@@ -91,29 +102,54 @@ class ListEvents extends Component implements HasForms, HasTable
                 ->label('SEND NOTIFICATIONS')
                 ->icon('heroicon-m-bell-alert')
                 ->size('lg')
+                 ->modalWidth(MaxWidth::SevenExtraLarge)
     ->form([
-        TextInput::make('Title')->required(),
+        TextInput::make('title')->required(),
         RichEditor::make('body')->required(),
-        Select::make('department_id')
-        ->preload()
-        ->native(false)
-                            ->required()
-                            ->label('BUILDING/DEPARTMENT')
-                            ->options(Department::get()->map(function ($d) {
-                                return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
-                            })->pluck('name', 'id'))
-                            ->searchable()
+        CheckboxList::make('departments')
+        ->required()
+    ->options(Department::where('name','!=', 'All')->pluck('name','id'))
+    ->columns(2)
+    ->searchable()
+    ->gridDirection('row')
+    ->label('SELECT DEPARTMENT THAT YOU WANT TO BE NOTIFIED'),
+        // CheckboxList::make('departments')
+        // ->relationship(
+        //     name: 'departments',
+        //     titleAttribute: 'name'
+        // )
+       
+        
+        // ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name}")
+        // ->bulkToggleable()
+        // ->columns(3)
+        // ->gridDirection('row')
+        // ->searchable()
+      
+        // ->label('SELECT DEPARTMENT THAT YOU WANT TO BE NOTIFIED'),
+        // Select::make('department_id')
+        // ->preload()
+        // ->native(false)
+        //                     ->required()
+        //                     ->label('BUILDING/DEPARTMENT')
+        //                     ->options(Department::get()->map(function ($d) {
+        //                         return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
+        //                     })->pluck('name', 'id'))
+        //                     ->searchable()
        
     ])
     ->button()
     ->action(function (array $data) {
-            // dd($data);
-        FilamentForm::notification('NOTIFICATION FEATURES COMING SOON ');
-        // Mail::to($this->client)
-        //     ->send(new GenericEmail(
-        //         subject: $data['subject'],
-        //         body: $data['body'],
-        //     ));
+
+        $newdata = [
+            'title' => $data['title'],
+            'body' => $data['body'],
+            'departments' =>  json_encode($data['departments'])
+        ];
+
+   
+        return redirect()->route('event-announcement', $newdata);
+       
     }),
                 ActionGroup::make([
                     Action::make('view')

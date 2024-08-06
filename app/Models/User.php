@@ -212,5 +212,20 @@ class User extends Authenticatable
             $query->where('record_id', $record);
         });
     }
+
+    public function scopeDepartmentBelong($query, $departments)
+    {
+        $query->where(function($q) use ($departments) {
+            $q->whereHas('student.department', function($query) use ($departments) {
+                $query->whereIn('id', $departments);
+            })
+            ->orWhereHas('staff.department', function($query) use ($departments) {
+                $query->whereIn('id', $departments);
+            })
+            ->orWhereHas('personnel.department', function($query) use ($departments) {
+                $query->whereIn('id', $departments);
+            });
+        });
+    }
     
 }

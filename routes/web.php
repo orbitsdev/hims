@@ -3,6 +3,7 @@
 
 
 use App\Livewire\Dashboard;
+use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
 use App\Livewire\Users\EditUser;
 use App\Livewire\Users\ListUser;
@@ -152,4 +153,7 @@ Route::middleware([
     
     Route::get('/medical-record/user-list/{record}', ListOfUserForIndividualScreening::class)->name('individual-medical-recoding');
     Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');
+    
+    Route::get('/event-announcement-status', EventsAnouncmentSMSStatus::class)->name('event-announcement');
+
 });

@@ -373,7 +373,7 @@ class FilamentForm extends Controller
                 ->columns([
                     'sm' => 3,
                     'xl' => 6,
-                    '2xl' => 9,
+                    '2xl' => 8,
                 ])
                 ->schema([
                     Section::make('')
@@ -395,6 +395,17 @@ class FilamentForm extends Controller
 
                                 ->columnSpan(4)
                                 ->searchable(),
+                                Select::make('department_id')
+                                ->required()
+                                ->label('BUILDING/DEPARTMENT')
+                                ->options(Department::where('name', '!=','All')->get()->map(function ($d) {
+                                    return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
+                                })->pluck('name', 'id'))
+                                ->searchable()
+                                ->columnSpan(4)
+                                ->createOptionForm(FilamentForm::departmentForm())
+                                
+                                ,
                             FileUpload::make('image')
                                 ->disk('public')
 
@@ -402,7 +413,7 @@ class FilamentForm extends Controller
                                 ->image()
                                 ->imageEditor()
                                 // ->required()
-                                ->columnSpan(4)
+                                ->columnSpanFull()
                                 ->label('IMAGE')
                         ]),
                 ]),

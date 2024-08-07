@@ -49,12 +49,18 @@ return [
             'transport' => 'ses',
         ],
 
-        'mailgun' => [
-            'transport' => 'mailgun',
-            // 'client' => [
-            //     'timeout' => 5,
-            // ],
-        ],
+        // 'mailgun' => [
+        //     'transport' => 'mailgun',
+        //     // 'client' => [
+        //     //     'timeout' => 5,
+        //     // ],
+        // ],
+
+    'mailgun' => [
+    'transport' => 'mailgun',
+    'domain' => env('MAILGUN_DOMAIN'),
+    'secret' => env('MAILGUN_SECRET'),
+],
 
         'postmark' => [
             'transport' => 'postmark',
@@ -98,7 +104,7 @@ return [
     */
 
     'from' => [
-        'address' => env('MAIL_FROM_ADDRESS', 'hello@example.com'),
+        'address' => env('MAIL_FROM_ADDRESS', 'kizzalovelyangelloria@sksu.edu.ph'),
         'name' => env('MAIL_FROM_NAME', 'Example'),
     ],
 

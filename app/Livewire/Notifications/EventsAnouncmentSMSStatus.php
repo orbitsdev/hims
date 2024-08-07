@@ -2,12 +2,15 @@
 
 namespace App\Livewire\Notifications;
 
+use App\Mail\AnouncementMail;
 use App\Models\User;
 use Livewire\Component;
 use Illuminate\Http\Request;
 use Filament\Facades\Filament;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\FilamentForm;
 use App\Notifications\SmsNotification;
+use App\Notifications\AnouncementNotification;
 
 class EventsAnouncmentSMSStatus extends Component {
 
@@ -22,26 +25,22 @@ class EventsAnouncmentSMSStatus extends Component {
         $this->departments = json_decode($request->input('departments', '[]'), true);
           $hardcodedPhoneNumber = '+639366303145';
 
-        $users = User::departmentBelong($this->departments)->get();
+            $users = User::departmentBelong($this->departments)->get();
         
         // Loop through users and send notification to the hardcoded phone number
-        foreach ($users as $user) {
-            $user->notify(new SmsNotification($hardcodedPhoneNumber, $user->name));
-        }
 
-        // Query users based on departments
-        // $users = User::departmentBelong($this->departments)->get();
+        // Mail::to('programmingacount@gmail.com')->send(new AnouncementMail($users[0]));
         // foreach ($users as $user) {
-        //     $user->notify(new SmsNotification($user->phone_number, $this->message));
+           
+        //     Mail::to('programmingacount@gmail.com')->send(new AnouncementMail($user));
+        //     // $user->notify(new AnouncementNotification());
+        //     //$user->notify(new SmsNotification($hardcodedPhoneNumber, $user->name));
         // }
+
+        
 
         FilamentForm::notification('messae');
-       // return redirect()->route('queue-monitor');
-        // $names  = [];
-        // foreach ($users as $user) {
-        //     $names[] = $user->name;
-        // }
-        // dd(['LIST OF USERS TO BE NOTIFIED UNDER SELECTED DEPARTMENT' => $names]);
+       
        
     }
 

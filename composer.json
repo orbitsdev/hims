@@ -13,7 +13,7 @@
         "filament/notifications": "^3.2",
         "filament/tables": "^3.2",
         "filament/widgets": "^3.2",
-        "guzzlehttp/guzzle": "^7.2",
+        "guzzlehttp/guzzle": "^7.8",
         "laravel/framework": "^10.0",
         "laravel/jetstream": "^4.3",
         "laravel/sanctum": "^3.2",
@@ -21,6 +21,8 @@
         "livewire/livewire": "^3.0",
         "rawilk/filament-password-input": "^2.0",
         "spatie/laravel-markdown": "^2.5",
+        "symfony/http-client": "^7.1",
+        "symfony/mailgun-mailer": "^7.1",
         "twilio/sdk": "^8.2"
     },
     "require-dev": {

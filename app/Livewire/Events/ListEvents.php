@@ -8,14 +8,17 @@ use App\Models\Event;
 use Livewire\Component;
 use App\Models\Department;
 use Filament\Tables\Table;
+use App\Mail\AnouncementMail;
 use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
 use Filament\Support\Enums\MaxWidth;
+use Illuminate\Support\Facades\Mail;
 use Filament\Forms\Components\Select;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Notifications\Collection;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
@@ -105,7 +108,7 @@ class ListEvents extends Component implements HasForms, HasTable
                  ->modalWidth(MaxWidth::SevenExtraLarge)
     ->form([
         TextInput::make('title')->required(),
-        RichEditor::make('body')->required(),
+        Textarea::make('body')->required(),
         CheckboxList::make('departments')
         ->required()
     ->options(Department::where('name','!=', 'All')->pluck('name','id'))
@@ -147,8 +150,10 @@ class ListEvents extends Component implements HasForms, HasTable
             'departments' =>  json_encode($data['departments'])
         ];
 
-   
-        return redirect()->route('event-announcement', $newdata);
+        $users = User::departmentBelong($data['departments'])->get();
+     //   dd($users);
+         Mail::to('kizzalovelyangelloria@sksu.edu.ph')->send(new AnouncementMail($users[0] ,$data['title'], $data['body']));
+        //return redirect()->route('event-announcement', $newdata);
        
     }),
                 ActionGroup::make([

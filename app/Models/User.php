@@ -129,12 +129,10 @@ class User extends Authenticatable
 
     public function scopeHasPersonalDetails($query)
     {
-     
-            return $query->whereHas('student.personalDetail')
-                ->orWhereHas('staff.personalDetail')
-                ->orWhereHas('personnel.personalDetail');
-                
-        
+
+        return $query->whereHas('student.personalDetail')
+            ->orWhereHas('staff.personalDetail')
+            ->orWhereHas('personnel.personalDetail');
     }
 
 
@@ -178,23 +176,19 @@ class User extends Authenticatable
         }
     }
     public function scopePersonalDetailsSearch($query, $search)
-{
+    {
 
-    return $query->whereHas('student.personalDetail', function($q) use($search) {
-        $q->where('first_name', 'like', "%{$search}%");
-    })->orWhereHas('staff.personalDetail', function($q) use($search) {
-        $q->where('first_name', 'like', "%{$search}%");
-    })->orWhereHas('personnel.personalDetail', function($q) use($search) {
-        $q->where('first_name', 'like', "%{$search}%");
-    });
-            
-    
-
-
-}
+        return $query->whereHas('student.personalDetail', function ($q) use ($search) {
+            $q->where('first_name', 'like', "%{$search}%");
+        })->orWhereHas('staff.personalDetail', function ($q) use ($search) {
+            $q->where('first_name', 'like', "%{$search}%");
+        })->orWhereHas('personnel.personalDetail', function ($q) use ($search) {
+            $q->where('first_name', 'like', "%{$search}%");
+        });
+    }
 
 
-  
+
     public function getPersonalDetailsBaseOnRole()
     {
         switch ($this->role) {
@@ -218,7 +212,7 @@ class User extends Authenticatable
             case User::STAFF:
                 return $this->staff ? $this->staff->department : null;
             case User::PERSONNEL:
-                return $this->personnel ? $this->department : null;
+                return $this->personnel ? $this->personnel->department : null;
             case User::ADMIN:
                 return null;
             default:
@@ -253,11 +247,10 @@ class User extends Authenticatable
 
     public function scopeNoRecordInThisAcademicYearAndSemester($query, $record)
     {
-        return $query->whereDoesntHave('medicalRecords.record', function($q) use($record) {
-            $q->where('id', $record->id) 
-              ->where('semester_id', $record->semester_id);  
+        return $query->whereDoesntHave('medicalRecords.record', function ($q) use ($record) {
+            $q->where('id', $record->id)
+                ->where('semester_id', $record->semester_id);
         });
-        
     }
 
     public function scopeDepartmentBelong($query, $departments)
@@ -274,5 +267,36 @@ class User extends Authenticatable
                 });
         });
     }
-   
+
+
+    public function scopeNoRecordInThisAcademicYearAndSemesterOnSpecificBatchDepartment($query, $record)
+    {
+
+
+
+        return $query->whereDoesntHave('medicalRecords', function ($query) use ($record) {
+            $query->whereHas('recordBatch', function($query) use($record){
+                $query->where('id', $record->id)->where('department_id', $record->department_id);
+            })->whereHas('record',function ($q) use ($record) {
+                    $q->where('id', $record->record->id)->where('semester_id', $record->record->semester->id);
+                }
+            );
+        });
+    }
+
+
+    public function scopeNoRecordAcademicYearWithBatchDepartment($query, $batch){
+      
+        return $query->whereDoesntHave('medicalRecords', function($query) use($batch){
+            $query->whereHas('recordBatch', function($query) use($batch){
+                $query->where('id', $batch->id)->where('department_id', $batch->department_id);
+            })
+            ->whereHas('record',function ($q) use ($batch) {
+                $q->where('id', $batch->record->id)->where('semester_id', $batch->record->semester->id);
+            }
+        );
+        })->where('role', $batch->department->role);
+    }
+
+    
 }

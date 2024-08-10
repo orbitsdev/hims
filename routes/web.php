@@ -54,7 +54,10 @@ use App\Livewire\Conditions\ListConditionTreatments;
 use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
+use App\Livewire\Records\CreateMedicalRecordByBatch;
+use App\Livewire\Records\ListBatches;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
+use App\Livewire\Records\ListOfUsersByBatch;
 
 /*
 |--------------------------------------------------------------------------
@@ -153,10 +156,12 @@ Route::middleware([
     Route::get('/record/edit/{record}', EditRecord::class)->name('record-edit');
     
     Route::get('/medical-record/user-list/{record}', ListOfUserForIndividualScreening::class)->name('individual-medical-recoding');
+    Route::get('/medical-record/list-batch/{record}', ListBatches::class)->name('batches');
+    Route::get('/medical-record/user-list-by-batch/{record}', ListOfUsersByBatch::class)->name('by-batch-medical-recoding');
     Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');
+    Route::get('/medical-record/by-batch/create/{record}/{user}', CreateMedicalRecordByBatch::class)->name('medical-record-create-by-batch');
     
     Route::get('/event-announcement-status', EventsAnouncmentSMSStatus::class)->name('event-announcement');
-
 
     Route::get('/monito-queue', QueueMonitor::class);
 

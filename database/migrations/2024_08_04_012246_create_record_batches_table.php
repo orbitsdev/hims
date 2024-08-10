@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignId('record_id')->nullable();
             $table->foreignId('department_id')->nullable();
             $table->foreignId('section_id')->nullable();
-            $table->string('status')->default('Pending')->nullable();
+            $table->boolean('is_complete')->default(false);
             $table->timestamps();
         });
     }

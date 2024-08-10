@@ -27,6 +27,15 @@ class Section extends Model
     public function medicalRecords(){
         return $this->hasMany(MedicalRecord::class);
     }
+
+    public function totalStudents()
+    {
+        return $this->students()->count();
+    }
+    
+
+
+
    
 
 }

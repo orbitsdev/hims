@@ -13,26 +13,38 @@ class Record extends Model
 {
     use HasFactory;
 
- 
+
     const ONGOING = 'Ongoing';
     const COMPLETED = 'Completed';
     const CANCELLED = 'Cancelled';
 
-    public function academicYear(){
+    public function academicYear()
+    {
         return $this->belongsTo(AcademicYear::class);
     }
-    public function semester(){
+    public function semester()
+    {
         return $this->belongsTo(Semester::class);
     }
 
-    public function recordBatches(){
+    public function recordBatches()
+    {
         return $this->hasMany(RecordBatch::class);
     }
 
-    public function medicalRecords(){
+    public function medicalRecords()
+    {
         return $this->hasMany(MedicalRecord::class);
     }
-    // public function event(){
-    //     return $this->belongsTo(Event::class);
-    // }
+
+    public function hasBatch()
+    {
+        return $this->recordBatches()->exists();
+    }
+
+    public function totalBatches()
+    {
+        return $this->recordBatches()->count();
+    }
+   
 }

@@ -34,4 +34,31 @@ class RecordBatch extends Model
     public function medicalRecords(){
         return $this->hasMany(MedicalRecord::class);
     }
+    
+    public function scopeBatchesOfRecord($query, $record){
+        return $query->where('record_id', $record);
+    }
+
+
+    public function scopeRecordBatchList($query, $record)
+    {
+        return $query->where('record_id', $record->id);
+    }
+
+
+
+    public  function totalUserOfThisBatch(){
+        
+       return User::notAdmin()->hasPersonalDetails()->noRecordAcademicYearWithBatchDepartment($this)->count();
+
+
+    }
+
+
+
+
+
+    
+
+
 }

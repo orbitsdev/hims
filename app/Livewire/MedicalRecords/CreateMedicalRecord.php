@@ -82,7 +82,7 @@ class CreateMedicalRecord extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->schema(FilamentForm::medicalForm($this->record))
+            ->schema(FilamentForm::medicalForm())
             ->statePath('data')
             ->model(MedicalRecord::class);
     }

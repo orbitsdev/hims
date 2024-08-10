@@ -20,6 +20,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Tables\Actions\ActionGroup;
@@ -47,6 +48,8 @@ class ListRecords extends Component implements HasForms, HasTable
                 Tables\Columns\TextColumn::make('semester')->formatStateUsing(function (Model $record) {
                     return $record->semester->semesterWithYear();
                 })->label('SEMESTER'),
+
+                ViewColumn::make('batches')->view('tables.columns.batch-count')->label('Batch Counts'),
 
                 // ToggleColumn::make('status')->label('STATUS')
 
@@ -78,7 +81,7 @@ class ListRecords extends Component implements HasForms, HasTable
             ->filters([
                 SelectFilter::make('ACADEMIC YEAR')
                     ->label('ACADEMIC YEAR')
-                    ->relationship('academicYear', 'name',fn (Builder $query) => $query->hasRecords())
+                    ->relationship('academicYear', 'name', fn(Builder $query) => $query->hasRecords())
                     ->searchable()
                     ->preload(),
 
@@ -130,7 +133,7 @@ class ListRecords extends Component implements HasForms, HasTable
                 //     )
                 //     ->reactive()
                 //     ->afterStateUpdated(fn (callable $set) => $set('semester_id', null)),
-                    
+
                 // ])  ->columnSpanFull()
                 // ->query(function (Builder $query, array $data): Builder {
                 //     return $query
@@ -174,43 +177,39 @@ class ListRecords extends Component implements HasForms, HasTable
 
                 // ->modalWidth(MaxWidth::Full),
                 Action::make('view')
-                ->size('lg')
-                ->color('primary')
-                
-                ->label('New Event')
-                ->icon('heroicon-s-plus')
-               
-                ->url(function(){
-                    return route('event-create');
-                }),
+                    ->size('lg')
+                    ->color('primary')
+
+                    ->label('New Event')
+                    ->icon('heroicon-s-plus')
+
+                    ->url(function () {
+                        return route('event-create');
+                    }),
             ])
             ->actions([
-              
-Action::make('recordIndividually') // Identifier should be unique and camelCase
-->label('RECORD INDIVIDUALLY') // Consistent casing
-->icon('heroicon-m-user')
-->button()
-->size('lg')
-->url(function (Model $record) {
-    return route('individual-medical-recoding', ['record'=> $record]);
-})
-,
 
-Action::make('recordByBatch') // Identifier should be unique and camelCase
-->label('RECORD BY BATCH') // Consistent casing
-->icon('heroicon-m-folder')
-->size('lg')
-   
-    ->button()
-    ->action(function () {
-            // dd($data);
-        FilamentForm::notification('NOTIFICATION FEATURES COMING SOON ');
-        // Mail::to($this->client)
-        //     ->send(new GenericEmail(
-        //         subject: $data['subject'],
-        //         body: $data['body'],
-        //     ));
-    }),
+                Action::make('recordIndividually') // Identifier should be unique and camelCase
+                    ->label('INDIVIDUAL') // Consistent casing
+                    ->icon('heroicon-o-user')
+                    ->button()
+                    ->size('lg')
+                    ->url(function (Model $record) {
+                        return route('individual-medical-recoding', ['record' => $record]);
+                    }),
+
+                Action::make('recordByBatch') // Identifier should be unique and camelCase
+                    ->label('BY BATCH') // Consistent casing
+                    ->icon('heroicon-o-user-group')
+                    ->size('lg')
+                    ->button()
+                    ->url(function (Model $record) {
+                        return route('batches', ['record' => $record]);
+                    })->hidden(function(Model $record){
+                        return $record->totalBatches() <= 0;
+                    })
+                    ,
+                   
 
                 ActionGroup::make([
                     Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function (Model $record) {
@@ -226,13 +225,13 @@ Action::make('recordByBatch') // Identifier should be unique and camelCase
                 Tables\Actions\BulkActionGroup::make([
                     BulkAction::make('delete')
                         ->requiresConfirmation()
-                        ->action(fn (Collection $records) => $records->each->delete())
+                        ->action(fn(Collection $records) => $records->each->delete())
                 ])
                     ->label('ACTION'),
             ])
             ->groups([
                 Group::make('academicYear.name')
-                ->label('Academic Year')
+                    ->label('Academic Year')
             ])->defaultGroup('academicYear.name');
     }
 

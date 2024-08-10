@@ -25,43 +25,43 @@ class CreateMedicalRecord extends Component implements HasForms
     {   
 
         $personalDetails = $this->user->getPersonalDetailsBaseOnRole();
-        $department= $this->user->getDepartmentBaseOnRole();
-        $academicYear = $this->record->academicYear;
-        $semester = $this->record->semester;
-        $student =null;
-        $course = null;
-        $section = null;
+        // $department= $this->user->getDepartmentBaseOnRole();
+        // $academicYear = $this->record->academicYear;
+        // $semester = $this->record->semester;
+        // $student =null;
+        // $course = null;
+        // $section = null;
        
 
     
 
         
         if($this->user->role == User::STUDENT){
-            $section= $this->user->section;
-            $student = $this->user->student;    
-            $course = $this->user->student->course;    
-            $section = $this->user->student->section;    
+            // $section= $this->user->section;
+            // $student = $this->user->student;    
+            // $course = $this->user->student->course;    
+            // $section = $this->user->student->section;    
         }
 
         $this->form->fill([
 
-            // RELATIONSHIP
+            // // RELATIONSHIP
          
-            'record_id'=> $this->record->id,           
-            'user_id'=> $this->user->id,                   
-            'section_id'=> $section->id,
-            'department_id'=> $department->id,
+            // 'record_id'=> $this->record->id,           
+            // 'user_id'=> $this->user->id,                   
+            // 'section_id'=> $section->id,
+            // 'department_id'=> $department->id,
             
             
-            'record_title'=> $this->record->title,          
-            'academic_year_name'=> $academicYear->name,          
-            'semester_name'=> $semester->name_in_text,          
+            // 'record_title'=> $this->record->title,          
+            // 'academic_year_name'=> $academicYear->name,          
+            // 'semester_name'=> $semester->name_in_text,          
             
-            'department_name'=> $department->name,          
-            'course_name'=>$course->name,          
-            'section_name'=>$section->name,          
-            'student_unique_id'=>$student->unique_id,          
-            'role'=>$this->user->role,       
+            // 'department_name'=> $department->name,          
+            // 'course_name'=>$course->name,          
+            // 'section_name'=>$section->name,          
+            // 'student_unique_id'=>$student->unique_id,          
+            // 'role'=>$this->user->role,       
             
             
             // PERSONAL DETAILS
@@ -91,7 +91,7 @@ class CreateMedicalRecord extends Component implements HasForms
     {
 
 
-        $personalDetails = $this->user->getPersonalDetailsBaseOnRole();
+       
         $department= $this->user->getDepartmentBaseOnRole();
         $academicYear = $this->record->academicYear;
         $semester = $this->record->semester;

@@ -29,6 +29,9 @@ class MedicalRecord extends Model
     public function user(){
         return $this->belongsTo(User::class);
     }
+    public function recorder(){
+        return $this->belongsTo(User::class,'recorder_id');
+    }
     public function recordBatch(){
         return $this->belongsTo(RecordBatch::class);
     }
@@ -44,4 +47,6 @@ class MedicalRecord extends Model
     public function condition(){
         return $this->belongsTo(Condition::class);
     }
+
+    
 }

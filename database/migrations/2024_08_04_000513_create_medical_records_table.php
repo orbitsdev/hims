@@ -17,6 +17,7 @@ return new class extends Migration
             //RECORD RELATIONSHIP
             $table->foreignId('record_id')->nullable();
             $table->foreignId('user_id')->nullable();
+            $table->foreignId('recorder_id')->nullable();
             $table->foreignId('record_batch_id')->nullable();
             $table->foreignId('section_id')->nullable();
             $table->foreignId('course_id')->nullable();
@@ -37,6 +38,7 @@ return new class extends Migration
             $table->text('course_name')->nullable();
             $table->string('section_name')->nullable();
             $table->string('student_unique_id')->nullable();
+            $table->string('student_id_number')->nullable();
             $table->string('role')->nullable();
 
             // PERSONAL DETAILS
@@ -60,15 +62,20 @@ return new class extends Migration
             $table->integer('diastolic_pressure')->nullable(); 
             $table->integer('heart_rate')->nullable(); 
             $table->text('specified_diagnoses')->nullable(); 
+            $table->text('diagnoses')->nullable(); 
             $table->text('condition_name')->nullable(); 
+            
             $table->text('remarks')->nullable(); 
             $table->date('date_of_examination')->nullable(); 
             $table->string('release_by')->nullable(); 
             $table->string('physician_name')->nullable(); 
             $table->text('upload_image')->nullable(); 
             $table->text('captured_image')->nullable(); 
-            $table->string('status')->default('No Record')->nullable(); 
+            $table->boolean('is_complete')->default(false)->nullable(); 
 
+           
+            
+          
 
             $table->timestamps();
         });

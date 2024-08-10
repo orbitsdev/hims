@@ -9,6 +9,8 @@ use Livewire\Component;
 use Filament\Forms\Form;
 use App\Models\MedicalRecord;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 
@@ -23,119 +25,120 @@ class CreateMedicalRecord extends Component implements HasForms
     {   
 
         $personalDetails = $this->user->getPersonalDetailsBaseOnRole();
-        $this->form->fill([
-            'record_title'=> $this->record->title ??'',
-            'academic_year_name'=> $this->record->academicYear->name ??'',
-            'semester_name'=> $this->record->semester->name_in_number ??'',
-            'department_name'=> $this->record->semester->name_in_number ??'',
-           
+        $department= $this->user->getDepartmentBaseOnRole();
+        $academicYear = $this->record->academicYear;
+        $semester = $this->record->semester;
+        $student =null;
+        $course = null;
+        $section = null;
+       
+
+    
+
         
+        if($this->user->role == User::STUDENT){
+            $section= $this->user->section;
+            $student = $this->user->student;    
+            $course = $this->user->student->course;    
+            $section = $this->user->student->section;    
+        }
+
+        $this->form->fill([
+
+            // RELATIONSHIP
+         
+            'record_id'=> $this->record->id,           
+            'user_id'=> $this->user->id,                   
+            'section_id'=> $section->id,
+            'department_id'=> $department->id,
+            
+            
+            'record_title'=> $this->record->title,          
+            'academic_year_name'=> $academicYear->name,          
+            'semester_name'=> $semester->name_in_text,          
+            
+            'department_name'=> $department->name,          
+            'course_name'=>$course->name,          
+            'section_name'=>$section->name,          
+            'student_unique_id'=>$student->unique_id,          
+            'role'=>$this->user->role,       
+            
+            
+            // PERSONAL DETAILS
+            'first_name'=>$personalDetails->first_name,          
+            'last_name'=>$personalDetails->last_name,                
+            'middle_name'=>$personalDetails->middle_name,          
+            'age'=>$personalDetails->age,          
+            'weight'=>$personalDetails->weight,          
+            'height'=>$personalDetails->height,          
+            'birth_date'=>$personalDetails->birth_date,          
+            'birth_place'=>$personalDetails->birth_place,          
+            'address'=>$personalDetails->address,          
+            'civil_status'=>$personalDetails->civil_status,          
+
         ]);
     }
 
     public function form(Form $form): Form
     {
         return $form
-            ->schema([
-                // Forms\Components\TextInput::make('record_id')
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('user_id')
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('record_batch_id')
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('section_id')
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('course_id')
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('department_id')
-                //     ->numeric(),
-                // Forms\Components\TextInput::make('condition_id')
-                //     ->numeric(),
-                Forms\Components\TextInput::make('record_title')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('batch_description')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('academic_year_name')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('semester_name')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('department_name')
-                    ->maxLength(191),
-                Forms\Components\Textarea::make('course_name')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('section_name')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('student_unique_id')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('role')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('first_name')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('last_name')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('middle_name')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('age')
-                    ->numeric(),
-                Forms\Components\TextInput::make('weight')
-                    ->numeric(),
-                Forms\Components\TextInput::make('height')
-                    ->numeric(),
-                Forms\Components\DatePicker::make('birth_date'),
-                Forms\Components\Textarea::make('birth_place')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('address')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('civil_status')
-                    ->maxLength(191),
-                Forms\Components\Textarea::make('past_illness')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('allergies')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('temperature')
-                    ->numeric(),
-                Forms\Components\TextInput::make('blood_pressure')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('systolic_pressure')
-                    ->numeric(),
-                Forms\Components\TextInput::make('diastolic_pressure')
-                    ->numeric(),
-                Forms\Components\TextInput::make('heart_rate')
-                    ->numeric(),
-                Forms\Components\Textarea::make('specified_diagnoses')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('condition_name')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('remarks')
-                    ->columnSpanFull(),
-                Forms\Components\DatePicker::make('date_of_examination'),
-                Forms\Components\TextInput::make('release_by')
-                    ->maxLength(191),
-                Forms\Components\TextInput::make('physician_name')
-                    ->maxLength(191),
-                Forms\Components\Textarea::make('upload_image')
-                    ->columnSpanFull(),
-                Forms\Components\Textarea::make('captured_image')
-                    ->columnSpanFull(),
-                Forms\Components\TextInput::make('status')
-                    ->maxLength(191)
-                    ->default('No Record'),
-            ])
+            ->schema(FilamentForm::medicalForm($this->record))
             ->statePath('data')
             ->model(MedicalRecord::class);
     }
 
-    public function create(): void
+    public function create()
     {
+
+
+        $personalDetails = $this->user->getPersonalDetailsBaseOnRole();
+        $department= $this->user->getDepartmentBaseOnRole();
+        $academicYear = $this->record->academicYear;
+        $semester = $this->record->semester;
+        $student =null;
+        $course = null;
+        $section = null;
+       
+        
+        if($this->user->role == User::STUDENT){
+            $section= $this->user->section;
+            $student = $this->user->student;    
+            $course = $this->user->student->course;    
+            $section = $this->user->student->section;    
+        }
+
         $data = $this->form->getState();
 
+        $data['record_id']=  $this->record->id;
+        $data['user_id']=  $this->user->id;
+        $data['section_id']= $section->id;
+        $data['department_id']=  $department->id;
+        $data['academic_year_name']=  $academicYear->name;
+        $data['semester_name']=  $semester->name_in_text;
+        $data['department_name']= $department->name;
+        $data['course_name']=  $course->name;
+        $data['section_name']=  $section->name;
+        $data['student_unique_id']= $student->unique_id;
+        $data['student_id_number']= $student->id_number;
+        $data['recorder_id']= Auth::user()->id;
+        $data['role']=  $this->user->role;
+     
+        
         $record = MedicalRecord::create($data);
 
         $this->form->model($record)->saveRelationships();
+
+      
+        FilamentForm::notification('Save Successfully');
+
+        return redirect()->route('individual-medical-recoding',['record'=> $record->id]);
+
     }
 
     public function render(): View
     {
+
+        
         return view('livewire.medical-records.create-medical-record');
     }
 }

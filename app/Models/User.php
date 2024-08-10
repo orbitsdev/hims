@@ -126,8 +126,17 @@ class User extends Authenticatable
     {
         return $query->where('role', User::PERSONNEL)->whereDoesntHave('personnel');
     }
-   
-   
+
+    public function scopeHasPersonalDetails($query)
+    {
+     
+            return $query->whereHas('student.personalDetail')
+                ->orWhereHas('staff.personalDetail')
+                ->orWhereHas('personnel.personalDetail');
+                
+        
+    }
+
 
     public function personalDetail(): MorphOne
     {
@@ -153,21 +162,39 @@ class User extends Authenticatable
     {
         switch ($role) {
             case self::STUDENT:
-                return $query->whereHas('student', function($query) use($department) {
+                return $query->whereHas('student', function ($query) use ($department) {
                     $query->where('department_id', $department);
                 });
             case self::STAFF:
-                return $query->whereHas('staff', function($query) use($department) {
+                return $query->whereHas('staff', function ($query) use ($department) {
                     $query->where('department_id', $department);
                 });
             case self::PERSONNEL:
-                return $query->whereHas('personnel', function($query) use($department) {
+                return $query->whereHas('personnel', function ($query) use ($department) {
                     $query->where('department_id', $department);
                 });
             default:
                 return $query; // Return the query object to allow further chaining
         }
     }
+    public function scopePersonalDetailsSearch($query, $search)
+{
+
+    return $query->whereHas('student.personalDetail', function($q) use($search) {
+        $q->where('first_name', 'like', "%{$search}%");
+    })->orWhereHas('staff.personalDetail', function($q) use($search) {
+        $q->where('first_name', 'like', "%{$search}%");
+    })->orWhereHas('personnel.personalDetail', function($q) use($search) {
+        $q->where('first_name', 'like', "%{$search}%");
+    });
+            
+    
+
+
+}
+
+
+  
     public function getPersonalDetailsBaseOnRole()
     {
         switch ($this->role) {
@@ -177,6 +204,21 @@ class User extends Authenticatable
                 return $this->staff ? $this->staff->personalDetail : null;
             case User::PERSONNEL:
                 return $this->personnel ? $this->personnel->personalDetail : null;
+            case User::ADMIN:
+                return null;
+            default:
+                return null;
+        }
+    }
+    public function getDepartmentBaseOnRole()
+    {
+        switch ($this->role) {
+            case User::STUDENT:
+                return $this->student ? $this->student->department : null;
+            case User::STAFF:
+                return $this->staff ? $this->staff->department : null;
+            case User::PERSONNEL:
+                return $this->personnel ? $this->department : null;
             case User::ADMIN:
                 return null;
             default:
@@ -199,33 +241,38 @@ class User extends Authenticatable
         }
     }
 
-    public function medicalRecords(){
+    public function medicalRecords()
+    {
         return $this->hasMany(MedicalRecord::class);
     }
 
-    public function scopeHasAnyRoles($query, $roles){
+    public function scopeHasAnyRoles($query, $roles)
+    {
         $query->whereIn('role', $roles);
     }
 
-    public function scopeNoRecordInThisAcademicYearAndSemester($query, $record){
-        return $query->hasAnyRoles([User::STUDENT,User::PERSONNEL])->whereDoesntHave('medicalRecords', function($query) use($record){
-            $query->where('record_id', $record);
+    public function scopeNoRecordInThisAcademicYearAndSemester($query, $record)
+    {
+        return $query->whereDoesntHave('medicalRecords.record', function($q) use($record) {
+            $q->where('id', $record->id) 
+              ->where('semester_id', $record->semester_id);  
         });
+        
     }
 
     public function scopeDepartmentBelong($query, $departments)
     {
-        $query->where(function($q) use ($departments) {
-            $q->whereHas('student.department', function($query) use ($departments) {
+        $query->where(function ($q) use ($departments) {
+            $q->whereHas('student.department', function ($query) use ($departments) {
                 $query->whereIn('id', $departments);
             })
-            ->orWhereHas('staff.department', function($query) use ($departments) {
-                $query->whereIn('id', $departments);
-            })
-            ->orWhereHas('personnel.department', function($query) use ($departments) {
-                $query->whereIn('id', $departments);
-            });
+                ->orWhereHas('staff.department', function ($query) use ($departments) {
+                    $query->whereIn('id', $departments);
+                })
+                ->orWhereHas('personnel.department', function ($query) use ($departments) {
+                    $query->whereIn('id', $departments);
+                });
         });
     }
-    
+   
 }

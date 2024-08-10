@@ -5,12 +5,18 @@ namespace App\Livewire\Records;
 use Filament\Tables;
 use App\Models\Record;
 use Livewire\Component;
+use App\Models\Semester;
 use Filament\Tables\Table;
+use App\Models\AcademicYear;
 use Filament\Actions\CreateAction;
 use Filament\Tables\Actions\Action;
+use Filament\Tables\Filters\Filter;
+use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
 use Filament\Support\Enums\MaxWidth;
+use Filament\Forms\Components\Select;
 use App\Http\Controllers\FilamentForm;
+use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
@@ -37,7 +43,7 @@ class ListRecords extends Component implements HasForms, HasTable
             ->query(Record::query())
             ->columns([
                 Tables\Columns\TextColumn::make('title')->searchable()->label('TITLE'),
-                Tables\Columns\TextColumn::make('academicYear.name')->label('ACADEMIC YEAR'),
+                Tables\Columns\TextColumn::make('academicYear.name')->label('ACADEMIC YEAR')->searchable(),
                 Tables\Columns\TextColumn::make('semester')->formatStateUsing(function (Model $record) {
                     return $record->semester->semesterWithYear();
                 })->label('SEMESTER'),
@@ -72,7 +78,7 @@ class ListRecords extends Component implements HasForms, HasTable
             ->filters([
                 SelectFilter::make('ACADEMIC YEAR')
                     ->label('ACADEMIC YEAR')
-                    ->relationship('academicYear', 'name')
+                    ->relationship('academicYear', 'name',fn (Builder $query) => $query->hasRecords())
                     ->searchable()
                     ->preload(),
 
@@ -81,6 +87,59 @@ class ListRecords extends Component implements HasForms, HasTable
                 // ->relationship('semester', 'name_in_text')
                 // ->searchable()
                 // ->preload()
+
+
+                //  Filter::make('filter')
+                //  ->columns([
+                //     'sm' => 3,
+                //     'xl' => 6,
+                //     '2xl' =>6,
+                // ])
+                // ->form([
+
+                //     Select::make('academic_year_id')
+                //     ->columnSpan(1)
+                //     ->label('ACADEMIC YEAR')
+                //     ->options(
+                //         AcademicYear::all()->pluck('name', 'id')->put(-1, 'None')->all()
+                //     )
+                //     ->reactive()
+                //     ->afterStateUpdated(fn (callable $set) => $set('areas', null)),
+                // Select::make('semester_id')
+                // ->columnSpan(1)
+                //     ->label('SEMESTER')
+                //     ->options(
+                //         function (callable $get) {
+                //             if (filled($semester_id = $get('academic_year_id'))) {
+                //                 $academicYear = AcademicYear::find($semester_id);
+                //                 return $academicYear->semesters->map(function($item){
+                //                     return [
+                //                         'name'=> $item->semesterWithYear(),
+                //                         'id'=> $item->id,
+                //                     ];
+                //                 })->pluck('name', 'id')->all();
+                //             } else {
+                //                 return Semester::all()->map(function($item){
+                //                     return [
+                //                         'name'=> $item->semesterWithYear(),
+                //                         'id'=> $item->id,
+                //                     ];
+                //                 })->pluck('name', 'id')->all();
+                //             }
+                //         }
+                //     )
+                //     ->reactive()
+                //     ->afterStateUpdated(fn (callable $set) => $set('semester_id', null)),
+                    
+                // ])  ->columnSpanFull()
+                // ->query(function (Builder $query, array $data): Builder {
+                //     return $query
+                //         ->when(
+                //             $data['academic_year_id'] === -1,
+                //             fn (Builder $query): Builder => $query->whereNull('academic_year_id'),
+                //         );
+                // }),
+
             ], layout: FiltersLayout::AboveContent)
             ->headerActions([
                 TAction::make('create')
@@ -170,7 +229,11 @@ Action::make('recordByBatch') // Identifier should be unique and camelCase
                         ->action(fn (Collection $records) => $records->each->delete())
                 ])
                     ->label('ACTION'),
-            ]);
+            ])
+            ->groups([
+                Group::make('academicYear.name')
+                ->label('Academic Year')
+            ])->defaultGroup('academicYear.name');
     }
 
     public function render(): View

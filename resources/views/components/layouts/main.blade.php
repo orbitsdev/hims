@@ -19,6 +19,25 @@
         [x-cloak] {
             display: none !important;
         }
+        .ron-ron-buang{
+            background: #EFF1F6;
+            padding: 8px;
+            border-radius: 12px;
+          
+            
+        }
+        .ron-image{
+            width: 90px;
+            height: 90px;
+
+        }
+        .ron-ml{
+            margin-left: 20px; 
+        }
+
+        .ron-flex{
+            display: flex;
+        }
     </style>
 
     @filamentStyles
@@ -30,8 +49,6 @@
 
 <body class="font-sans antialiased bg-gradient-to-br  from-tory-blue-50 to-tory-blue-200  min-h-screen flex flex-col">
 
-
-            
             {{$slot}}
 
 {{-- 

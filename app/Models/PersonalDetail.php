@@ -9,7 +9,12 @@ use Illuminate\Database\Eloquent\Relations\MorphTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class PersonalDetail extends Model
+
 {
+
+
+    
+
     use HasFactory;
     public function personaldetailable(): MorphTo
     {

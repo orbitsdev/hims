@@ -1,5 +1,5 @@
 
-<div class="p-10">
+<div class="p-10 ">
 
     <x-filament::button  color="gray" class=" mb-4"   href="{{route('individual-medical-recoding',['record'=> $record])}}" size="xl"
     tag="a" icon="heroicon-m-backspace">

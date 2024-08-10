@@ -37,7 +37,7 @@ class ManageCondition extends Component implements HasForms, HasActions
     {   
        
 
-        $this->form->fill($this->record->attributesToArray());
+        // $this->form->fill($this->record->attributesToArray());
     }
 
     public function form(Form $form): Form

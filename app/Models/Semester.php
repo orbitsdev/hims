@@ -22,5 +22,12 @@ class Semester extends Model
     public function records(){
         return $this->hasMany(Record::class);
     }
+    public function record(){
+        return $this->hasOne(Record::class);
+    }
+
+    public function scopeNoRecord($query){
+        return $query->whereDoesntHave('record');
+    }
 
 }

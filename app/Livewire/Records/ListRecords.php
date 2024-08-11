@@ -51,39 +51,7 @@ class ListRecords extends Component implements HasForms, HasTable
                     return $record->semester->semesterWithYear();
                 })->label('SEMESTER'),
 
-                // ViewColumn::make('batches')->view('tables.columns.batch-count')->label('BATCH DEPARTMENT AND TOTAL ACCOUNT'),
-
-                //  TextColumn::make('recordBatches.department.name')
-                //  ->listWithLineBreaks()
-                //  ->limitList(3)
-                //  ->expandableLimitedList()
-
-                // ToggleColumn::make('status')->label('STATUS')
-
-                //     ->afterStateUpdated(function ($record, $state) {
-                //         FilamentForm::notification('Status Was set to ' . $state ? 'Active' : 'Inactive');
-                //     }),
-
-                // TextColumn::make('recordBatches')->counts('recordBatches')->label('BATCH COUNT')->formatStateUsing(function(Model $record){
-                //     return $record->recordBatches->count();
-                // })
-                //             TextColumn::make('recordBatches.description')->label('BATCH')
-                // ->listWithLineBreaks()
-                // ->limitList(3)
-                // ->expandableLimitedList()
-
-                // Tables\Columns\TextColumn::make('academic_year_name')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('semester_name')
-                //     ->searchable(),
-                // Tables\Columns\TextColumn::make('created_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
-                // Tables\Columns\TextColumn::make('updated_at')
-                //     ->dateTime()
-                //     ->sortable()
-                //     ->toggleable(isToggledHiddenByDefault: true),
+               
 
                 IconColumn::make('status')
                     ->boolean()
@@ -202,9 +170,17 @@ class ListRecords extends Component implements HasForms, HasTable
                     }),
             ])
             ->actions([
-
+                Action::make('collection') // Identifier should be unique and camelCase
+                ->label('DATA') // Consistent casing
+                ->icon('heroicon-o-folder-open')
+                 ->button()
+                 ->size('lg')
+                
+                 ,
+                
+               
                 Action::make('recordIndividually') // Identifier should be unique and camelCase
-                    ->label('INDIVIDUAL') // Consistent casing
+                    ->label('RD INDIVIDUAL') // Consistent casing
                     ->icon('heroicon-o-user')
                     ->button()
                     ->size('lg')
@@ -216,7 +192,7 @@ class ListRecords extends Component implements HasForms, HasTable
                     }),
 
                 Action::make('recordByBatch') // Identifier should be unique and camelCase
-                    ->label('BY BATCH') // Consistent casing
+                    ->label('RD BY BATCH') // Consistent casing
                     ->icon('heroicon-o-user-group')
                     ->size('lg')
                     ->button()
@@ -227,6 +203,9 @@ class ListRecords extends Component implements HasForms, HasTable
                         return false;
                         // return $record->totalBatches() <= 0;
                     }),
+
+                  
+                    
 
 
                 ActionGroup::make([
@@ -249,7 +228,9 @@ class ListRecords extends Component implements HasForms, HasTable
             ])
             ->groups([
                 Group::make('academicYear.name')
-                    ->label('Academic Year')
+                    ->label('Academic Year'),
+                Group::make('semester.name_in_text')
+                    ->label('Semester')
             ])->defaultGroup('academicYear.name');
     }
 

@@ -9,14 +9,13 @@ use App\Models\Personnel;
 use App\Models\MedicalRecord;
 use App\Models\PersonalDetail;
 use Laravel\Sanctum\HasApiTokens;
-use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -26,14 +25,13 @@ class User extends Authenticatable
     use Notifiable;
     use TwoFactorAuthenticatable;
 
-
     const ADMIN = 'Admin';
     const STAFF = 'Staff';
     const PERSONNEL = 'Personnel';
     const STUDENT = 'Student';
 
     const ROLES = [
-        //   User::ADMIN => User::ADMIN, 
+        //   User::ADMIN => User::ADMIN,
         User::STAFF => User::STAFF,
         User::PERSONNEL => User::PERSONNEL,
         User::STUDENT => User::STUDENT,
@@ -80,7 +78,6 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
-
     public function fullName()
     {
         return $this->name;
@@ -109,10 +106,21 @@ class User extends Authenticatable
         }
     }
 
-
     public function scopeNotAdmin($query)
     {
         return $query->where('role', '!=', User::ADMIN);
+    }
+    public function scopeNotStudent($query)
+    {
+        return $query->where('role', '!=', User::STUDENT);
+    }
+    public function scopeNotPersonnel($query)
+    {
+        return $query->where('role', '!=', User::PERSONNEL);
+    }
+    public function scopeNotStaff($query)
+    {
+        return $query->where('role', '!=', User::STAFF);
     }
     public function scopeNotRegisteredStudents($query)
     {
@@ -135,12 +143,10 @@ class User extends Authenticatable
             ->orWhereHas('personnel.personalDetail');
     }
 
-
     public function personalDetail(): MorphOne
     {
         return $this->morphOne(PersonalDetail::class, 'personaldetailable');
     }
-
 
     public function student()
     {
@@ -186,8 +192,6 @@ class User extends Authenticatable
             $q->where('first_name', 'like', "%{$search}%");
         });
     }
-
-
 
     public function getPersonalDetailsBaseOnRole()
     {
@@ -268,35 +272,37 @@ class User extends Authenticatable
         });
     }
 
-
     public function scopeNoRecordInThisAcademicYearAndSemesterOnSpecificBatchDepartment($query, $record)
     {
 
-
-
         return $query->whereDoesntHave('medicalRecords', function ($query) use ($record) {
-            $query->whereHas('recordBatch', function($query) use($record){
+            $query->whereHas('recordBatch', function ($query) use ($record) {
                 $query->where('id', $record->id)->where('department_id', $record->department_id);
-            })->whereHas('record',function ($q) use ($record) {
-                    $q->where('id', $record->record->id)->where('semester_id', $record->record->semester->id);
-                }
+            })->whereHas('record', function ($q) use ($record) {
+                $q->where('id', $record->record->id)->where('semester_id', $record->record->semester->id);
+            }
             );
         });
     }
 
+    public function scopeNoRecordAcademicYearWithBatchDepartment($query, $batch)
+    {
 
-    public function scopeNoRecordAcademicYearWithBatchDepartment($query, $batch){
-      
-        return $query->whereDoesntHave('medicalRecords', function($query) use($batch){
-            $query->whereHas('recordBatch', function($query) use($batch){
-                $query->where('id', $batch->id)->where('department_id', $batch->department_id);
-            })
-            ->whereHas('record',function ($q) use ($batch) {
-                $q->where('id', $batch->record->id)->where('semester_id', $batch->record->semester->id);
-            }
-        );
-        })->where('role', $batch->department->role);
+        return $query->whereDoesntHave('medicalRecords', function ($query) use ($batch) {
+            $query->whereHas('record', function ($q) use ($batch) {
+                $q->where('id', $batch->record->id)
+                    ->where('semester_id', $batch->record->semester_id);
+            })->whereHas('recordBatch', function($quer) use($batch){
+                $quer->where('id', $batch->id)->where('department_id', $batch->department_id);
+            });
+        })
+        ->where('role', $batch->department->role)->when($batch->department->role == User::STUDENT, function($query) use($batch){
+            $query->whereHas('student', function ($q) use ($batch) {
+                $q->where('section_id', $batch->section_id);
+            });
+        });
+
+       
     }
 
-    
 }

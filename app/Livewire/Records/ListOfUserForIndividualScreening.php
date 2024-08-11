@@ -37,7 +37,7 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
     public function table(Table $table): Table
     {
         return $table
-            ->query(User::query()->notAdmin()->hasPersonalDetails()->noRecordInThisAcademicYearAndSemester($this->record)->orderBy('name'))
+            ->query(User::query()->notAdmin()->notStaff()->hasPersonalDetails()->noRecordInThisAcademicYearAndSemester($this->record)->orderBy('name'))
             ->columns([
 
                 ImageColumn::make('profile_photo_path')

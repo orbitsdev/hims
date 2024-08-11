@@ -30,8 +30,8 @@ use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Tables\Concerns\InteractsWithTable;
 use Filament\Tables\Actions\CreateAction as TAction;
+use Filament\Tables\Concerns\InteractsWithTable;
 
 class ListRecords extends Component implements HasForms, HasTable
 {
@@ -49,7 +49,12 @@ class ListRecords extends Component implements HasForms, HasTable
                     return $record->semester->semesterWithYear();
                 })->label('SEMESTER'),
 
-                ViewColumn::make('batches')->view('tables.columns.batch-count')->label('Batch Counts'),
+                 ViewColumn::make('batches')->view('tables.columns.batch-count')->label('BATCH DEPARTMENT AND TOTAL ACCOUNT'),
+
+                //  TextColumn::make('recordBatches.department.name')
+                //  ->listWithLineBreaks()
+                //  ->limitList(3)
+                //  ->expandableLimitedList()
 
                 // ToggleColumn::make('status')->label('STATUS')
 

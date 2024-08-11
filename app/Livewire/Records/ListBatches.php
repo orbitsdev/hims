@@ -2,7 +2,6 @@
 
 namespace App\Livewire\Records;
 
-use App\Http\Controllers\FilamentForm;
 use Filament\Tables;
 use App\Models\Record;
 use Livewire\Component;
@@ -10,6 +9,7 @@ use Filament\Tables\Table;
 use App\Models\RecordBatch;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
+use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ViewColumn;
@@ -32,8 +32,10 @@ class ListBatches extends Component implements HasForms, HasTable
         return $table
             ->query(RecordBatch::query()->recordBatchList($this->record))
             ->columns([
-                Tables\Columns\TextColumn::make('record.title')
+                Tables\Columns\TextColumn::make('description')->label('Description')
                     ->sortable(),
+                // Tables\Columns\TextColumn::make('record.title')
+                //     ->sortable(),
                 Tables\Columns\TextColumn::make('department.name')
                     ->numeric()
                     ->sortable(),
@@ -43,7 +45,7 @@ class ListBatches extends Component implements HasForms, HasTable
 
                   
 
-                    ViewColumn::make('users')->view('tables.columns.batch-users')->label('Users'),
+                 ViewColumn::make('users')->view('tables.columns.batch-users')->label('Users'),
 
                     ToggleColumn::make('is_complete')
    

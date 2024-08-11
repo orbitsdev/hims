@@ -29,7 +29,7 @@ class ListOfUsersByBatch extends Component implements HasForms, HasTable
     public function table(Table $table): Table
     {
         return $table
-            ->query(User::query()->notAdmin()->hasPersonalDetails()->noRecordAcademicYearWithBatchDepartment($this->record))
+            ->query(User::query()->notAdmin()->notStaff()->hasPersonalDetails()->noRecordAcademicYearWithBatchDepartment($this->record))
             ->columns([
                 ImageColumn::make('profile_photo_path')
                 ->disk('public')
@@ -75,8 +75,12 @@ class ListOfUsersByBatch extends Component implements HasForms, HasTable
                 })
                 ->searchable()->label('ROLE'),
 
+                
 
+
+          
             ViewColumn::make('department')->view('tables.columns.user-department')->label('DEPARTMENT'),
+      
             ])
             ->filters([
                 //

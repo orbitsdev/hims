@@ -19,9 +19,16 @@ class DepartmentSeeder extends Seeder
         //     'abbreviation'=> '',           
         //  ]);
         Department::create([
-            'name'=> 'FACULTY',
-            'abbreviation'=> '',           
+            'name'=> 'STAFF BUILDING',
+            'abbreviation'=> '',    
+            'role'=> User::STAFF,       
          ]);
+        Department::create([
+            'name'=> 'FACULTY',
+            'abbreviation'=> '',    
+            'role'=> User::PERSONNEL,       
+         ]);
+         
         Department::create([
             'name'=> 'COLLEGE OF COMPUTER STUDY',
             'abbreviation'=> 'CCS',           

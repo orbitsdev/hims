@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use Closure;
 use App\Models\User;
 use App\Models\Course;
 use Filament\Forms\Get;
@@ -20,6 +21,8 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\TextColumn;
+use Illuminate\Validation\Rules\Unique;
 use Filament\Forms\Components\TextInput;
 use Filament\Notifications\Notification;
 use Filament\Forms\Components\DatePicker;
@@ -232,7 +235,7 @@ class FilamentForm extends Controller
                                         ->label('BIRTH PLACE')
                                         ->label('BIRTH_PLACE')
                                         ->columnSpan(4),
-                                        TextInput::make('address')
+                                    TextInput::make('address')
                                         ->label('ADDRESS')
                                         ->columnSpan(4),
                                 ]),
@@ -309,6 +312,26 @@ class FilamentForm extends Controller
                         ])
                         ->schema([
 
+                            Select::make('department_id')
+                                ->required()
+                                ->label('BUILDING/DEPARTMENT')
+                                ->options(Department::studentDepartment()->get()->map(function ($d) {
+                                    return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
+                                })->pluck('name', 'id'))
+                                ->live(debounce: 500)
+                                ->afterStateUpdated(function ($state, Get $get, Set $set) {
+
+
+                                    $set('course_id', null);
+
+                                    $set('section_id', null);
+                                })
+                                ->searchable()
+                                ->columnSpan(3)
+                                ->createOptionForm(FilamentForm::departmentForm()),
+
+
+
                             Select::make('course_id')
                                 ->live(debounce: 500)
                                 ->afterStateUpdated(function ($state, Get $get, Set $set) {
@@ -318,7 +341,18 @@ class FilamentForm extends Controller
                                 ->required()
                                 ->label('COURSE')
 
-                                ->options(Course::pluck('name', 'id'))
+                                ->options(function (Get $get) {
+                                    if (!empty($get('department_id'))) {
+                                        return Course::where('department_id', $get('department_id'))->get()->map(function ($a) {
+                                            return [
+                                                'name' => $a->getNameWithAbbreviation(),
+                                                'id' => $a->id,
+                                            ];
+                                        })->pluck('name', 'id');
+                                    } else {
+                                        return [];
+                                    }
+                                })
                                 ->preload()
                                 ->columnSpan(3)
                                 ->searchable(),
@@ -341,17 +375,17 @@ class FilamentForm extends Controller
                                 ->searchable()
                                 ->native(false)
                                 ->label('SECTION')
-                                ->columnSpan(3),
-
-                            Select::make('department_id')
-                                ->required()
-                                ->label('BUILDING/DEPARTMENT')
-                                ->options(Department::where('name', '!=', 'All')->get()->map(function ($d) {
-                                    return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
-                                })->pluck('name', 'id'))
-                                ->searchable()
                                 ->columnSpan(3)
-                                ->createOptionForm(FilamentForm::departmentForm()),
+                                ->hidden(function (Get $get) {
+
+                                    if ($get('department_id') != null) {
+                                        $department = Department::findOrFail($get('department_id'));
+                                        return $department->role != User::STUDENT;
+                                    }
+                                    return false;
+                                }),
+
+
                             //TextInput::make('department')
                             // ->required()
                             // ->maxLength(191),
@@ -413,7 +447,7 @@ class FilamentForm extends Controller
                             Select::make('department_id')
                                 ->required()
                                 ->label('BUILDING/DEPARTMENT')
-                                ->options(Department::where('name', '!=', 'All')->get()->map(function ($d) {
+                                ->options(Department::personnelDepartment()->get()->map(function ($d) {
                                     return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
                                 })->pluck('name', 'id'))
                                 ->searchable()
@@ -497,7 +531,7 @@ class FilamentForm extends Controller
                             Select::make('department_id')
                                 ->required()
                                 ->label('BUILDING/DEPARTMENT')
-                                ->options(Department::where('name', '!=', 'All')->get()->map(function ($d) {
+                                ->options(Department::staffDepartment()->get()->map(function ($d) {
                                     return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
                                 })->pluck('name', 'id'))
                                 ->searchable()
@@ -965,7 +999,7 @@ class FilamentForm extends Controller
                 ])
                 ->schema([
                     TextInput::make('name')->required()->label('NAME')
-                        ->unique(ignoreRecord: true)
+                        ->unique(ignoreRecord: true,)
                         ->columnSpan(3),
                     TextInput::make('abbreviation')->label('ABBREVIATION')
                         ->unique(ignoreRecord: true,)
@@ -974,7 +1008,7 @@ class FilamentForm extends Controller
                     Select::make('department_id')
                         ->required()
                         ->label('BUILDING/DEPARTMENT')
-                        ->options(Department::whereNotIn('name', ['All', 'Faculty'])->get()->map(function ($d) {
+                        ->options(Department::studentDepartment()->get()->map(function ($d) {
                             return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
                         })->pluck('name', 'id'))
                         ->searchable()
@@ -982,13 +1016,11 @@ class FilamentForm extends Controller
                         ->createOptionForm(FilamentForm::departmentForm()),
 
 
+
                     TableRepeater::make('course_sections')
                         ->relationship('sections')
                         ->schema([
-                            Select::make('id')
-                                ->label('SECTION')
-                                ->hiddenLabel()
-                                ->options(MSection::query()->pluck('name', 'id'))->disableOptionsWhenSelectedInSiblingRepeaterItems(),
+                            TextInput::make('name')->required(),
 
                         ])
                         ->withoutHeader()
@@ -1045,6 +1077,7 @@ class FilamentForm extends Controller
                             'xl' => 6,
                             '2xl' => 8,
                         ])
+                        ->hidden(fn (string $operation): bool => $operation == 'App\Livewire\Records\EditRecord')
                         ->schema([
                             Select::make('academic_year_id')
                                 ->live(debounce: 500)
@@ -1052,9 +1085,11 @@ class FilamentForm extends Controller
 
                                     $set('semester_id', null);
                                 })
+                                ->getOptionLabelFromRecordUsing(fn (AcademicYear $academicYear) => "#{$academicYear->name}")
+                                ->hidden(fn (string $operation): bool => $operation == 'App\Livewire\Records\EditRecord')
                                 ->required()
                                 ->label('ACADEMIC YEAR')
-
+                                // ->native(false)
                                 ->options(AcademicYear::withSemesterWithoutRecord()->pluck('name', 'id'))
                                 ->preload()
                                 ->columnSpan(4)
@@ -1071,29 +1106,22 @@ class FilamentForm extends Controller
                                 } else {
                                     return [];
                                 }
+                                
                             })
+                            ->hidden(fn (string $operation): bool => $operation == 'App\Livewire\Records\EditRecord')
                                 ->required()
                                 ->native(false)
                                 ->label('SEMESTER')
                                 ->columnSpan(4),
                         ]),
 
-                    // Toggle::make('status')->label('STATUS')
-                    // ->live()
-                    // ->afterStateUpdated(function ($state) {
-                    //     FilamentForm::notification('Status Was set to '. $state ? 'Active' : 'Inactive');
-                    // })
-                    // ,
-
-                    ...FilamentForm::batchForm()
+                        ...FilamentForm::batchForm()
+                    
                 ]),
 
 
 
-            // TextInput::make('academic_year_name')
-            //         ->maxLength(191),
-            // TextInput::make('semester_name')
-            //         ->maxLength(191),
+            
 
         ];
     }
@@ -1114,63 +1142,91 @@ class FilamentForm extends Controller
 
 
                     TableRepeater::make('recordBatches')
-
+                    ->live()
+                    // After adding a new row, we need to update the totals
+                    ->afterStateUpdated(function (Get $get, Set $set) {
+                        
+                    })
+                    ->relationship('recordBatches')
                         ->columnWidths([
 
                             'section_id' => '600px',
                         ])
-                        ->relationship('recordBatches')
+                        
                         ->schema([
-                            TextInput::make('description')->required()->label('description')
-                                ->unique(ignoreRecord: true)
-                                ->default('Batch 1')
-                                ->placeholder('ex. Batch 1')
-                                ->columnSpanFull()->label('Description'),
-                            Select::make('department_id')
-                                ->live(debounce: 500)
-                                ->afterStateUpdated(function ($state, Get $get, Set $set) {
 
-                                    $set('section_id', null);
-                                })
-                                ->required()
-                                ->label('DEPARTMENT')
+                            TextInput::make('description')->required()
+                            ->default('Batch 1')
+                            ->placeholder('ex. Batch 1')
+                            ->columnSpanFull()->label('Description'),
 
-                                ->options(Department::pluck('name', 'id'))
-                                ->preload()
-                                ->columnSpan(4)
-                                ->searchable(),
-                            // ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                            // ,
+                        Select::make('department_id')
+                            ->live(debounce: 500)
+                            ->afterStateUpdated(function ($state, Get $get, Set $set) {
+                                $set('course_id', null);
+                                $set('section_id', null);
 
-                            Select::make('section_id')->options(function (Get $get) {
-                                if (!empty($get('department_id'))) {
-                                    return MSection::whereHas('course.department', function ($query) use ($get) {
-                                        $query->where('id', $get('department_id'));
-                                    })->get()->pluck('name', 'id');
-                                } else {
-                                    return [];
-                                }
+
                             })
-                                ->required()
-                                ->native(false)
-                                ->label('SECTION')
-                                ->columnSpan(4)
-                                ->disableOptionsWhenSelectedInSiblingRepeaterItems()
-                                ->hidden(function ($state, Get $get, Set $set) {
-                                    if (!empty($get('department_id'))) {
-                                        $department = Department::findOrFail($get('department_id'));
-                                        return $department->role != User::STUDENT;
-                                    }
+                            ->required()
+                            ->label('DEPARTMENT')
+                            ->options(Department::pluck('name', 'id'))
+                            ->preload()
+                            ->columnSpan(4)
+                            ->searchable(),
 
-                                    return true;
-                                }),
+                        Select::make('course_id')
+                            ->live(debounce: 500)
+                            ->afterStateUpdated(function ($state, Get $get, Set $set) {
+                                $set('section_id', null);
+                               
+                            })
+                            
+
+                           
+                            ->required()
+                            ->label('Course')
+                            ->options(function(Get $get){
+                                if (!empty($get('department_id'))) {
+                                            return Course::where('department_id', $get('department_id'))->get()->pluck('name', 'id');
+                                        } else {
+                                            return [];
+                                        }
+                            })
+                           
+                            ->preload()
+                            ->columnSpan(4)
+                          
+                            
+                            ->searchable(),
+
+                            Select::make('section_id')
+                            ->live(debounce: 500)
+                            ->afterStateUpdated(function ($state, Get $get, Set $set) {
+                              
+                                //$set('section_id', null);
+                            })
+                            
+                            ->required()
+                            ->label('Section')
+                            ->options(function(Get $get){
+                                if (!empty($get('course_id'))) {
+                                            return MSection::where('course_id', $get('course_id'))->get()->pluck('name', 'id');
+                                        } else {
+                                            return [];
+                                        }
+                            })
+                           
+                            ->preload()
+                            ->columnSpan(4)
+                            ->searchable(),
+                                
 
 
 
                         ])
                         ->withoutHeader()
 
-                        // ->defaultItems(0)
                         ->addActionLabel('Add Batch')
                         ->columnSpan('full')
                         ->label('BATCH')
@@ -1186,235 +1242,259 @@ class FilamentForm extends Controller
         return [
 
             Section::make('Physical Examination Form')
-         
-            ->collapsible()
 
-            ->schema([
-
-         
-
-            Section::make('Personal Information')
-                // ->description('The following section contains fields for entering and managing personal details. Please fill out the required information accurately.')
                 ->collapsible()
 
-                ->columns([
-                    'sm' => 3,
-                    'xl' => 6,
-                    '2xl' => 12,
-                ])
-                ->schema([
-                    TextInput::make('first_name')->maxLength(191)->columnSpan(4)->required(),
-                    TextInput::make('last_name')->maxLength(191)->columnSpan(4)->required(),
-                    TextInput::make('middle_name')->maxLength(191)->columnSpan(4)->required(),
-
-                    TextInput::make('age')
-                    ->required()
-                        ->mask(999)
-                        ->default(18)
-                        ->numeric()
-                        ->columnSpan(1),
-
-
-                    DatePicker::make('birth_date')
-                    ->required()
-                        ->native(false)
-                        ->columnSpan(2),
-
-                    Select::make('civil_status')
-                    ->required()
-                        ->label('Civil Status')
-                        ->options(FilamentForm::CIVIL_STATUS_OPTIONS)
-                        ->default('Single')
-                        ->columnSpan(3)
-                        ->searchable(),
-
-                    TextInput::make('birth_place')
-                    ->required()
-                        ->columnSpan(3),
-
-                    TextInput::make('address')
-                    ->required()
-                        ->columnSpan(3),
-
-
-                ]),
-            //    TextInput::make('record_title')
-            //             ->maxLength(191),
-            //        TextInput::make('batch_description')
-            //             ->maxLength(191),
-            //        TextInput::make('academic_year_name')
-            //             ->maxLength(191),
-            //        TextInput::make('semester_name')
-            //             ->maxLength(191),
-            //        TextInput::make('department_name')
-            //             ->maxLength(191),
-            //        Textarea::make('course_name')
-            //             ->columnSpanFull(),
-            //        TextInput::make('section_name')
-            //             ->maxLength(191),
-            //        TextInput::make('student_unique_id')
-            //             ->maxLength(191),
-            //    TextInput::make('role')
-            //         ->maxLength(191),
-
-
-            Section::make('Vital Signs & Diagnosis')
-                // ->description('The following section contains fields for entering and managing medical details. ')
-                // ->extraAttributes([
-                //     'class' => 'section-bg'
-
-                // ])
-                ->collapsible()
-                ->columns([
-                    'sm' => 3,
-                    'xl' => 6,
-                    '2xl' => 12,
-                ])
                 ->schema([
 
-                    TextInput::make('past_illness')
-
-                        ->columnSpan(6),
-
-                    TextInput::make('allergies')->label('Allergies (Food, Drugs, Etc.)')
 
 
+                    Section::make('Personal Information')
+                        // ->description('The following section contains fields for entering and managing personal details. Please fill out the required information accurately.')
+                        ->collapsible()
+
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 12,
+                        ])
+                        ->schema([
+                            TextInput::make('first_name')->maxLength(191)->columnSpan(4)->required(),
+                            TextInput::make('last_name')->maxLength(191)->columnSpan(4)->required(),
+                            TextInput::make('middle_name')->maxLength(191)->columnSpan(4)->required(),
+
+                            TextInput::make('age')
+                                ->required()
+                                ->mask(999)
+                                ->default(18)
+                                ->numeric()
+                                ->columnSpan(1),
+
+
+                            DatePicker::make('birth_date')
+                                ->required()
+                                ->native(false)
+                                ->columnSpan(2),
+
+                            Select::make('civil_status')
+                                ->required()
+                                ->label('Civil Status')
+                                ->options(FilamentForm::CIVIL_STATUS_OPTIONS)
+                                ->default('Single')
+                                ->columnSpan(3)
+                                ->searchable(),
+
+                            TextInput::make('birth_place')
+                                ->required()
+                                ->columnSpan(3),
+
+                            TextInput::make('address')
+                                ->required()
+                                ->columnSpan(3),
+
+
+                        ]),
+                    //    TextInput::make('record_title')
+                    //             ->maxLength(191),
+                    //        TextInput::make('batch_description')
+                    //             ->maxLength(191),
+                    //        TextInput::make('academic_year_name')
+                    //             ->maxLength(191),
+                    //        TextInput::make('semester_name')
+                    //             ->maxLength(191),
+                    //        TextInput::make('department_name')
+                    //             ->maxLength(191),
+                    //        Textarea::make('course_name')
+                    //             ->columnSpanFull(),
+                    //        TextInput::make('section_name')
+                    //             ->maxLength(191),
+                    //        TextInput::make('student_unique_id')
+                    //             ->maxLength(191),
+                    //    TextInput::make('role')
+                    //         ->maxLength(191),
+
+
+                    Section::make('Vital Signs & Diagnosis')
+                        // ->description('The following section contains fields for entering and managing medical details. ')
+                        // ->extraAttributes([
+                        //     'class' => 'section-bg'
+
+                        // ])
+                        ->collapsible()
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 12,
+                        ])
+                        ->schema([
+
+                            TextInput::make('past_illness')
+
+                                ->columnSpan(6),
+
+                            TextInput::make('allergies')->label('Allergies (Food, Drugs, Etc.)')
 
 
 
-                        ->columnSpan(4),
-
-                    // TextInput::make('specified_diagnoses')
 
 
-                    //     ->columnSpan(3),
+                                ->columnSpan(4),
 
-                    // TextInput::make('condition_name')
-
-
-                    //     ->columnSpan(3),
+                            // TextInput::make('specified_diagnoses')
 
 
-                    TextInput::make('weight')
-                        ->numeric()->columnSpan(1),
-                    TextInput::make('height')->label('Height (cm)')
-                        ->columnSpan(1)
-                        ->numeric(),
+                            //     ->columnSpan(3),
+
+                            // TextInput::make('condition_name')
 
 
-                    TextInput::make('temperature')->label('Temperature (°C)')
-                        ->columnSpan(1)
-                        ->numeric(),
+                            //     ->columnSpan(3),
 
 
+                            TextInput::make('weight')
+                                ->numeric()->columnSpan(1),
+                            TextInput::make('height')->label('Height (cm)')
+                                ->columnSpan(1)
+                                ->numeric()
+
+                                ->maxValue(1000)
+                                ->numeric(),
 
 
+                            TextInput::make('temperature')->label('Temperature (°C)')
+                                ->columnSpan(1)
+                                ->numeric()
 
-                    TextInput::make('systolic_pressure')
-                        ->columnSpan(1)
-
-                        ->numeric(),
-                    TextInput::make('diastolic_pressure')
-                        ->columnSpan(1)
-
-                        ->numeric(),
-
-
-                    TextInput::make('blood_pressure')
-                        ->columnSpan(1)
-
-                        ->maxLength(191),
+                                ->maxValue(150),
 
 
 
 
-                    TextInput::make('heart_rate')->label('Heart Rate (bpm)')
-                        ->columnSpan(1)
-                        ->numeric(),
+
+                            TextInput::make('systolic_pressure')
+                                ->columnSpan(1)
+                                ->maxValue(1000)
+
+                                ->numeric(),
+                            TextInput::make('diastolic_pressure')
+                                ->columnSpan(1)
+                                ->maxValue(1000)
 
 
-                    Select::make('condition_id')
-                        ->relationship(name: 'condition', titleAttribute: 'name')
-                     
-                        ->label('Diagnosis')
-                        // ->options(Condition::get()->map(function ($item) {
-                        //     return 
-                        //     ['name' => $item->name, 'id' => $item->id] ;
-                        // })->pluck('name', 'id'))
-                        ->searchable()
-                        ->preload()
-                        ->columnSpan(7)
-                        ->createOptionForm(FilamentForm::conditionForm2()),
+                                ->numeric(),
 
-                        Textarea::make('remarks')
-                        ->columnSpanFull()->rows(1),
 
-                        FileUpload::make('upload_image')
-                        ->disk('public')
-                        ->directory('events')
-                        ->image()
-                        ->imageEditor()
-                        // ->required()
-                        ->columnSpanFull(   ),
+                            TextInput::make('blood_pressure')
+                                ->columnSpan(1)
+
+                                ->maxLength(191),
+
+
+
+
+                            TextInput::make('heart_rate')->label('Heart Rate (bpm)')
+                                ->columnSpan(1)
+                                ->maxValue(1000)
+                                ->numeric(),
+
+
+                            Select::make('condition_id')
+                                ->relationship(name: 'condition', titleAttribute: 'name')
+
+                                ->label('Diagnosis')
+                                // ->options(Condition::get()->map(function ($item) {
+                                //     return 
+                                //     ['name' => $item->name, 'id' => $item->id] ;
+                                // })->pluck('name', 'id'))
+                                ->searchable()
+                                ->preload()
+                                ->columnSpan(7)
+                                ->createOptionForm(FilamentForm::conditionForm2()),
+
+                            Textarea::make('remarks')
+                                ->columnSpanFull()->rows(1),
+
+                            FileUpload::make('upload_image')
+                                ->disk('public')
+                                ->directory('events')
+                                ->image()
+                                ->imageEditor()
+                                // ->required()
+                                ->columnSpanFull(),
+
+                        ]),
+
+                    Section::make('Consultation Details')
+                        ->description('')
+                        ->collapsible()
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 12,
+                        ])
+                        ->schema([
+
+                            DatePicker::make('date_of_examination')
+                                ->date()
+                                ->required()
+                                ->columnSpan(4),
+                            TextInput::make('release_by')
+                                ->required()
+
+                                ->columnSpan(4)
+                                ->maxLength(191),
+                            TextInput::make('physician_name')
+                                ->required()
+
+                                ->columnSpan(4)
+                                ->maxLength(191),
+
+                            // TextInput::make('status')
+                            //     ->columnSpan(2)
+                            //     ->maxLength(191)
+                            //     ->default('No Record'),
+
+
+
+                            Toggle::make('is_complete')->label('Mark as Complete')
+                                ->columnSpanFull()
+                                ->live()
+                                ->afterStateUpdated(function ($state) {
+                                    FilamentForm::notification($state ? 'Marks as  Complete' : ' Marks as Incomplete');
+                                }),
+
+                            // FileUpload::make('captured_image')
+                            //     ->disk('public')
+                            //     ->directory('events')
+                            //     ->image()
+                            //     ->imageEditor()
+                            //     // ->required()
+                            //     ->columnSpan(6)
+                            // ->label('FEATURED IMAGE'),
+                            // Textarea::make('upload_image')
+                            //     ->columnSpanFull(),
+                            // Textarea::make('captured_image')
+                            //     ->columnSpanFull(),
+
+                        ]),
 
                 ]),
 
-            Section::make('Consultation Details')
-                ->description('')
-                ->collapsible()
-                ->columns([
-                    'sm' => 3,
-                    'xl' => 6,
-                    '2xl' => 12,
-                ])
-                ->schema([
-                 
-                    DatePicker::make('date_of_examination')
-                        ->date()
-                        ->required()
-                        ->columnSpan(4),
-                    TextInput::make('release_by')
-                    ->required()
+        ];
+    }
+    public static function sectionForm(): array
+    {
+        return [
+            TextInput::make('name')
+                ->required()
+                ->unique(ignoreRecord: true)
+                ->columnSpan(2),
+            Select::make('course_id')->label('Course')
+                ->options(Course::all()->pluck('name', 'id'))
+                ->preload()
+                ->columnSpan(2)
+                ->searchable(),
 
-                        ->columnSpan(4)
-                        ->maxLength(191),
-                    TextInput::make('physician_name')
-                    ->required()
-
-                        ->columnSpan(4)
-                        ->maxLength(191),
-                       
-                    // TextInput::make('status')
-                    //     ->columnSpan(2)
-                    //     ->maxLength(191)
-                    //     ->default('No Record'),
-
-                  
-
-                        Toggle::make('is_complete')->label('Mark as Complete')
-                        ->columnSpanFull()
-                        ->live()
-                        ->afterStateUpdated(function($state){
-                            FilamentForm::notification( $state ? 'Marks as  Complete' : ' Marks as Incomplete');
-                        }),
-
-                    // FileUpload::make('captured_image')
-                    //     ->disk('public')
-                    //     ->directory('events')
-                    //     ->image()
-                    //     ->imageEditor()
-                    //     // ->required()
-                    //     ->columnSpan(6)
-                    // ->label('FEATURED IMAGE'),
-                    // Textarea::make('upload_image')
-                    //     ->columnSpanFull(),
-                    // Textarea::make('captured_image')
-                    //     ->columnSpanFull(),
-
-                ]),
-
-            ]),
-              
         ];
     }
 }

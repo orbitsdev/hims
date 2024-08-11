@@ -11,14 +11,9 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('record_batches', function (Blueprint $table) {
+        Schema::create('section_options', function (Blueprint $table) {
             $table->id();
-            $table->text('description')->nullable();
-            $table->foreignId('record_id')->nullable();
-            $table->foreignId('department_id')->nullable();
-            $table->foreignId('course_id')->nullable();
             $table->foreignId('section_id')->nullable();
-            $table->boolean('is_complete')->default(false);
             $table->timestamps();
         });
     }
@@ -28,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('record_batches');
+        Schema::dropIfExists('section_options');
     }
 };

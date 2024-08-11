@@ -45,13 +45,18 @@ class ListBatches extends Component implements HasForms, HasTable
 
                   
 
-                 ViewColumn::make('users')->view('tables.columns.batch-users')->label('Users'),
+                //  ViewColumn::make('users')->view('tables.columns.batch-users')->label('Users'),
 
-                    ToggleColumn::make('is_complete')
+    //                 ToggleColumn::make('is_complete')
    
-    ->afterStateUpdated(function ($record, $state) {
-            FilamentForm::notification( $state ? 'Mark as complete ' : 'Mark as incomplete');
-    })->label('Is Complete')
+    // ->afterStateUpdated(function ($record, $state) {
+    //         FilamentForm::notification( $state ? 'Mark as complete ' : 'Mark as incomplete');
+    // })->label('Is Complete'),
+
+
+    IconColumn::make('is_complete')
+    ->boolean()
+    ->label('Is Complete')
 
                     // IconColumn::make('is_complete')->label('IS COMPLETE')
                     // ->boolean()

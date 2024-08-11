@@ -79,7 +79,7 @@ class ListOfUsersByBatch extends Component implements HasForms, HasTable
 
 
           
-            ViewColumn::make('department')->view('tables.columns.user-department')->label('DEPARTMENT'),
+            // ViewColumn::make('department')->view('tables.columns.user-department')->label('DEPARTMENT'),
       
             ])
             ->filters([

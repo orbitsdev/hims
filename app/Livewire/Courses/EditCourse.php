@@ -35,7 +35,6 @@ class EditCourse extends Component implements HasForms
     public function save()
     {
         $data = $this->form->getState();
-
         $this->record->update($data);
         FilamentForm::notification();
 

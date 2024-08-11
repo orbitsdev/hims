@@ -46,5 +46,17 @@ class Record extends Model
     {
         return $this->recordBatches()->count();
     }
+
+    public function isComplete(){
+        
+        $count = User::query()
+        ->notAdmin()
+        ->notStaff()
+        ->hasPersonalDetails()
+        ->noRecordInThisAcademicYearAndSemester($this)
+        ->count();   
+
+        return $count > 0 ? false :true;
+    }
    
 }

@@ -19,6 +19,7 @@ use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Components\Section;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
@@ -28,10 +29,11 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Tables\Columns\CheckboxColumn;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
-use Filament\Tables\Actions\CreateAction as TAction;
 use Filament\Tables\Concerns\InteractsWithTable;
+use Filament\Tables\Actions\CreateAction as TAction;
 
 class ListRecords extends Component implements HasForms, HasTable
 {
@@ -49,7 +51,7 @@ class ListRecords extends Component implements HasForms, HasTable
                     return $record->semester->semesterWithYear();
                 })->label('SEMESTER'),
 
-                 ViewColumn::make('batches')->view('tables.columns.batch-count')->label('BATCH DEPARTMENT AND TOTAL ACCOUNT'),
+                // ViewColumn::make('batches')->view('tables.columns.batch-count')->label('BATCH DEPARTMENT AND TOTAL ACCOUNT'),
 
                 //  TextColumn::make('recordBatches.department.name')
                 //  ->listWithLineBreaks()
@@ -82,6 +84,13 @@ class ListRecords extends Component implements HasForms, HasTable
                 //     ->dateTime()
                 //     ->sortable()
                 //     ->toggleable(isToggledHiddenByDefault: true),
+
+                IconColumn::make('status')
+                    ->boolean()
+                    ->label('Is Complete'),
+                    CheckboxColumn::make('status')->label('Mark as Done')->afterStateUpdated(function ($record, $state) {
+                        FilamentForm::notification($state ? 'Mark as Done' : 'Mark as Incomplete');
+                    }),
             ])
             ->filters([
                 SelectFilter::make('ACADEMIC YEAR')
@@ -201,6 +210,9 @@ class ListRecords extends Component implements HasForms, HasTable
                     ->size('lg')
                     ->url(function (Model $record) {
                         return route('individual-medical-recoding', ['record' => $record]);
+                    })->hidden(function(Model $record){
+                       
+                        return false;
                     }),
 
                 Action::make('recordByBatch') // Identifier should be unique and camelCase
@@ -210,11 +222,12 @@ class ListRecords extends Component implements HasForms, HasTable
                     ->button()
                     ->url(function (Model $record) {
                         return route('batches', ['record' => $record]);
-                    })->hidden(function(Model $record){
-                        return $record->totalBatches() <= 0;
-                    })
-                    ,
-                   
+                    })->hidden(function (Model $record) {
+
+                        return false;
+                        // return $record->totalBatches() <= 0;
+                    }),
+
 
                 ActionGroup::make([
                     Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function (Model $record) {

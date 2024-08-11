@@ -28,7 +28,7 @@ class DatabaseSeeder extends Seeder
             TreatmentSeeder::class,
             FirstAidGuideSeeder::class,
             CourseSeeder::class,
-            SectionSeeder::class,
+            // SectionSeeder::class,
             
         ]);
         // \App\Models\User::factory(10)->create();

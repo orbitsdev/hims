@@ -20,7 +20,8 @@ class EditRecord extends Component implements HasForms
     public Record $record;
 
     public function mount(): void
-    {
+    {   
+        
         $this->form->fill($this->record->attributesToArray());
     }
 

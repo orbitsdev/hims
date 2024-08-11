@@ -40,7 +40,7 @@ class CourseSeeder extends Seeder
             ],
             [
                 'name' => 'Bachelor of Science in Cyber Security (BSCS)',
-                'abbreviation' => 'BSCS',
+                'abbreviation' => 'BSCYS',
                 'department_id'=> 3,
                 
             ],

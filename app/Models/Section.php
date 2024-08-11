@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Course;
 use App\Models\Student;
+use App\Models\Department;
 use App\Models\RecordBatch;
 use App\Models\MedicalRecord;
 use Illuminate\Database\Eloquent\Model;
@@ -15,6 +16,9 @@ class Section extends Model
 
     public function course(){
         return $this->belongsTo(Course::class);
+    }
+    public function department(){
+        return $this->belongsTo(Department::class);
     }
     public function recordBatches(){
         return $this->hasMany(RecordBatch::class);
@@ -31,6 +35,10 @@ class Section extends Model
     public function totalStudents()
     {
         return $this->students()->count();
+    }
+
+    public function scopeNoCourse($query){
+        return $query->whereDoesntHave('course');
     }
     
 

@@ -11,6 +11,7 @@ use App\Models\MedicalRecord;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FilamentForm;
+use App\Http\Controllers\MedicalController;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
 
@@ -23,8 +24,10 @@ class CreateMedicalRecord extends Component implements HasForms
 
     public function mount(): void
     {   
-
+       
         $personalDetails = $this->user->getPersonalDetailsBaseOnRole();
+
+
         // $department= $this->user->getDepartmentBaseOnRole();
         // $academicYear = $this->record->academicYear;
         // $semester = $this->record->semester;
@@ -109,31 +112,35 @@ class CreateMedicalRecord extends Component implements HasForms
 
         $data = $this->form->getState();
 
-        $data['record_id']=  $this->record->id;
-        $data['user_id']=  $this->user->id;
-        $data['section_id']= $section->id;
-        $data['department_id']=  $department->id;
-        $data['academic_year_name']=  $academicYear->name;
-        $data['semester_name']=  $semester->name_in_text;
-        $data['department_name']= $department->name;
-        $data['course_name']=  $course->name;
-        $data['section_name']=  $section->name;
-        $data['student_unique_id']= $student->unique_id;
-        $data['student_id_number']= $student->id_number;
-        $data['recorder_id']= Auth::user()->id;
-        $data['role']=  $this->user->role;
+        $data['record_id']=  $this->record->id?? null;
+        $data['user_id']=  $this->user->id ?? null;
+        $data['section_id']= $section->id ?? null;
+        $data['department_id']=  $department->id ?? null;
+        $data['academic_year_name']=  $academicYear->name ?? null;
+        $data['semester_name']=  $semester->name_in_text ?? null;
+        $data['department_name']= $department->name ?? null;
+        $data['course_name']=  $course->name ?? null;
+        $data['section_name']=  $section->name ?? null;
+        $data['student_unique_id']= $student->unique_id ?? null;
+        $data['student_id_number']= $student->id_number ?? null;
+        $data['recorder_id']= Auth::user()->id ?? null;
+        $data['role']=  $this->user->role ?? null;
      
         
-        $record = MedicalRecord::create($data);
+        $newRecord = MedicalRecord::create($data);
 
-        $this->form->model($record)->saveRelationships();
+        $this->form->model($newRecord)->saveRelationships();
 
+        MedicalController::automaticChangeStatus($this->record);
+        $this->record->refresh();
       
         FilamentForm::notification('Save Successfully');
 
-        return redirect()->route('individual-medical-recoding',['record'=> $record->id]);
+        return redirect()->route('individual-medical-recoding',['record'=> $this->record->id]);
 
     }
+
+
 
     public function render(): View
     {
@@ -141,4 +148,5 @@ class CreateMedicalRecord extends Component implements HasForms
         
         return view('livewire.medical-records.create-medical-record');
     }
+   
 }

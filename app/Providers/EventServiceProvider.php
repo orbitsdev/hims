@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Record;
 use App\Models\AcademicYear;
+use App\Observers\RecordObserver;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Auth\Events\Registered;
 use App\Observers\AcademicYearObserver;
@@ -28,6 +30,7 @@ class EventServiceProvider extends ServiceProvider
     public function boot(): void
     {
         AcademicYear::observe(AcademicYearObserver::class);
+        Record::observe(RecordObserver::class);
     }
 
     /**

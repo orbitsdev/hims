@@ -2,9 +2,11 @@
 
 namespace App\Models;
 
+use App\Models\User;
 use App\Models\Event;
 use App\Models\Staff;
 use App\Models\Course;
+use App\Models\Section;
 use App\Models\Student;
 use App\Models\Personnel;
 use App\Models\RecordBatch;
@@ -50,6 +52,12 @@ class Department extends Model
         return $this->hasMany(Course::class);
     }
 
+    public function sections(){
+        return $this->hasMany(Section::class);
+    }
+
+   
+
     
 
     public function getImage()
@@ -86,6 +94,16 @@ class Department extends Model
 
     public function departmentEvents(){
         return $this->hasMany(DepartmentEvent::class);
+    }
+
+    public function scopeStudentDepartment($query){
+        return $query->where('role', User::STUDENT);
+    }
+    public function scopeStaffDepartment($query){
+        return $query->where('role', User::STAFF);
+    }
+    public function scopePersonnelDepartment($query){
+        return $query->where('role', User::PERSONNEL);
     }
 
 

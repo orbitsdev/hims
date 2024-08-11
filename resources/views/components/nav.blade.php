@@ -89,6 +89,13 @@
                     </a>
                 </li>
                 <li>
+                    <a href="{{route('departments')}}"
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['departments'])}}">
+                        <i class="fa-solid fa-building-columns text-2xl"></i>
+                        DEPARMENT/BUILDING 
+                    </a>
+                </li>
+                <li>
                     <a href="{{route('courses')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['courses'])}}">
                         {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
@@ -96,14 +103,17 @@
                     COURSES & SECTIONS
                     </a>
                 </li>
-               
                 <li>
-                    <a href="{{route('departments')}}"
-                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['departments'])}}">
-                        <i class="fa-solid fa-building-columns text-2xl"></i>
-                        DEPARMENT/BUILDING 
+                    <a href="{{route('sections')}}"
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['sections'])}}">
+                      
+                        <i class="fa-solid fa-book text-2xl"></i>
+                     SECTIONS
                     </a>
                 </li>
+                
+               
+              
                 <li>
                     <a href="{{route('conditions')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[

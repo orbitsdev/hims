@@ -21,12 +21,14 @@ use App\Livewire\Records\EditRecord;
 use App\Livewire\Staffs\CreateStaff;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Courses\ListCourses;
+use App\Livewire\Records\ListBatches;
 use App\Livewire\Records\ListRecords;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Courses\CreateCourse;
 use App\Livewire\Records\CreateRecord;
 use App\Livewire\Students\EditStudent;
 use App\Livewire\Students\ViewStudent;
+use App\Livewire\Sections\ListSections;
 use App\Livewire\Students\ListStudents;
 use App\Livewire\Symptoms\ListSymptoms;
 use Filament\Tables\Actions\EditAction;
@@ -41,6 +43,7 @@ use App\Livewire\Conditions\ListConditions;
 use App\Livewire\Personels\CreatePersonnel;
 use App\Livewire\Personnels\ListPersonnels;
 use App\Livewire\Conditions\ManageCondition;
+use App\Livewire\Records\ListOfUsersByBatch;
 use App\Livewire\Conditions\ManageConditions;
 use App\Livewire\Departments\ListDepartments;
 use App\Livewire\AcademicYear\ListAcademicYear;
@@ -53,11 +56,9 @@ use App\Livewire\FirstAidGuides\ListFirstAidGuides;
 use App\Livewire\Conditions\ListConditionTreatments;
 use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\MedicalRecords\CreateMedicalRecord;
-use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
-use App\Livewire\Records\ListBatches;
+use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
-use App\Livewire\Records\ListOfUsersByBatch;
 
 /*
 |--------------------------------------------------------------------------
@@ -158,11 +159,16 @@ Route::middleware([
     Route::get('/medical-record/user-list/{record}', ListOfUserForIndividualScreening::class)->name('individual-medical-recoding');
     Route::get('/medical-record/list-batch/{record}', ListBatches::class)->name('batches');
     Route::get('/medical-record/user-list-by-batch/{record}', ListOfUsersByBatch::class)->name('by-batch-medical-recoding');
+
     Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');
     Route::get('/medical-record/by-batch/create/{record}/{user}', CreateMedicalRecordByBatch::class)->name('medical-record-create-by-batch');
     
     Route::get('/event-announcement-status', EventsAnouncmentSMSStatus::class)->name('event-announcement');
 
     Route::get('/monito-queue', QueueMonitor::class);
+    
+    //
+    Route::get('/sections', ListSections::class)->name('sections');
+
 
 });

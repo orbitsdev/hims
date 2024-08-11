@@ -65,7 +65,7 @@ class ListCourses extends Component implements HasForms, HasTable
 
                 ->size('lg')
                 ->color('primary')
-                ->label('First Aid')
+                ->label('New')
                 ->icon('heroicon-s-plus')
                
                 ->url(function(){

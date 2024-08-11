@@ -56,5 +56,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->make(ChannelManager::class)->extend('sms', function ($app) {
             return new SmsChannel();
         });
+
+        
     }
 }

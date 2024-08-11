@@ -1141,24 +1141,22 @@ class FilamentForm extends Controller
                 ->schema([
 
 
-                    TableRepeater::make('recordBatches')
+                    Repeater::make('recordBatches')
                     ->live()
-                    // After adding a new row, we need to update the totals
-                    ->afterStateUpdated(function (Get $get, Set $set) {
-                        
-                    })
+                    ->columns([
+                        'sm' => 3,
+                        'xl' => 6,
+                        '2xl' => 8,
+                    ])
                     ->relationship('recordBatches')
-                        ->columnWidths([
-
-                            'section_id' => '600px',
-                        ])
+                        
                         
                         ->schema([
 
                             TextInput::make('description')->required()
                             ->default('Batch 1')
                             ->placeholder('ex. Batch 1')
-                            ->columnSpanFull()->label('Description'),
+                            ->columnSpan(2)->label('Description'),
 
                         Select::make('department_id')
                             ->live(debounce: 500)
@@ -1169,10 +1167,10 @@ class FilamentForm extends Controller
 
                             })
                             ->required()
-                            ->label('DEPARTMENT')
+                            ->label('DEPARTMENT/BUILDING')
                             ->options(Department::pluck('name', 'id'))
                             ->preload()
-                            ->columnSpan(4)
+                            ->columnSpan(2)
                             ->searchable(),
 
                         Select::make('course_id')
@@ -1181,8 +1179,9 @@ class FilamentForm extends Controller
                                 $set('section_id', null);
                                
                             })
-                            
+                            ->hidden(fn (Get $get) => !empty($get('department_id')) ? Department::find($get('department_id'))->role !== User::STUDENT : true)
 
+                            
                            
                             ->required()
                             ->label('Course')
@@ -1193,9 +1192,9 @@ class FilamentForm extends Controller
                                             return [];
                                         }
                             })
-                           
+                            ->hidden(fn (Get $get) => !empty($get('department_id')) ? Department::find($get('department_id'))->role !== User::STUDENT : true)
                             ->preload()
-                            ->columnSpan(4)
+                            ->columnSpan(2)
                           
                             
                             ->searchable(),
@@ -1206,7 +1205,10 @@ class FilamentForm extends Controller
                               
                                 //$set('section_id', null);
                             })
-                            
+
+                            ->distinct()
+                            ->disableOptionsWhenSelectedInSiblingRepeaterItems()
+                            ->hidden(fn (Get $get) => !empty($get('department_id')) ? Department::find($get('department_id'))->role !== User::STUDENT : true)
                             ->required()
                             ->label('Section')
                             ->options(function(Get $get){
@@ -1218,15 +1220,17 @@ class FilamentForm extends Controller
                             })
                            
                             ->preload()
-                            ->columnSpan(4)
+                            ->columnSpan(2)
                             ->searchable(),
                                 
 
 
 
                         ])
-                        ->withoutHeader()
-
+                        ->cloneable()
+                        
+                        // ->withoutHeader()
+                        ->maxItems(20)
                         ->addActionLabel('Add Batch')
                         ->columnSpan('full')
                         ->label('BATCH')

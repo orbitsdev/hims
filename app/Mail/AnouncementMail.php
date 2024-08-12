@@ -29,8 +29,8 @@ class AnouncementMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('kizzalovelyangelloria@sksu.edu.ph', 'SKU-HIMS'),
-            subject: 'Anouncement Mail',
+            from: new Address($this->user->email, 'SKU-HIMS'),
+            subject: 'Announcement Mail',
         );
     }
 

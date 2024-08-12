@@ -113,6 +113,7 @@ class CreateMedicalRecord extends Component implements HasForms
         $data = $this->form->getState();
 
         $data['record_id']=  $this->record->id?? null;
+        $data['record_title']=  $this->record->title?? null;
         $data['user_id']=  $this->user->id ?? null;
         $data['section_id']= $section->id ?? null;
         $data['department_id']=  $department->id ?? null;

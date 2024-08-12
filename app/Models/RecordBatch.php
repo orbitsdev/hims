@@ -53,8 +53,17 @@ class RecordBatch extends Model
 
     public  function totalUserOfThisBatch(){
         
-       return User::notAdmin()->hasPersonalDetails()->noRecordAcademicYearWithBatchDepartment($this)->count();
 
+       return User::notAdmin()->notStaff()->hasPersonalDetails()->noRecordAcademicYearWithBatchDepartment($this)->count();
+
+
+    }
+    public  function totalUserOfThisBatchData(){
+
+
+       $users = User::notAdmin()->notStaff()->hasPersonalDetails()->noRecordAcademicYearWithBatchDepartment($this)->get();
+       
+       return $users;
 
     }
 

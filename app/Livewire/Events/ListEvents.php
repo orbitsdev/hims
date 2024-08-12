@@ -9,6 +9,7 @@ use Livewire\Component;
 use App\Models\Department;
 use Filament\Tables\Table;
 use App\Mail\AnouncementMail;
+use App\Jobs\SendNotificationJob;
 use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
@@ -149,7 +150,10 @@ class ListEvents extends Component implements HasForms, HasTable
 
                         $users = User::departmentBelong($data['departments'])->get();
                         //   dd($users);
-                        Mail::to('kizzalovelyangelloria@sksu.edu.ph')->send(new AnouncementMail($users[0], $data['title'], $data['body']));
+                        foreach($users as $user){
+                            SendNotificationJob::dispatch($user ,$data);
+
+                        }
                         //return redirect()->route('event-announcement', $newdata);
 
                     }),

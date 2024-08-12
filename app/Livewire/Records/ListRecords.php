@@ -51,14 +51,14 @@ class ListRecords extends Component implements HasForms, HasTable
                     return $record->semester->semesterWithYear();
                 })->label('SEMESTER'),
 
-               
+                ViewColumn::make('last_name')->view('tables.columns.record-batch-detail')->label('Batches'),
 
                 IconColumn::make('status')
                     ->boolean()
                     ->label('Is Complete'),
                     CheckboxColumn::make('status')->label('Mark as Done')->afterStateUpdated(function ($record, $state) {
                         FilamentForm::notification($state ? 'Mark as Done' : 'Mark as Incomplete');
-                    }),
+                    })
             ])
             ->filters([
                 SelectFilter::make('ACADEMIC YEAR')
@@ -170,13 +170,13 @@ class ListRecords extends Component implements HasForms, HasTable
                     }),
             ])
             ->actions([
-                Action::make('collection') // Identifier should be unique and camelCase
-                ->label('DATA') // Consistent casing
-                ->icon('heroicon-o-folder-open')
-                 ->button()
-                 ->size('lg')
+                // Action::make('collections') // Identifier should be unique and camelCase
+                // ->label('COLLECTIONS') // Consistent casing
+                // ->icon('heroicon-o-folder-open')
+                //  ->button()
+                //  ->size('lg')
                 
-                 ,
+                //  ,
                 
                
                 Action::make('recordIndividually') // Identifier should be unique and camelCase
@@ -188,19 +188,20 @@ class ListRecords extends Component implements HasForms, HasTable
                         return route('individual-medical-recoding', ['record' => $record]);
                     })->hidden(function(Model $record){
                        
-                        return false;
+                        return $record->status;
                     }),
 
                 Action::make('recordByBatch') // Identifier should be unique and camelCase
                     ->label('RD BY BATCH') // Consistent casing
-                    ->icon('heroicon-o-user-group')
+                    ->icon('heroicon-o-chart-bar')
                     ->size('lg')
                     ->button()
                     ->url(function (Model $record) {
                         return route('batches', ['record' => $record]);
                     })->hidden(function (Model $record) {
 
-                        return false;
+                       
+                        return ($record->totalBatches() == 0 || $record->status);
                         // return $record->totalBatches() <= 0;
                     }),
 
@@ -213,7 +214,13 @@ class ListRecords extends Component implements HasForms, HasTable
                         return route('record-edit', ['record' => $record]);
                     }),
                     Tables\Actions\DeleteAction::make(),
-                ]),
+                ])->hidden(function (Model $record) {
+
+                    
+                    return $record->status;
+                    // return $record->totalBatches() <= 0;
+                }),
+
 
 
 

@@ -12,6 +12,7 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
+use App\Http\Controllers\MedicalController;
 use Filament\Forms\Concerns\InteractsWithForms;
 
 class CreateMedicalRecordByBatch extends Component implements HasForms
@@ -76,6 +77,9 @@ class CreateMedicalRecordByBatch extends Component implements HasForms
         $data = $this->form->getState();
 
         $data['record_id']=  $newrecord->id ?? null;
+        $data['record_title']=  $newrecord->title ?? null;
+        $data['record_batch_id']=  $this->record->id ?? null;
+        $data['batch_description']=  $this->record->description ?? null;
         $data['user_id']=  $this->user->id ?? null;
         $data['section_id']= $section->id ?? null;
         $data['department_id']=  $department->id ?? null;
@@ -94,6 +98,9 @@ class CreateMedicalRecordByBatch extends Component implements HasForms
         $record = MedicalRecord::create($data);
 
         $this->form->model($record)->saveRelationships();
+
+        MedicalController::automaticChangeStatus($this->record->record);
+        $this->record->refresh();
 
 
         FilamentForm::notification('Save Successfully');

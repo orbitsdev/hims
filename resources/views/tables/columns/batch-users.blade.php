@@ -1,3 +1,3 @@
 <div class="px-4">
-{{$getRecord()}}
+{{$getRecord()->totalUserOfThisBatch()}}
 </div>

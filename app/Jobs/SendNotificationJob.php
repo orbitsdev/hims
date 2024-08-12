@@ -22,9 +22,9 @@ class SendNotificationJob implements ShouldQueue
     /**
      * Create a new job instance.
      */
-    public function __construct( public User $user, public $data = [])
+    public function __construct( public  $users = [], public $data = [])
     {
-        $this->user = $user;
+        $this->users = $users;
         $this->data = $data;
 
     }
@@ -35,8 +35,13 @@ class SendNotificationJob implements ShouldQueue
     public function handle(): void
     {   
 
-        Mail::to('kizzalovelyangelloria@sksu.edu.ph')->send(new AnouncementMail($this->user, $this->data['title'], $this->data['body']));
-        // sleep(2);
-        // Log::info('Notification sent to user ' . $this->user->id);
+
+        foreach($this->users as $user){
+                         Log::info('Notification sent to user ' . $user->id);
+
+            //Mail::to($user->email)->send(new AnouncementMail($user, $this->data['title'], $this->data['body']));
+        }
+            // sleep(2);
+       
     }
 }

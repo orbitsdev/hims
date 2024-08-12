@@ -56,6 +56,7 @@ use App\Livewire\FirstAidGuides\ListFirstAidGuides;
 use App\Livewire\Conditions\ListConditionTreatments;
 use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\MedicalRecords\CreateMedicalRecord;
+use App\Livewire\MonitorSendSmsJob;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
@@ -169,6 +170,7 @@ Route::middleware([
     
     //
     Route::get('/sections', ListSections::class)->name('sections');
-
+    
+    Route::get('/monitor-sms', MonitorSendSmsJob::class)->name('monitor-sms');
 
 });

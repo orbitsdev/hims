@@ -149,11 +149,15 @@ class ListEvents extends Component implements HasForms, HasTable
                         ];
 
                         $users = User::departmentBelong($data['departments'])->get();
-                        //   dd($users);
-                        foreach($users as $user){
-                            SendNotificationJob::dispatch($user ,$data);
 
-                        }
+                        // SendNotificationJob::dispatch($users, $newdata);
+
+                        SendNotificationJob::dispatch($users, $newdata)->delay(now()->addMinutes(2));
+
+                        return redirect()->route('monitor-sms');
+
+                        //   dd($users);
+                       
                         //return redirect()->route('event-announcement', $newdata);
 
                     }),

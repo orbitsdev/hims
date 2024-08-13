@@ -59,6 +59,7 @@ use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\MonitorSendSmsJob;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
+use App\Livewire\RecordBatchNotficationRequest;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
 
 /*
@@ -159,6 +160,7 @@ Route::middleware([
     
     Route::get('/medical-record/user-list/{record}', ListOfUserForIndividualScreening::class)->name('individual-medical-recoding');
     Route::get('/medical-record/list-batch/{record}', ListBatches::class)->name('batches');
+    Route::get('/medical-record/list-batch/request/{record}', RecordBatchNotficationRequest::class)->name('batches-request-notification');
     Route::get('/medical-record/user-list-by-batch/{record}', ListOfUsersByBatch::class)->name('by-batch-medical-recoding');
 
     Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');

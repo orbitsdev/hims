@@ -9,13 +9,17 @@ use Filament\Tables\Table;
 use App\Models\RecordBatch;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
+use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Columns\ImageColumn;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\CheckboxList;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
@@ -103,7 +107,34 @@ class ListOfUsersByBatch extends Component implements HasForms, HasTable
                
                 ->url(function(Model $user){
                     return route('medical-record-create-by-batch', ['record'=> $this->record,'user'=> $user]);
-                }),
+                })
+                ,
+
+
+                Action::make('notify')
+                ->label('Notify')
+                ->icon('heroicon-m-user')
+                ->button()
+                ->size('lg')
+                ->requiresConfirmation()
+                ->fillForm( function(Model $record) {
+                    
+                    return [
+                        'to' => $record->email,
+                    ];
+                })
+                ->form([
+                    TextInput::make('to')->required()->disabled()->label('To'),
+                    Textarea::make('message')->required(),
+
+
+                ])
+                ->action(function (Model $record, array $data) {
+
+
+                    FilamentForm::notification('SEND SMS TO  ' . $record->fullNameWithEmail() . ' IS COMING SOON '.$data['message']);
+                    
+                })
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

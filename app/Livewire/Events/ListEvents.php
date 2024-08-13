@@ -114,29 +114,7 @@ class ListEvents extends Component implements HasForms, HasTable
                             ->searchable()
                             ->gridDirection('row')
                             ->label('SELECT DEPARTMENT THAT YOU WANT TO BE NOTIFIED'),
-                        // CheckboxList::make('departments')
-                        // ->relationship(
-                        //     name: 'departments',
-                        //     titleAttribute: 'name'
-                        // )
-
-
-                        // ->getOptionLabelFromRecordUsing(fn (Model $record) => "{$record->name}")
-                        // ->bulkToggleable()
-                        // ->columns(3)
-                        // ->gridDirection('row')
-                        // ->searchable()
-
-                        // ->label('SELECT DEPARTMENT THAT YOU WANT TO BE NOTIFIED'),
-                        // Select::make('department_id')
-                        // ->preload()
-                        // ->native(false)
-                        //                     ->required()
-                        //                     ->label('BUILDING/DEPARTMENT')
-                        //                     ->options(Department::get()->map(function ($d) {
-                        //                         return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
-                        //                     })->pluck('name', 'id'))
-                        //                     ->searchable()
+                       
 
                     ])
                     ->button()

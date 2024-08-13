@@ -7,6 +7,7 @@ use App\Models\Record;
 use App\Models\Section;
 use App\Models\Department;
 use App\Models\MedicalRecord;
+use App\Models\NotificationRequest;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -65,6 +66,12 @@ class RecordBatch extends Model
        
        return $users;
 
+    }
+
+
+    public function notificationRequests()
+    {
+        return $this->morphMany(NotificationRequest::class, 'requestable');
     }
 
     

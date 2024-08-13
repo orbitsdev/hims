@@ -14,6 +14,7 @@ use Illuminate\Contracts\View\View;
 use Filament\Forms\Components\Select;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
@@ -49,6 +50,7 @@ class ListBatches extends Component implements HasForms, HasTable
 
 
 
+                ViewColumn::make('notifications')->view('tables.columns.record-batch-notification-request')->label('Notificaiton Sent'),
                 ViewColumn::make('users')->view('tables.columns.batch-users')->label('Available'),
 
                 //                 ToggleColumn::make('is_complete')
@@ -88,27 +90,42 @@ class ListBatches extends Component implements HasForms, HasTable
                     ->icon('heroicon-m-user')
                     ->button()
                     ->size('lg')
+                    ->requiresConfirmation()
                     ->form([
+                        Textarea::make('message')->required(),
 
                         CheckboxList::make('users')
-            ->label('Select Users')
-            ->columns(2)
-            ->searchable()
-            ->bulkToggleable()
-            ->options(User::all()->pluck('name','id'))
+                            ->label('Select Users')
+                            // ->columns(2)
+                            ->searchable()
+                            ->bulkToggleable()
+                            ->options(function (Model $record) {
+                                return User::notAdmin()->notStaff()->hasPersonalDetails()->noRecordAcademicYearWithBatchDepartment($record)->get()->map(function ($item) {
+                                    return [
+                                        'name' => $item->fullNameWithEmail(),
+                                        'id' => $item->id
+                                    ];
+                                })->pluck('name', 'id');
+                            })
 
-                      
+
                     ])
                     ->action(function (Model $record, array $data) {
 
 
+
+
                         foreach ($data['users'] as $userId) {
                             $user = User::find($userId);
-                            SendNotificationJob::dispatch($user, $record);
+                            FilamentForm::notification('SEND SMS TO  ' . $user->fullNameWithEmail() . ' IS COMING SOON');
+                            $record->notificationRequests()->create([
+                                'message' => $data['message'],
+                                'email' => $user->email
+                            ]);
+                            //  SendNotificationJob::dispatch($user, $record);
                         }
-
-                       
-                        
+                    })->hidden(function (Model $record) {
+                        return $record->totalUserOfThisBatch() == 0;
                     })
 
 

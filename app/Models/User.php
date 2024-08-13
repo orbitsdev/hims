@@ -86,6 +86,10 @@ class User extends Authenticatable
     {
         return ($this->name ?? '') . ' (' . ($this->email ?? '') . ')';
     }
+    public function fullNameWithEmailAndRole()
+    {
+        return '( '.($this->role ?? '').') '. ($this->name ?? '');
+    }
 
     public function dashBoardBaseOnRole()
     {

@@ -39,7 +39,7 @@ class SendNotificationJob implements ShouldQueue
         foreach($this->users as $user){
                          Log::info('Notification sent to user ' . $user->id);
 
-            //Mail::to($user->email)->send(new AnouncementMail($user, $this->data['title'], $this->data['body']));
+            Mail::to($user->email)->send(new AnouncementMail($user,  $this->data['message']));
         }
             // sleep(2);
        

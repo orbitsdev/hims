@@ -229,6 +229,7 @@ class FilamentForm extends Controller
 
                                     DatePicker::make('birth_date')
                                         ->native(false)
+                                        ->required()
                                         ->label('BIRTH DATE')
                                         ->columnSpan(3),
                                     TextInput::make('birth_place')
@@ -237,6 +238,7 @@ class FilamentForm extends Controller
                                         ->columnSpan(4),
                                     TextInput::make('address')
                                         ->label('ADDRESS')
+                                        ->required()
                                         ->columnSpan(4),
                                 ]),
 
@@ -1071,11 +1073,13 @@ class FilamentForm extends Controller
                         ->columnSpanFull()
                         ->required(),
 
+                     
+
                     Section::make('')
                         ->columns([
                             'sm' => 3,
                             'xl' => 6,
-                            '2xl' => 8,
+                            '2xl' => 9,
                         ])
                         ->hidden(fn (string $operation): bool => $operation == 'App\Livewire\Records\EditRecord')
                         ->schema([
@@ -1092,7 +1096,7 @@ class FilamentForm extends Controller
                                 // ->native(false)
                                 ->options(AcademicYear::withSemesterWithoutRecord()->pluck('name', 'id'))
                                 ->preload()
-                                ->columnSpan(4)
+                                ->columnSpan(3)
                                 ->searchable(),
 
                             Select::make('semester_id')->options(function (Get $get) {
@@ -1112,7 +1116,8 @@ class FilamentForm extends Controller
                                 ->required()
                                 ->native(false)
                                 ->label('SEMESTER')
-                                ->columnSpan(4),
+                                ->columnSpan(3),
+                                DatePicker::make('record_date')->native(false)->columnSpan(3)->date()->required()->label('DATE')->default(now()),
                         ]),
 
                         ...FilamentForm::batchForm()
@@ -1129,7 +1134,7 @@ class FilamentForm extends Controller
     public static function batchForm(): array
     {
         return [
-            Section::make('BATCHES (Optional)')
+            Section::make('BATCH (Optional)')
                 ->description('You can Record medical history by batches')
                 ->collapsible()
 
@@ -1263,9 +1268,259 @@ class FilamentForm extends Controller
                             '2xl' => 12,
                         ])
                         ->schema([
-                            TextInput::make('first_name')->maxLength(191)->columnSpan(4)->required(),
-                            TextInput::make('last_name')->maxLength(191)->columnSpan(4)->required(),
-                            TextInput::make('middle_name')->maxLength(191)->columnSpan(4)->required(),
+                            TextInput::make('first_name')->maxLength(191)->columnSpan(3)->required(),
+                            TextInput::make('last_name')->maxLength(191)->columnSpan(3)->required(),
+                            TextInput::make('middle_name')->maxLength(191)->columnSpan(3)->required(),
+                            TextInput::make('email')->required()
+                                                    ->columnSpan(3),
+
+                            TextInput::make('age')
+                                ->required()
+                                ->mask(999)
+                                ->default(18)
+                                ->numeric()
+                                ->columnSpan(1),
+
+
+                            DatePicker::make('birth_date')
+                                ->required()
+                                ->native(false)
+                                ->columnSpan(2),
+
+                            Select::make('civil_status')
+                                ->required()
+                                ->label('Civil Status')
+                                ->options(FilamentForm::CIVIL_STATUS_OPTIONS)
+                                ->default('Single')
+                                ->columnSpan(3)
+                                ->searchable(),
+
+                            TextInput::make('birth_place')
+                                ->required()
+                                ->columnSpan(3),
+
+                            TextInput::make('address')
+                                ->required()
+                                ->columnSpan(3),
+
+
+                        ]),
+                    //    TextInput::make('record_title')
+                    //             ->maxLength(191),
+                    //        TextInput::make('batch_description')
+                    //             ->maxLength(191),
+                    //        TextInput::make('academic_year_name')
+                    //             ->maxLength(191),
+                    //        TextInput::make('semester_name')
+                    //             ->maxLength(191),
+                    //        TextInput::make('department_name')
+                    //             ->maxLength(191),
+                    //        Textarea::make('course_name')
+                    //             ->columnSpanFull(),
+                    //        TextInput::make('section_name')
+                    //             ->maxLength(191),
+                    //        TextInput::make('student_unique_id')
+                    //             ->maxLength(191),
+                    //    TextInput::make('role')
+                    //         ->maxLength(191),
+
+
+                    Section::make('Vital Signs & Diagnosis')
+                        // ->description('The following section contains fields for entering and managing medical details. ')
+                        // ->extraAttributes([
+                        //     'class' => 'section-bg'
+
+                        // ])
+                        ->collapsible()
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 12,
+                        ])
+                        ->schema([
+
+                            TextInput::make('past_illness')
+
+                                ->columnSpan(6),
+
+                            TextInput::make('allergies')->label('Allergies (Food, Drugs, Etc.)')
+
+
+
+
+
+                                ->columnSpan(4),
+
+                            // TextInput::make('specified_diagnoses')
+
+
+                            //     ->columnSpan(3),
+
+                            // TextInput::make('condition_name')
+
+
+                            //     ->columnSpan(3),
+
+
+                            TextInput::make('weight')
+                                ->numeric()->columnSpan(1),
+                            TextInput::make('height')->label('Height (cm)')
+                                ->columnSpan(1)
+                                ->numeric()
+
+                                ->maxValue(1000)
+                                ->numeric(),
+
+
+                            TextInput::make('temperature')->label('Temperature (°C)')
+                                ->columnSpan(1)
+                                ->numeric()
+
+                                ->maxValue(150),
+
+
+
+
+
+                            TextInput::make('systolic_pressure')
+                                ->columnSpan(1)
+                                ->maxValue(1000)
+
+                                ->numeric(),
+                            TextInput::make('diastolic_pressure')
+                                ->columnSpan(1)
+                                ->maxValue(1000)
+
+
+                                ->numeric(),
+
+
+                            TextInput::make('blood_pressure')
+                                ->columnSpan(1)
+
+                                ->maxLength(191),
+
+
+
+
+                            TextInput::make('heart_rate')->label('Heart Rate (bpm)')
+                                ->columnSpan(1)
+                                ->maxValue(1000)
+                                ->numeric(),
+
+
+                            Select::make('condition_id')
+                                ->relationship(name: 'condition', titleAttribute: 'name')
+
+                                ->label('Diagnosis')
+                                // ->options(Condition::get()->map(function ($item) {
+                                //     return 
+                                //     ['name' => $item->name, 'id' => $item->id] ;
+                                // })->pluck('name', 'id'))
+                                ->searchable()
+                                ->preload()
+                                ->columnSpan(7)
+                                ->createOptionForm(FilamentForm::conditionForm2()),
+
+                            Textarea::make('remarks')
+                                ->columnSpanFull()->rows(1),
+
+                            FileUpload::make('upload_image')
+                                ->disk('public')
+                                ->directory('events')
+                                ->image()
+                                ->imageEditor()
+                                // ->required()
+                                ->columnSpanFull(),
+
+                        ]),
+
+                    Section::make('Consultation Details')
+                        ->description('')
+                        ->collapsible()
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 12,
+                        ])
+                        ->schema([
+
+                            DatePicker::make('date_of_examination')
+                                ->date()
+                                ->required()
+                                ->columnSpan(4),
+                            TextInput::make('release_by')
+                                ->required()
+
+                                ->columnSpan(4)
+                                ->maxLength(191),
+                            TextInput::make('physician_name')
+                                ->required()
+
+                                ->columnSpan(4)
+                                ->maxLength(191),
+
+                            // TextInput::make('status')
+                            //     ->columnSpan(2)
+                            //     ->maxLength(191)
+                            //     ->default('No Record'),
+
+
+
+                            Toggle::make('is_complete')->label('Mark as Complete')
+                                ->columnSpanFull()
+                                ->default(true)
+                                ->live()
+                                ->afterStateUpdated(function ($state) {
+                                    FilamentForm::notification($state ? 'Marks as  Complete' : ' Marks as Incomplete');
+                                }),
+
+                            // FileUpload::make('captured_image')
+                            //     ->disk('public')
+                            //     ->directory('events')
+                            //     ->image()
+                            //     ->imageEditor()
+                            //     // ->required()
+                            //     ->columnSpan(6)
+                            // ->label('FEATURED IMAGE'),
+                            // Textarea::make('upload_image')
+                            //     ->columnSpanFull(),
+                            // Textarea::make('captured_image')
+                            //     ->columnSpanFull(),
+
+                        ]),
+
+                ]),
+
+        ];
+    }
+    public static function editMedicalForm(): array
+    {
+        return [
+
+            Section::make('Physical Examination Form')
+
+                ->collapsible()
+
+                ->schema([
+
+
+
+                    Section::make('Personal Information')
+                        // ->description('The following section contains fields for entering and managing personal details. Please fill out the required information accurately.')
+                        ->collapsible()
+
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 12,
+                        ])
+                        ->schema([
+                            TextInput::make('first_name')->maxLength(191)->columnSpan(3)->required()->disabled(),
+                            TextInput::make('last_name')->maxLength(191)->columnSpan(3)->required()->disabled(),
+                            TextInput::make('middle_name')->maxLength(191)->columnSpan(3)->required()->disabled(),
+                            TextInput::make('email')->required()
+                                                    ->columnSpan(3),
 
                             TextInput::make('age')
                                 ->required()

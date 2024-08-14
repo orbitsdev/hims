@@ -9,8 +9,10 @@ use Livewire\Component;
 use Filament\Tables\Table;
 use App\Models\RecordBatch;
 use App\Jobs\SendNotificationJob;
+use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
+use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
@@ -19,6 +21,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\CheckboxList;
@@ -76,8 +79,9 @@ class ListBatches extends Component implements HasForms, HasTable
             ])
             ->actions([
                 Action::make('userByBatch') // Identifier should be unique and camelCase
-                    ->label('Start Record') // Consistent casing
-                    ->icon('heroicon-m-user')
+                    ->label('START RECORDING')
+                    ->color('success') // Consistent casing
+                    ->icon('heroicon-o-user')
                     ->button()
                     ->size('lg')
                     ->url(function (Model $record) {
@@ -85,48 +89,71 @@ class ListBatches extends Component implements HasForms, HasTable
                     })->hidden(function (Model $record) {
                         return $record->totalUserOfThisBatch() == 0;
                     }),
-                Action::make('notify')
-                    ->label('Notify')
-                    ->icon('heroicon-m-user')
-                    ->button()
-                    ->size('lg')
-                    ->requiresConfirmation()
-                    ->form([
-                        Textarea::make('message')->required(),
+                   
+                    ActionGroup::make([
+                        Action::make('notify')
+                        ->label('SEND SMS')
+                        ->icon('heroicon-o-bell')
+                      
+                        ->size('lg')
+                        
+                        ->form([
+                            Textarea::make('message')->required()->maxLength(153),
+    
+                            CheckboxList::make('users')
+                                ->label('Select Users')
+                                // ->columns(2)
+                                ->required()
+                                ->searchable()
+                                ->bulkToggleable()
+                                ->options(function (Model $record) {
+                                    return User::notAdmin()->notStaff()->hasPersonalDetails()->noRecordAcademicYearWithBatchDepartment($record)->get()->map(function ($item) {
+                                        return [
+                                            'name' => $item->fullNameWithEmail(),
+                                            'id' => $item->id
+                                        ];
+                                    })->pluck('name', 'id');
+                                })
+    
+    
+                        ])
+                        ->action(function (Model $record, array $data) {
+    
+    
+    
+    
+                            foreach ($data['users'] as $userId) {
+                                $user = User::find($userId);
+                                FilamentForm::notification('SEND SMS TO  ' . $user->fullNameWithEmail() . ' IS COMING SOON');
+                                $record->notificationRequests()->create([
+                                    'message' => $data['message'],
+                                    'email' => $user->email
+                                ]);
+                                //  SendNotificationJob::dispatch($user, $record);
+                            }
+                        })->hidden(function (Model $record) {
+                            return $record->totalUserOfThisBatch() == 0;
+                        }),
 
-                        CheckboxList::make('users')
-                            ->label('Select Users')
-                            // ->columns(2)
-                            ->searchable()
-                            ->bulkToggleable()
-                            ->options(function (Model $record) {
-                                return User::notAdmin()->notStaff()->hasPersonalDetails()->noRecordAcademicYearWithBatchDepartment($record)->get()->map(function ($item) {
-                                    return [
-                                        'name' => $item->fullNameWithEmail(),
-                                        'id' => $item->id
-                                    ];
-                                })->pluck('name', 'id');
-                            })
+                        Action::make('view')
+                        ->icon('heroicon-o-eye')
+                    ->label('VIEW SENT SMS')
+    
+                   
 
 
-                    ])
-                    ->action(function (Model $record, array $data) {
-
-
-
-
-                        foreach ($data['users'] as $userId) {
-                            $user = User::find($userId);
-                            FilamentForm::notification('SEND SMS TO  ' . $user->fullNameWithEmail() . ' IS COMING SOON');
-                            $record->notificationRequests()->create([
-                                'message' => $data['message'],
-                                'email' => $user->email
-                            ]);
-                            //  SendNotificationJob::dispatch($user, $record);
-                        }
-                    })->hidden(function (Model $record) {
-                        return $record->totalUserOfThisBatch() == 0;
-                    })
+                    ->outlined()
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                    ->disabledForm()
+                    ->modalContent(fn (Model $record): View => view(
+                        'livewire.record-batch-notfication-request',
+                        ['record' => $record],
+                    ))
+                    ->modalWidth(MaxWidth::SevenExtraLarge)
+                    ,
+                    ]),
+                
 
 
             ])

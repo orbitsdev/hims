@@ -48,5 +48,6 @@ class MedicalRecord extends Model
         return $this->belongsTo(Condition::class);
     }
 
+
     
 }

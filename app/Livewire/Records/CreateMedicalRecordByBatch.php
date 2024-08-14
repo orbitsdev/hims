@@ -33,6 +33,7 @@ class CreateMedicalRecordByBatch extends Component implements HasForms
             'first_name' => $personalDetails->first_name ?? null,
             'last_name' => $personalDetails->last_name ?? null,
             'middle_name' => $personalDetails->middle_name ?? null,
+            'email'=>$this->user->email ?? null,   
             'age' => $personalDetails->age ?? null,
             'weight' => $personalDetails->weight ?? null,
             'height' => $personalDetails->height ?? null,

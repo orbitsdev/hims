@@ -47,18 +47,22 @@ class ListRecords extends Component implements HasForms, HasTable
             ->columns([
                 Tables\Columns\TextColumn::make('title')->searchable()->label('TITLE'),
                 Tables\Columns\TextColumn::make('academicYear.name')->label('ACADEMIC YEAR')->searchable(),
+
                 Tables\Columns\TextColumn::make('semester')->formatStateUsing(function (Model $record) {
                     return $record->semester->semesterWithYear();
                 })->label('SEMESTER'),
 
-                ViewColumn::make('last_name')->view('tables.columns.record-batch-detail')->label('Batches'),
+                ViewColumn::make('last_name')->view('tables.columns.record-batch-detail')->label('BATCH'),
 
-                IconColumn::make('status')
-                    ->boolean()
-                    ->label('Is Complete'),
-                    CheckboxColumn::make('status')->label('Mark as Done')->afterStateUpdated(function ($record, $state) {
+                
+                    CheckboxColumn::make('status')->label('MARK AS DONE')->afterStateUpdated(function ($record, $state) {
                         FilamentForm::notification($state ? 'Mark as Done' : 'Mark as Incomplete');
-                    })
+                    }) ,
+
+                    Tables\Columns\TextColumn::make('created_at')->label('CREATED AT')->date(),
+
+
+                    
             ])
             ->filters([
                 SelectFilter::make('ACADEMIC YEAR')
@@ -162,7 +166,7 @@ class ListRecords extends Component implements HasForms, HasTable
                     ->size('lg')
                     ->color('primary')
 
-                    ->label('New Event')
+                    ->label('New Record')
                     ->icon('heroicon-s-plus')
 
                     ->url(function () {
@@ -170,46 +174,58 @@ class ListRecords extends Component implements HasForms, HasTable
                     }),
             ])
             ->actions([
-                // Action::make('collections') // Identifier should be unique and camelCase
-                // ->label('COLLECTIONS') // Consistent casing
-                // ->icon('heroicon-o-folder-open')
-                //  ->button()
-                //  ->size('lg')
+                Action::make('collections')
+                ->tooltip('MEDICAL RECORD STORAGE')  
+                // Identifier should be unique and camelCase
+                ->label('COLLECTIONS') // Consistent casing
+                ->icon('heroicon-o-folder-open')
+                 ->button()
+                 ->size('lg')
+                 ->url(function (Model $record) {
+                    return route('record-list-medical-record',['record'=> $record]);
+                })
                 
-                //  ,
+                 ,
                 
                
-                Action::make('recordIndividually') // Identifier should be unique and camelCase
-                    ->label('RD INDIVIDUAL') // Consistent casing
-                    ->icon('heroicon-o-user')
-                    ->button()
-                    ->size('lg')
-                    ->url(function (Model $record) {
-                        return route('individual-medical-recoding', ['record' => $record]);
-                    })->hidden(function(Model $record){
-                       
-                        return $record->status;
-                    }),
-
-                Action::make('recordByBatch') // Identifier should be unique and camelCase
-                    ->label('RD BY BATCH') // Consistent casing
-                    ->icon('heroicon-o-chart-bar')
-                    ->size('lg')
-                    ->button()
-                    ->url(function (Model $record) {
-                        return route('batches', ['record' => $record]);
-                    })->hidden(function (Model $record) {
-
-                       
-                        return ($record->totalBatches() == 0 || $record->status);
-                        // return $record->totalBatches() <= 0;
-                    }),
+               
 
                   
                     
 
 
                 ActionGroup::make([
+
+                    Action::make('recordIndividually') // Identifier should be unique and camelCase
+                    ->tooltip('Record Individually')   
+                    ->color('primary')
+                    ->label('RD INDIVIDUAL') // Consistent casing
+                        ->icon('heroicon-o-user')
+                      
+                        ->size('lg')
+                        ->url(function (Model $record) {
+                            return route('individual-medical-recoding', ['record' => $record]);
+                        })->hidden(function(Model $record){
+                           
+                            return $record->status;
+                        }),
+    
+                    Action::make('recordByBatch')
+                    ->color('primary')
+                    ->tooltip('Record By Batch')
+                    // Identifier should be unique and camelCase
+                        ->label('RD BY BATCH') // Consistent casing
+                        ->icon('heroicon-o-chart-bar')
+                        ->size('lg')
+                        
+                        ->url(function (Model $record) {
+                            return route('batches', ['record' => $record]);
+                        })->hidden(function (Model $record) {
+    
+                           
+                            return ($record->totalBatches() == 0 || $record->status);
+                            // return $record->totalBatches() <= 0;
+                        }),
                     Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function (Model $record) {
                         return route('record-edit', ['record' => $record]);
                     }),
@@ -219,7 +235,7 @@ class ListRecords extends Component implements HasForms, HasTable
                     
                     return $record->status;
                     // return $record->totalBatches() <= 0;
-                }),
+                }) ->tooltip('MANAGEMENT')   ,
 
 
 

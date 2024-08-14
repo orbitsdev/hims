@@ -7,19 +7,22 @@ use Filament\Tables;
 use App\Models\Record;
 use Livewire\Component;
 use Filament\Tables\Table;
-use Filament\Tables\Actions\Action;
+use Filament\Actions\StaticAction;
 
+use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\EditAction;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
@@ -117,6 +120,55 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                 ->url(function(Model $user){
                     return route('medical-record-create', ['record'=> $this->record,'user'=> $user]);
                 }),
+
+
+                ActionGroup::make([
+                    Action::make('notify')
+                        ->label('SEND SMS')
+                        ->icon('heroicon-o-bell')
+                       
+                        ->size('lg')
+                        ->requiresConfirmation()
+                        ->fillForm(function (Model $record) {
+
+                            return [
+                                'to' => $record->email,
+                            ];
+                        })
+                        ->form([
+                            TextInput::make('to')->required()->disabled()->label('To'),
+                            Textarea::make('message')->required()->maxLength(153),
+
+
+                        ])
+                        ->action(function (Model $record, array $data) {
+
+
+                            FilamentForm::notification('SEND SMS TO  ' . $record->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
+                            $this->record->record->notificationRequests()->create([
+                                'message' => $data['message'],
+                                'email' => $record->email
+                            ]);
+                        }),
+
+                        Action::make('view')
+                        ->icon('heroicon-o-eye')
+                    ->label('VIEW SENT SMS')
+    
+                   
+
+
+                    ->outlined()
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                    ->disabledForm()
+                    ->modalContent(fn (Model $record): View => view(
+                        'livewire.view-send-notification',
+                        ['record' => $record],
+                    ))
+                    ->modalWidth(MaxWidth::SevenExtraLarge)
+                    ,
+                ]),
             
                 
             ])

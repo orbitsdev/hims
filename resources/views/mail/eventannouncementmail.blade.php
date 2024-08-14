@@ -7,9 +7,8 @@ Hi {{ $user->name }},
 
 This is an announcement regarding:
 
-**{{ $title }}**
 
-{{ $body }}
+{{ $message }}
 
 Best regards,
 

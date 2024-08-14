@@ -15,6 +15,10 @@ class ConditionSeeder extends Seeder
     {
         DB::table('conditions')->insert([
             [
+                'name' => 'None',
+                'description' => '',
+            ],
+            [
                 'name' => 'Burn',
                 'description' => 'Run cool (not cold) water over the burn for 10-15 minutes. This helps to reduce the heat and prevent further injury. If the burn is severe, cover it with a sterile, non-stick bandage or clean cloth. Avoid applying ice or butter, as these can cause further damage. Elevate the affected area if possible to reduce swelling. Over-the-counter pain relievers such as ibuprofen or acetaminophen can help manage pain. If the burn is larger than three inches, involves the face, hands, feet, or genitals, or if you notice signs of infection (such as increased pain, redness, fever, swelling, or oozing), seek medical attention immediately. Keep the burn clean and dry. Change the bandage daily, and watch for signs of infection. Avoid breaking any blisters that form, as this can lead to infection. Moisturizing lotions or aloe vera gel can be applied once the burn has cooled to help prevent dryness and improve healing. For extensive burns, follow up with a healthcare provider to ensure proper healing and minimize scarring.',
             ],

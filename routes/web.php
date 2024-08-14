@@ -56,11 +56,14 @@ use App\Livewire\FirstAidGuides\ListFirstAidGuides;
 use App\Livewire\Conditions\ListConditionTreatments;
 use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\MedicalRecords\CreateMedicalRecord;
+use App\Livewire\MedicalRecords\EditMedicalRecord;
 use App\Livewire\MonitorSendSmsJob;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\RecordBatchNotficationRequest;
+use App\Livewire\Records\ListMedicalRecord;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
+use App\Livewire\ViewSendNotification;
 
 /*
 |--------------------------------------------------------------------------
@@ -158,6 +161,10 @@ Route::middleware([
     Route::get('/record/create', CreateRecord::class)->name('record-create');
     Route::get('/record/edit/{record}', EditRecord::class)->name('record-edit');
     
+    Route::get('/record/collection/medical-record/{record}', ListMedicalRecord::class)->name('record-list-medical-record');
+    Route::get('/record/collection/medical-record/edit/{record}', EditMedicalRecord::class)->name('medical-record-edit');
+
+
     Route::get('/medical-record/user-list/{record}', ListOfUserForIndividualScreening::class)->name('individual-medical-recoding');
     Route::get('/medical-record/list-batch/{record}', ListBatches::class)->name('batches');
     Route::get('/medical-record/list-batch/request/{record}', RecordBatchNotficationRequest::class)->name('batches-request-notification');
@@ -167,12 +174,12 @@ Route::middleware([
     Route::get('/medical-record/by-batch/create/{record}/{user}', CreateMedicalRecordByBatch::class)->name('medical-record-create-by-batch');
     
     Route::get('/event-announcement-status', EventsAnouncmentSMSStatus::class)->name('event-announcement');
-
     Route::get('/monito-queue', QueueMonitor::class);
     
     //
     Route::get('/sections', ListSections::class)->name('sections');
     
     Route::get('/monitor-sms', MonitorSendSmsJob::class)->name('monitor-sms');
+    Route::get('/view-notification-sent/{record}', ViewSendNotification::class)->name('vew-notification-sent');
 
 });

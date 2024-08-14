@@ -309,4 +309,14 @@ class User extends Authenticatable
        
     }
 
+    public function totalNotification()
+    {
+        return NotificationRequest::where('email', $this->email)->count();
+    }
+    public function getNotification()
+    {
+        return NotificationRequest::latest()->where('email', $this->email)->get();
+    }
+    
+
 }

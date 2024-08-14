@@ -122,7 +122,7 @@ class ListStaffs extends Component implements HasForms, HasTable
                                 return route('staffs-edit', ['record'=> $record]);
                  }),
                     Tables\Actions\DeleteAction::make(),
-                ]),
+                ])->tooltip('MANAGEMENT'),
                
                 
               

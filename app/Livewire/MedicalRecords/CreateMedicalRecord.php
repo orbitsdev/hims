@@ -68,16 +68,17 @@ class CreateMedicalRecord extends Component implements HasForms
             
             
             // PERSONAL DETAILS
-            'first_name'=>$personalDetails->first_name,          
-            'last_name'=>$personalDetails->last_name,                
-            'middle_name'=>$personalDetails->middle_name,          
-            'age'=>$personalDetails->age,          
-            'weight'=>$personalDetails->weight,          
-            'height'=>$personalDetails->height,          
-            'birth_date'=>$personalDetails->birth_date,          
-            'birth_place'=>$personalDetails->birth_place,          
-            'address'=>$personalDetails->address,          
-            'civil_status'=>$personalDetails->civil_status,          
+            'first_name'=>$personalDetails->first_name ?? null,          
+            'last_name'=>$personalDetails->last_name ?? null,                
+            'middle_name'=>$personalDetails->middle_name ?? null,          
+            'email'=>$this->user->email ?? null,          
+            'age'=>$personalDetails->age ?? null,          
+            'weight'=>$personalDetails->weight ?? null,          
+            'height'=>$personalDetails->height ?? null,          
+            'birth_date'=>$personalDetails->birth_date ?? null,          
+            'birth_place'=>$personalDetails->birth_place ?? null,          
+            'address'=>$personalDetails->address ?? null,          
+            'civil_status'=>$personalDetails->civil_status ?? null,          
 
         ]);
     }

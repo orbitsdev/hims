@@ -100,20 +100,20 @@ class ListEvents extends Component implements HasForms, HasTable
             ])
             ->actions([
                 Action::make('sendEmail')
-                    ->label('SEND NOTIFICATIONS')
+                    ->label('SEND SMS ')
                     ->icon('heroicon-m-bell-alert')
                     ->size('lg')
                     ->modalWidth(MaxWidth::SevenExtraLarge)
                     ->form([
-                        TextInput::make('title')->required(),
-                        Textarea::make('body')->required(),
+                        // TextInput::make('title')->required(),
+                        Textarea::make('message')->required()->maxLength(153)->hint('SMS MESSAGE'),
                         CheckboxList::make('departments')
                             ->required()
                             ->options(Department::where('name', '!=', 'All')->pluck('name', 'id'))
                             ->columns(2)
                             ->searchable()
                             ->gridDirection('row')
-                            ->label('SELECT DEPARTMENT THAT YOU WANT TO BE NOTIFIED'),
+                            ->label('SELECT DEPARTMENT/BUILDING THAT YOU WANT TO BE NOTIFIED'),
                        
 
                     ])
@@ -121,8 +121,8 @@ class ListEvents extends Component implements HasForms, HasTable
                     ->action(function (array $data) {
 
                         $newdata = [
-                            'title' => $data['title'],
-                            'body' => $data['body'],
+                            
+                            'message' => $data['message'],
                             'departments' =>  json_encode($data['departments'])
                         ];
 
@@ -132,7 +132,7 @@ class ListEvents extends Component implements HasForms, HasTable
 
                         SendNotificationJob::dispatch($users, $newdata)->delay(now()->addMinutes(2));
 
-                        return redirect()->route('monitor-sms');
+                        // return redirect()->route('monitor-sms');
 
                         //   dd($users);
                        
@@ -159,7 +159,7 @@ class ListEvents extends Component implements HasForms, HasTable
                         return route('event-edit', ['record' => $record]);
                     }),
                     Tables\Actions\DeleteAction::make(),
-                ]),
+                ])->tooltip('MANAGEMENT'),
 
 
 

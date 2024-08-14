@@ -115,7 +115,7 @@ class ListStudents extends Component implements HasForms, HasTable
                                 return route('edit-student', ['record'=> $record]);
                  }),
                     Tables\Actions\DeleteAction::make(),
-                ]),
+                ])->tooltip('MANAGEMENT'),
                 
               
                 

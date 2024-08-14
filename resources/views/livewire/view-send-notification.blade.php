@@ -1,4 +1,5 @@
 
+    
     <div class="bg-white p-8">
         <table class="min-w-full divide-y divide-gray-300">
             <thead>
@@ -9,7 +10,7 @@
                 </tr>
             </thead>
             <tbody class="divide-y divide-gray-200">
-                @forelse($record->notificationRequestLatest() as $request)
+                @forelse($record->getNotification() as $request)
                     <tr>
                         <td class="whitespace-normal py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
                             {{ $request->message }} 
@@ -31,6 +32,5 @@
             </tbody>
         </table>
     </div>
-    
     
     

@@ -58,5 +58,14 @@ class Record extends Model
 
         return $count > 0 ? false :true;
     }
+
+    public function academicYearAndSemester(){
+        return  $this->academicYear->name.' ('.$this->semester->name_in_number.')';   
+    }
+
+    public function notificationRequests()
+    {
+        return $this->morphMany(NotificationRequest::class, 'requestable');
+    }
    
 }

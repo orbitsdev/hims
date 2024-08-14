@@ -73,6 +73,10 @@ class RecordBatch extends Model
     {
         return $this->morphMany(NotificationRequest::class, 'requestable');
     }
+    public function notificationRequestLatest()
+{
+    return $this->notificationRequests()->latest()->get();
+}
 
     
 

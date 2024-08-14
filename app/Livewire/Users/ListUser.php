@@ -138,11 +138,11 @@ class ListUser extends Component implements HasForms, HasTable
                     ->modalWidth(MaxWidth::Full),
                      Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
                                 return route('user-edit', ['record'=> $record]);
-                 }),
+                 })  ,
                              
                    
                     Tables\Actions\DeleteAction::make(),
-                ]),
+                ])->tooltip('MANAGEMENT'),
                
    
             ])

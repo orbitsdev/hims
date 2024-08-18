@@ -110,10 +110,7 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                 ->button()
                 ->color('primary')
                 ->label('CREATE MEDICAL RECORD')
-                ->fillForm([
-                    'name' => fake()->sentence(),
-                   
-                ])
+               
                 ->modalWidth('7xl')
                 
                 // ->form(FilamentForm::medicalForm())

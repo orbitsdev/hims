@@ -1135,6 +1135,7 @@ class FilamentForm extends Controller
     {
         return [
             Section::make('BATCH (Optional)')
+            
                 ->description('You can Record medical history by batches')
                 ->collapsible()
 
@@ -1148,9 +1149,11 @@ class FilamentForm extends Controller
 
                     Repeater::make('recordBatches')
                     ->live()
+                   
+                    ->grid(3)
                     ->columns([
-                        'sm' => 3,
-                        'xl' => 6,
+                        'sm' => 1,
+                        'xl' => 1,
                         '2xl' => 8,
                     ])
                     ->relationship('recordBatches')
@@ -1161,7 +1164,8 @@ class FilamentForm extends Controller
                             TextInput::make('description')->required()
                             ->default('Batch 1')
                             ->placeholder('ex. Batch 1')
-                            ->columnSpan(2)->label('Description'),
+                            ->columnSpanfull()
+                            ->label('Description'),
 
                         Select::make('department_id')
                             ->live(debounce: 500)
@@ -1175,7 +1179,7 @@ class FilamentForm extends Controller
                             ->label('DEPARTMENT/BUILDING')
                             ->options(Department::pluck('name', 'id'))
                             ->preload()
-                            ->columnSpan(2)
+                            ->columnSpanfull()
                             ->searchable(),
 
                         Select::make('course_id')
@@ -1199,7 +1203,7 @@ class FilamentForm extends Controller
                             })
                             ->hidden(fn (Get $get) => !empty($get('department_id')) ? Department::find($get('department_id'))->role !== User::STUDENT : true)
                             ->preload()
-                            ->columnSpan(2)
+                            ->columnSpanfull()
                           
                             
                             ->searchable(),
@@ -1225,7 +1229,7 @@ class FilamentForm extends Controller
                             })
                            
                             ->preload()
-                            ->columnSpan(2)
+                            ->columnSpanfull()
                             ->searchable(),
                                 
 
@@ -1274,9 +1278,17 @@ class FilamentForm extends Controller
                             TextInput::make('email')->required()
                                                     ->columnSpan(3),
 
-                            TextInput::make('age')
-                                ->required()
-                                ->mask(999)
+                                                    TextInput::make('age')
+                                                    ->required()
+                                                    ->mask(999)
+                                                    ->live()
+                                                    ->debounce(700)
+                    
+                                                ->afterStateUpdated(function(Get $get, Set $set){
+                                                
+                                                    FilamentForm::changeBloodPressure($get, $set);
+                                                    FilamentForm::changeRiskLevel($get, $set);
+                                                })
                                 ->default(18)
                                 ->numeric()
                                 ->columnSpan(1),
@@ -1381,18 +1393,56 @@ class FilamentForm extends Controller
 
 
 
-
-                            TextInput::make('systolic_pressure')
-                                ->columnSpan(1)
-                                ->maxValue(1000)
-
-                                ->numeric(),
-                            TextInput::make('diastolic_pressure')
-                                ->columnSpan(1)
-                                ->maxValue(1000)
-
-
-                                ->numeric(),
+                                TextInput::make('systolic_pressure')
+                                ->live()
+                                ->debounce(700)
+                                ->afterStateUpdated(function(Get $get, Set $set){
+                                
+                                    FilamentForm::changeBloodPressure($get, $set);
+                                    FilamentForm::changeRiskLevel($get, $set);
+                                })
+                                    ->columnSpan(1)
+                                    ->maxValue(1000)
+    
+                                    ->numeric(),
+                                TextInput::make('diastolic_pressure')
+                                    ->columnSpan(1)
+                                    ->maxValue(1000)
+                                    ->live()
+                                    ->debounce(700)
+    
+                                    ->afterStateUpdated(function(Get $get, Set $set){
+                                    
+                                        FilamentForm::changeBloodPressure($get, $set);
+                                        
+                                    
+                                         FilamentForm::changeRiskLevel($get, $set);
+                                    })
+    
+                                    ->numeric(),
+                            
+                                    // ->afterStateUpdated(function(Get $get, Set $set){
+                                    
+                                    //     FilamentForm::changeBloodPressure($get, $set);
+                                    // })
+    
+                                   
+    
+    
+                                TextInput::make('blood_pressure')
+                                    ->columnSpan(1)
+    
+                                    ->maxLength(191),
+    
+                                    TextInput::make('risk_level_status')
+                                    ->label('BP RISK level')
+                                        ->columnSpan(2)
+                                        ->maxValue(1000)
+                                        ->live()
+                                        ->disabled()
+                                        ->readOnly()
+                                       
+                                        ->debounce(300),
 
 
                             TextInput::make('blood_pressure')
@@ -1419,7 +1469,7 @@ class FilamentForm extends Controller
                                 // })->pluck('name', 'id'))
                                 ->searchable()
                                 ->preload()
-                                ->columnSpan(7)
+                                ->columnSpan(4)
                                 ->createOptionForm(FilamentForm::conditionForm2()),
 
                             Textarea::make('remarks')
@@ -1525,6 +1575,14 @@ class FilamentForm extends Controller
                             TextInput::make('age')
                                 ->required()
                                 ->mask(999)
+                                ->live()
+                                ->debounce(700)
+
+                            ->afterStateUpdated(function(Get $get, Set $set){
+                            
+                                FilamentForm::changeBloodPressure($get, $set);
+                                FilamentForm::changeRiskLevel($get, $set);
+                            })
                                 ->default(18)
                                 ->numeric()
                                 ->columnSpan(1),
@@ -1631,6 +1689,13 @@ class FilamentForm extends Controller
 
 
                             TextInput::make('systolic_pressure')
+                            ->live()
+                            ->debounce(700)
+                            ->afterStateUpdated(function(Get $get, Set $set){
+                            
+                                FilamentForm::changeBloodPressure($get, $set);
+                                FilamentForm::changeRiskLevel($get, $set);
+                            })
                                 ->columnSpan(1)
                                 ->maxValue(1000)
 
@@ -1638,15 +1703,41 @@ class FilamentForm extends Controller
                             TextInput::make('diastolic_pressure')
                                 ->columnSpan(1)
                                 ->maxValue(1000)
+                                ->live()
+                                ->debounce(700)
 
+                                ->afterStateUpdated(function(Get $get, Set $set){
+                                
+                                    FilamentForm::changeBloodPressure($get, $set);
+                                    
+                                    // dd($get('risk_level_status'));
+                                     FilamentForm::changeRiskLevel($get, $set);
+                                })
 
                                 ->numeric(),
+                        
+                                // ->afterStateUpdated(function(Get $get, Set $set){
+                                
+                                //     FilamentForm::changeBloodPressure($get, $set);
+                                // })
+
+                               
 
 
                             TextInput::make('blood_pressure')
                                 ->columnSpan(1)
 
                                 ->maxLength(191),
+
+                                TextInput::make('risk_level_status')
+                                ->label('BP RISK level')
+                                    ->columnSpan(2)
+                                    ->maxValue(1000)
+                                    ->live()
+                                    ->disabled()
+                                    ->readOnly()
+                                   
+                                    ->debounce(300),
 
 
 
@@ -1667,7 +1758,7 @@ class FilamentForm extends Controller
                                 // })->pluck('name', 'id'))
                                 ->searchable()
                                 ->preload()
-                                ->columnSpan(7)
+                                ->columnSpan(5)
                                 ->createOptionForm(FilamentForm::conditionForm2()),
 
                             Textarea::make('remarks')
@@ -1756,4 +1847,61 @@ class FilamentForm extends Controller
 
         ];
     }
+
+    public static function changeBloodPressure(Get $get , Set $set){
+        if (!empty($get('systolic_pressure')) && !empty($get('diastolic_pressure'))) {
+            $bloodPressure = $get('systolic_pressure') . '/' . $get('diastolic_pressure');
+            
+            $set('blood_pressure', $bloodPressure);
+        } else {
+         
+            $set('blood_pressure', null);
+        }
+    }
+
+
+    public static function changeRiskLevel(Get $get, Set $set)
+    {
+        $systolic = $get('systolic_pressure');
+        $diastolic = $get('diastolic_pressure');
+        $age = $get('age');
+    
+        if (!empty($systolic) && !empty($diastolic) && !empty($age)) {
+            if ($age < 13) {
+                if ($systolic < 110 && $diastolic < 70) {
+                    $set('risk_level_status', 'Normal');
+                } elseif ($systolic >= 110 && $systolic <= 120 && $diastolic < 80) {
+                    $set('risk_level_status', 'Elevated');
+                } elseif ($systolic > 120 || $diastolic > 80) {
+                    $set('risk_level_status', 'Hypertension');
+                }
+            } elseif ($age < 18) {
+                if ($systolic < 120 && $diastolic < 80) {
+                    $set('risk_level_status', 'Normal');
+                } elseif ($systolic >= 120 && $systolic <= 130 && $diastolic < 80) {
+                    $set('risk_level_status', 'Elevated');
+                } elseif ($systolic > 130 || $diastolic > 80) {
+                    $set('risk_level_status', 'Hypertension');
+                }
+            } else {
+                if ($systolic < 120 && $diastolic < 80) {
+                    $set('risk_level_status', 'Normal');
+                } elseif ($systolic >= 120 && $systolic <= 129 && $diastolic < 80) {
+                    $set('risk_level_status', 'Elevated');
+                } elseif (($systolic >= 130 && $systolic <= 139) || ($diastolic >= 80 && $diastolic <= 89)) {
+                    $set('risk_level_status', 'Hypertension Stage 1');
+                } elseif ($systolic >= 140 || $diastolic >= 90) {
+                    $set('risk_level_status', 'Hypertension Stage 2');
+                } elseif ($systolic > 180 || $diastolic > 120) {
+                    $set('risk_level_status', 'Hypertensive Crisis');
+                }
+            }
+        } else {
+            $set('risk_level_status', 'Unknown');
+        }
+    }
+    
+
+   
+    
 }

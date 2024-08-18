@@ -18,7 +18,7 @@ class AnouncementMail extends Mailable implements ShouldQueue
     /**
      * Create a new message instance.
      */
-    public function __construct(public User $user,  public  $message )
+    public function __construct(public User $user,  public  $message, public $subject = 'Announcement Mail')
     {
         //
     }
@@ -30,7 +30,7 @@ class AnouncementMail extends Mailable implements ShouldQueue
     {
         return new Envelope(
             from: new Address($this->user->email, 'SKU-HIMS'),
-            subject: 'Announcement Mail',
+            subject: $this->subject,
         );
     }
 

@@ -7,12 +7,14 @@ use Filament\Tables;
 use App\Models\Record;
 use Livewire\Component;
 use Filament\Tables\Table;
-use Filament\Actions\StaticAction;
+use App\Mail\AnouncementMail;
 
+use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Textarea;
@@ -145,10 +147,12 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
 
 
                             FilamentForm::notification('SEND SMS TO  ' . $record->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
-                            $this->record->record->notificationRequests()->create([
+                            $this->record->notificationRequests()->create([
                                 'message' => $data['message'],
                                 'email' => $record->email
                             ]);
+                            
+                             //Mail::to('orbinobrian0506@gmail.com')->send(new AnouncementMail($record, $data['message']));
                         }),
 
                         Action::make('view')

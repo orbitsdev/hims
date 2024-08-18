@@ -12,12 +12,17 @@ use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Textarea;
+use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Filament\Forms\Components\TextInput;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Enums\FiltersLayout;
+use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -168,13 +173,17 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->toggleable(isToggledHiddenByDefault: true)
                         ->numeric()
                         ->sortable(),
+                        ViewColumn::make('bp-risk')->view('tables.columns.b-p-risk-level')->label('BP RISK LEVEL')
+                        // ->toggleable(isToggledHiddenByDefault: true)
+                        ,
+
                     Tables\Columns\TextColumn::make('heart_rate')->label('HEART RATE')
                     ->toggleable(isToggledHiddenByDefault: true)
                         ->numeric()
                         ->sortable(),              
     
                         Tables\Columns\TextColumn::make('condition.name')->label('CONDITION')
-                        // ->toggleable(isToggledHiddenByDefault: true, condition: true)
+                         ->toggleable(isToggledHiddenByDefault: true, condition: true)
                             ->searchable(),
                 ]),
 
@@ -199,14 +208,25 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                 
             ])
             ->filters([
-                //
+                SelectFilter::make('condition_id')
+                ->label('Condition')
+                ->relationship('condition', 'name')
+                ->searchable()
+                ->preload()
+                ,
+                SelectFilter::make('section_id')
+                ->label('section')
+                ->relationship('section', 'name')
+                ->searchable()
+                ->preload()
+                ,
             ])
             ->actions([
                 
                 ActionGroup::make([
                     Action::make('edit')
                     ->color('primary')
-                    ->icon('heroicon-o-pencil-square')
+                    ->icon('heroicon-s-pencil-square')
                     ->tooltip('Update Medical Recurd')
                     // Identifier should be unique and camelCase
                         ->label('UPDATE RECORD') // Consistent casing
@@ -215,20 +235,97 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                         ->url(function (Model $record) {
                             return route('medical-record-edit', ['record' => $record]);
                         }),
+
+                    
                    
-                    Action::make('print')
+                    // Action::make('view-report')
+                    // ->color('primary')
+                    // ->icon('heroicon-s-eye')
+                    // ->tooltip('DONNLOAD REPORT')
+                    
+                    // ->label('VIEW REPORT') // Consistent casing
+                    // ->size('lg')
+                    // ->url(function(Model $record){
+                    //     return route('reports.view-medical-record',['record'=> $record]);
+                    // })
+                    // ->openUrlInNewTab()
+                    // ,
+                    Action::make('download')
                     ->color('primary')
-                    ->icon('heroicon-o-arrow-down-tray')
+                    ->icon('heroicon-s-arrow-down-tray')
                     ->tooltip('DONNLOAD REPORT')
                     ->action(function(){
                         FilamentForm::notification('DOWNLOAD REPORT COMING SOOND');
                     })
-                        ->label('DOWNLOAD REPORT') // Consistent casing
-                        ->size('lg'),
-                        
-                        // ->url(function (Model $record) {
-                        //     return route('batches', ['record' => $record]);
-                        // }),
+                    ->label('DOWNLOAD PDF') // Consistent casing
+                    ->size('lg')
+                    ->url(function(Model $record){
+                        return route('reports.medical-record',['record'=> $record]);
+                    })
+                    ->openUrlInNewTab()
+                    ,
+
+                    Action::make('sms')
+                    ->label('SEND SMS')
+                    ->icon('heroicon-s-chat-bubble-left-ellipsis')
+                    ->color('primary')
+                    ->size('lg')
+                    ->requiresConfirmation()
+                    ->fillForm(function (Model $record) {
+
+                        return [
+                            'to' => $record->user->email,
+                        ];
+                    })
+                    ->form([
+                        TextInput::make('to')->required()->disabled()->label('To'),
+                        Textarea::make('message')->required()->maxLength(153),
+
+
+                    ])
+                    ->action(function (Model $record, array $data) {
+
+                        $owner= $record->user;
+                        if($owner){
+                            FilamentForm::notification('SEND SMS TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
+                            $record->record->notificationRequests()->create([
+                                'message' => $data['message'],
+                                'email' => $owner->email
+                            ]);
+                        }
+                       
+                    }),
+                    Action::make('send-email')
+                    ->label('SEND EMAIL')
+                    ->icon('heroicon-s-envelope')
+                    ->color('primary')
+                    ->size('lg')
+                  
+                    ->fillForm(function (Model $record) {
+
+                        return [
+                            'to' => $record->user->email,
+                        ];
+                    })
+                    ->form([
+                        TextInput::make('to')->required()->disabled()->label('To'),
+                        Textarea::make('message')->required(),
+
+
+                    ])
+                    ->action(function (Model $record, array $data) {
+
+                        $owner= $record->user;
+                        if($owner){
+                            FilamentForm::notification('SEND EMAIL TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
+                            $record->record->notificationRequests()->create([
+                                'message' => $data['message'],
+                                'email' => $owner->email
+                            ]);
+                        }
+                       
+                    }),
+
                    
                     
                     Tables\Actions\DeleteAction::make()->label('DELETE'),

@@ -20,4 +20,28 @@
 .section-bg{
     @apply bg-tory-blue-200;
 }
+/* 
+.fi-fi-repeater-item-content{
+    background: red !important;
+    } */
+    
+    .fi-fo-repeater-item-header{
+        
+        @apply bg-tory-blue-50;
+}
+    .fi-fo-repeater-item-content{
+        
+       @apply bg-tory-blue-50;
+}
+/* 
+.fi-ta-header-cell{
+        
+    @apply bg-tory-blue-700 text-white;
+}
+.fi-ta-header-cell-label{
+        
+    @apply  text-white;
+}
+ */
 
+    

@@ -74,9 +74,6 @@ return new class extends Migration
             $table->text('captured_image')->nullable(); 
             $table->boolean('is_complete')->default(false)->nullable(); 
 
-           
-            
-          
 
             $table->timestamps();
         });

@@ -1,7 +1,7 @@
 
 <?php
 
-
+use App\Http\Controllers\ReportController;
 use App\Livewire\Dashboard;
 use App\Livewire\QueueMonitor;
 use App\Livewire\Users\EditUser;
@@ -182,4 +182,15 @@ Route::middleware([
     Route::get('/monitor-sms', MonitorSendSmsJob::class)->name('monitor-sms');
     Route::get('/view-notification-sent/{record}', ViewSendNotification::class)->name('vew-notification-sent');
 
+    Route::get('/test-report', function () {
+        return view('reports.medical-report');
+    });
+    Route::prefix('reports')->name('reports.')->group(function(){
+        Route::get('medical-report/view/{record}', [ReportController::class, 'viewMedicalReport'])->name('view-medical-record');
+
+    });
+    Route::prefix('reports')->name('reports.')->group(function(){
+        Route::get('medical-report/{record}', [ReportController::class, 'generatePdf'])->name('medical-record');
+
+    });
 });

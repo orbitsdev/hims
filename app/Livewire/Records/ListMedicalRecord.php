@@ -238,18 +238,18 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
 
                     
                    
-                    // Action::make('view-report')
-                    // ->color('primary')
-                    // ->icon('heroicon-s-eye')
-                    // ->tooltip('DONNLOAD REPORT')
+                    Action::make('view-report')
+                    ->color('primary')
+                    ->icon('heroicon-s-eye')
+                    ->tooltip('DONNLOAD REPORT')
                     
-                    // ->label('VIEW REPORT') // Consistent casing
-                    // ->size('lg')
-                    // ->url(function(Model $record){
-                    //     return route('reports.view-medical-record',['record'=> $record]);
-                    // })
-                    // ->openUrlInNewTab()
-                    // ,
+                    ->label('VIEW REPORT') // Consistent casing
+                    ->size('lg')
+                    ->url(function(Model $record){
+                        return route('reports.view-medical-record',['record'=> $record]);
+                    })
+                    ->openUrlInNewTab()
+                    ,
                     Action::make('download')
                     ->color('primary')
                     ->icon('heroicon-s-arrow-down-tray')

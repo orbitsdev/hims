@@ -1445,10 +1445,7 @@ class FilamentForm extends Controller
                                         ->debounce(300),
 
 
-                            TextInput::make('blood_pressure')
-                                ->columnSpan(1)
-
-                                ->maxLength(191),
+                       
 
 
 

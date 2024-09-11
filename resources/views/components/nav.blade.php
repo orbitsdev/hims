@@ -1,4 +1,6 @@
-<nav class="flex flex-1 flex-col">
+<div class="custom-scrollbar w-[20rem] bg-white px-6 pb-2 flex-shrink-0 h-full overflow-y-auto">
+    <div class="h-8"></div>
+<nav class="flex flex-1 flex-col ">
 
     <div  class="mb-4">
 
@@ -29,7 +31,7 @@
                        SYSTEM USERS
                     </a>
                 </li>
-               
+
                 <li>
                     <a href="{{route('students')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['students','create-student','edit-student','view-student'])}}">
@@ -74,7 +76,7 @@
                       EMERGENCY CONTACTS
                     </a>
                 </li>
-              
+
             </ul>
         </li>
         <li>
@@ -92,7 +94,7 @@
                     <a href="{{route('departments')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['departments'])}}">
                         <i class="fa-solid fa-building-columns text-2xl"></i>
-                        DEPARMENT/BUILDING 
+                        DEPARMENT/BUILDING
                     </a>
                 </li>
                 <li>
@@ -106,14 +108,14 @@
                 <li>
                     <a href="{{route('sections')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['sections'])}}">
-                      
+
                         <i class="fa-solid fa-book text-2xl"></i>
                      SECTIONS
                     </a>
                 </li>
-                
-               
-              
+
+
+
                 <li>
                     <a href="{{route('conditions')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
@@ -137,11 +139,11 @@
                         'first-aid-guide-view',
                         'first-aid-guide-create',
                         'first-aid-guide-edit',
-                       
+
 
                         ])}}">
                         {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
-                        
+
                         <i class="fa-solid fa-briefcase-medical text-2xl"></i>
                         FIRSTAID & GUIDE
                     </a>
@@ -152,3 +154,4 @@
 
     <div class="h-[200px]"></div>
 </nav>
+</div>

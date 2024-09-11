@@ -1,5 +1,14 @@
-<div class="h-screen flex flex-col">
-    <nav class="bg-white">
+<div class="h-screen flex ">
+
+        <x-nav />
+    <div class="w-full">
+        <x-main-header />
+        <div class="flex-1 p-4 overflow-y-auto">
+            {{$slot}}
+        </div>
+    </div>
+
+    {{-- <nav class="bg-white">
         <x-main-header />
     </nav>
     <div class="flex flex-1 h-full overflow-hidden">
@@ -7,8 +16,6 @@
             <div class="h-8"></div>
             <x-nav />
         </div>
-        <div class="flex-1 p-4 overflow-y-auto">
-            {{$slot}}
-        </div>
-    </div>
+
+    </div> --}}
 </div>

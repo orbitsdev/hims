@@ -19,6 +19,8 @@ export default {
     theme: {
         extend: {
             colors: {
+
+
                 green: colors.green,
                 gray: colors.neutral,
                 'tory-blue': {
@@ -46,9 +48,23 @@ export default {
                 '800': '#345427',
                 '900': '#2b4522',
                 '950': '#13250e',
-            },
-            
-                
+
+                    },
+                   'kaitoke-green': {
+        '50': '#edfff7',
+        '100': '#d6ffed',
+        '200': '#afffdc',
+        '300': '#71ffc3',
+        '400': '#2cfca3',
+        '500': '#01e684',
+        '600': '#00bf6a',
+        '700': '#009657',
+        '800': '#067547',
+        '900': '#064f32',
+        '950': '#003620',
+    },
+
+
             },
             fontFamily: {
                 sans: ['Figtree', ...defaultTheme.fontFamily.sans],

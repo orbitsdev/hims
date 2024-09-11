@@ -1,12 +1,12 @@
-<nav class=" border-opacity-25  lg:border-b  px-4 bg-white">
-    <div class="mx-auto   p-2">
-        <div class="relative flex h-16 items-center justify-end    lg:border-opacity-25">
-           
+<nav class="   px-4 bg-white ">
+    <div class="mx-auto   ">
+        <div class="relative flex  py-2 items-center justify-end    lg:border-opacity-25">
+
             <div class="hidden lg:ml-4 lg:block">
                 <div class="flex items-center">
-                  
+
                     {{Auth::user()->fullName()}}
-                    
+
 
                     <div x-data="{ dropdownOpen: false }" class="relative ml-3">
                         <!-- Button for user menu -->
@@ -20,7 +20,7 @@
 
                         <!-- Dropdown menu -->
                         <div x-show="dropdownOpen" @click.outside="dropdownOpen = false" class="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
-                           
+
                             <x-dropdown-link href="{{ route('edit-profile',['record'=> Auth::user()]) }}" >
                                 Edit Profile
 
@@ -32,9 +32,9 @@
                                 </x-dropdown-link>
                             </form>
                         </div>
-                        
+
                     </div>
-                    
+
                     <!-- Mobile menu button -->
                     <div class="-mr-2 flex items-center sm:hidden">
                         <button type="button" class="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2" aria-controls="mobile-menu" aria-expanded="false">
@@ -50,11 +50,11 @@
                             </svg>
                         </button>
                     </div>
-                    
+
                 </div>
             </div>
         </div>
     </div>
 
-    @include('components.mobile.main-header')
+    {{-- @include('components.mobile.main-header') --}}
 </nav>

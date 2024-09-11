@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         Model::unguard();
 
         FilamentColor::register([
-            'primary' => "#0b82ec",
+            'primary' => "#064f32",
             'tory-blue' => [
                 '50' => '#f0f7ff',
                 '100' => '#e0edfe',
@@ -47,6 +47,20 @@ class AppServiceProvider extends ServiceProvider
                 '900' => '#0b3a6f',
                 '950' => '#07244a',
             ],
+            'kaitoke-green' => [
+    '50'  => '#edfff7',
+    '100' => '#d6ffed',
+    '200' => '#afffdc',
+    '300' => '#71ffc3',
+    '400' => '#2cfca3',
+    '500' => '#01e684',
+    '600' => '#00bf6a',
+    '700' => '#009657',
+    '800' => '#067547',
+    '900' => '#064f32',
+    '950' => '#003620',
+],
+
 
 
 
@@ -57,6 +71,6 @@ class AppServiceProvider extends ServiceProvider
             return new SmsChannel();
         });
 
-        
+
     }
 }

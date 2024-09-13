@@ -11,6 +11,7 @@ use App\Models\Condition;
 use App\Models\Department;
 use App\Models\RecordBatch;
 use Illuminate\Support\Str;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -145,6 +146,64 @@ class MedicalRecord extends Model
     public function birthDateFormat(){
         return Carbon::parse($this->birth_date)->format('F j, Y');
     }
+
+
+    // new
+
+    public function getBloodPressureStatusAndSuggestions()
+{
+    $systolic = $this->systolic_pressure;
+    $diastolic = $this->diastolic_pressure;
+    $age = $this->age;
+    $status = 'Unknown';
+
+    // Check for Hypotension (Low Blood Pressure)
+    if ($systolic < 90 || $diastolic < 60) {
+        $status = 'Hypotension';
+    }
+    // Determine the blood pressure status based on age and systolic/diastolic values
+    elseif ($age < 13) {
+        if ($systolic < 110 && $diastolic < 70) {
+            $status = 'Normal';
+        } elseif ($systolic >= 110 && $systolic <= 120 && $diastolic < 80) {
+            $status = 'Elevated';
+        } else {
+            $status = 'Hypertension';
+        }
+    } elseif ($age < 18) {
+        if ($systolic < 120 && $diastolic < 80) {
+            $status = 'Normal';
+        } elseif ($systolic >= 120 && $systolic <= 130 && $diastolic < 80) {
+            $status = 'Elevated';
+        } else {
+            $status = 'Hypertension';
+        }
+    } else {
+        if ($systolic < 120 && $diastolic < 80) {
+            $status = 'Normal';
+        } elseif ($systolic >= 120 && $systolic <= 129 && $diastolic < 80) {
+            $status = 'Elevated';
+        } elseif (($systolic >= 130 && $systolic <= 139) || ($diastolic >= 80 && $diastolic <= 89)) {
+            $status = 'Hypertension Stage 1';
+        } elseif ($systolic >= 140 || $diastolic >= 90) {
+            $status = 'Hypertension Stage 2';
+        } elseif ($systolic > 180 || $diastolic > 120) {
+            $status = 'Hypertensive Crisis';
+        }
+    }
+
+    // Fetch suggestions for diet, lifestyle, and medication based on the blood pressure status
+    $recommendations = DB::table('blood_pressure_levels')
+        ->where('status', $status)
+        ->first(['diet_recommendations', 'lifestyle_recommendations', 'medication_recommendations']);
+
+    return [
+        'status' => $status,
+        'diet' => $recommendations->diet_recommendations ?? 'No diet recommendations available.',
+        'lifestyle' => $recommendations->lifestyle_recommendations ?? 'No lifestyle recommendations available.',
+        'medication' => $recommendations->medication_recommendations ?? 'No medication recommendations available.'
+    ];
+}
 
 
 }

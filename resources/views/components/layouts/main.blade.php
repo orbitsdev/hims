@@ -46,8 +46,8 @@
     <!-- Styles -->
     @livewireStyles
 </head>
-
-<body class="font-sans antialiased bg-gradient-to-br  from-tory-blue-50 to-tory-blue-200  min-h-screen flex flex-col">
+{{-- bg-[#E2E5E0]  --}}
+<body class="font-sans antialiased  bg-[#E2E5E0] flex flex-col">
 
             {{$slot}}
 

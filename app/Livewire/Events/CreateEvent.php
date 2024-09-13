@@ -25,7 +25,7 @@ class CreateEvent extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-            ->schema(FilamentForm::eventForm())->columns(3)
+            ->schema(FilamentForm::eventForm())
             ->statePath('data')
             ->model(Event::class);
     }

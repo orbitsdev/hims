@@ -33,7 +33,7 @@ class AppServiceProvider extends ServiceProvider
         Model::unguard();
 
         FilamentColor::register([
-            'primary' => "#064f32",
+            'primary' => "#00bf6a",
             'tory-blue' => [
                 '50' => '#f0f7ff',
                 '100' => '#e0edfe',

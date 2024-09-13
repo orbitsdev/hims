@@ -9,11 +9,11 @@
 /* Custom link styles using Tailwind's @apply directive */
 
 .active-link {
-    @apply  flex items-center p-2 gap-x-3 rounded-md bg-tory-blue-50  text-sm font-semibold leading-6 text-tory-blue-600;
+    @apply  flex items-center p-2 gap-x-3 rounded-md bg-[#2B7858]  text-sm font-semibold leading-6 text-white;
 }
 
 .inactive-link {
-    @apply  flex items-center p-2 gap-x-3 rounded-md  text-sm font-semibold leading-6 text-gray-600 hover:bg-tory-blue-50 hover:text-tory-blue-600;
+    @apply  flex items-center p-2 gap-x-3 rounded-md  text-sm font-semibold leading-6  hover:bg-[#2B7858] text-[#74B096] hover:text-white;
 }
 
 
@@ -27,12 +27,21 @@
 
     .fi-fo-repeater-item-header{
 
-        @apply bg-tory-blue-50;
+        @apply bg-[#E2E5E0];
 }
     .fi-fo-repeater-item-content{
 
-       @apply bg-tory-blue-50;
+       @apply bg-[#E2E5E0];
 }
+
+.fi-ta-header-cell{
+
+    @apply bg-[#F9FAFC] text-white;
+}
+/* 
+.fi-section-content{
+    @apply bg-[#E2E5E0]
+} */
 /*
 .fi-ta-header-cell{
 
@@ -75,9 +84,9 @@
 .custom-scrollbar:hover::-webkit-scrollbar-thumb {
     background-color: rgba(180, 180, 180, 0.7); /* Light thumb color similar to mobile */
     border-radius: 12px; /* More rounded thumb */
-    border: 2px solid rgba(240, 240, 240, 0.5); /* Padding around thumb */
+    border: 2px solid rgba(240, 240, 240, 1); /* Padding around thumb */
 }
 
 .custom-scrollbar:hover::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(160, 160, 160, 0.8); /* Slightly darker thumb on hover */
+    background-color: #ffffff; /* Slightly darker thumb on hover */
 }

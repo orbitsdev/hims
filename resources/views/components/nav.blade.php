@@ -1,8 +1,9 @@
-<div class="custom-scrollbar w-[20rem] bg-white px-6 pb-2 flex-shrink-0 h-full overflow-y-auto">
+<div class="custom-scrollbar w-[20rem] bg-[#06603A] px-6 pb-2 flex-shrink-0 h-full overflow-y-auto relative">
+    <div class="w-4 h-full bg-[#064F32] top-0 left-0 bottom-0 absolute"></div>
     <div class="h-8"></div>
-<nav class="flex flex-1 flex-col ">
-
-    <div  class="mb-4">
+<nav class="flex flex-1 flex-col ml-4">
+    <p class="text-3xl text-white font-bold"> DASHBOARD</p>
+    {{-- <div  class="mb-4">
 
         <div class="flex items-center justify-center">
             <img src="{{asset('images/logo.png')}}" alt="" class="h-32 w-32">
@@ -11,10 +12,10 @@
 
             <h1 class="text-6xl font-bold"> HIMS</h1>
         </div>
-    </div>
-    <ul role="list" class="flex flex-1 flex-col gap-y-7">
+    </div> --}}
+    <ul role="list" class="flex flex-1 flex-col gap-y-7 mt-8">
         <li>
-            <div class="text-xs font-semibold leading-6 text-gray-400">RECORD MANAGEMENT</div>
+            <div class="text-xl font-semibold leading-6 text-gray-100 mb-2">RECORD MANAGEMENT</div>
             <ul role="list" class="-mx-2 space-y-1">
                 <li>
                     <!-- Current: "bg-gray-50 text-tory-blue-600", Default: "text-gray-700 hover:text-tory-blue-600 hover:bg-gray-50" -->
@@ -64,7 +65,7 @@
                 <li>
                     {{-- {{Session::get('current_route_name')}} --}}
                     <a href="{{route('records')}}"
-                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['records'])}}">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['records','medical-record-create',''])}}">
                         <i class="fa-regular fa-folder-open text-2xl w-6 "></i>
                       MEDICAL RECORDS
                     </a>
@@ -80,7 +81,7 @@
             </ul>
         </li>
         <li>
-            <div class="text-xs font-semibold leading-6 text-gray-400">DISPLAY MANAGEMENT</div>
+            <div class="text-xl font-semibold leading-6 text-gray-100 mb-2">DISPLAY MANAGEMENT</div>
             <ul role="list" class="-mx-2 mt-2 space-y-1">
                 <li>
                     <a href="{{route('academic-year')}}"

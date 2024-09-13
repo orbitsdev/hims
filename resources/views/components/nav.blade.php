@@ -1,8 +1,61 @@
 <div class="custom-scrollbar w-[20rem] bg-[#06603A] px-6 pb-2 flex-shrink-0 h-full overflow-y-auto relative">
+    
     <div class="w-4 h-full bg-[#064F32] top-0 left-0 bottom-0 absolute"></div>
     <div class="h-8"></div>
 <nav class="flex flex-1 flex-col ml-4">
-    <p class="text-3xl text-white font-bold"> DASHBOARD</p>
+    <div class="hidden lg:ml-4 lg:block">
+        <div class="flex flex-col items-center justify-center">
+
+           
+
+            <div x-data="{ dropdownOpen: false }" class="relative">
+                <div>
+                    <button @click="dropdownOpen = !dropdownOpen" type="button" class="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-kaitoke-green-500 focus:ring-offset-2" id="user-menu-button" aria-expanded="false" aria-haspopup="true">
+                        <span class="absolute -inset-1.5"></span>
+                        <span class="sr-only">Open user menu</span>
+                        <img class="h-16 w-16 rounded-full object-cover" src="{{Auth::user()->getImage()}}" alt="">
+                    </button>
+                </div>
+                
+            
+                <div x-show="dropdownOpen" @click.outside="dropdownOpen = false" class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 origin-top-center rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
+                    <x-dropdown-link href="{{Auth::user()->getImage()}}" target="_blank">
+                        View Image
+                    </x-dropdown-link>
+                    <x-dropdown-link href="{{ route('edit-profile',['record'=> Auth::user()]) }}">
+                        Edit Profile
+                    </x-dropdown-link>
+                    <form method="POST" action="{{ route('logout') }}" x-data>
+                        @csrf
+                        <x-dropdown-link href="{{ route('logout') }}" @click.prevent="$root.submit();">
+                            {{ __('Log Out') }}
+                        </x-dropdown-link>
+                    </form>
+                </div>
+            </div>
+            
+            
+            <p class="text-white text-xl text-ellipsis mt-2">
+                {{Auth::user()->fullName()}}
+
+            </p>
+
+            <div class="-mr-2 flex items-center sm:hidden">
+                <button type="button" class="relative inline-flex items-center justify-center rounded-md bg-white p-2 text-gray-400 hover:bg-gray-100 hover:text-gray-500 focus:outline-none focus:ring-2 focus:ring-kaitoke-green-500 focus:ring-offset-2" aria-controls="mobile-menu" aria-expanded="false">
+                    <span class="absolute -inset-0.5"></span>
+                    <span class="sr-only">Open main menu</span>
+                    <svg class="block h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+                    </svg>
+                    <svg class="hidden h-6 w-6" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+    </div>
+    {{-- <p class="text-3xl text-white font-bold"> DASHBOARD</p> --}}
     {{-- <div  class="mb-4">
 
         <div class="flex items-center justify-center">
@@ -18,7 +71,6 @@
             <div class="text-xl font-semibold leading-6 text-gray-100 mb-2">RECORD MANAGEMENT</div>
             <ul role="list" class="-mx-2 space-y-1">
                 <li>
-                    <!-- Current: "bg-gray-50 text-tory-blue-600", Default: "text-gray-700 hover:text-tory-blue-600 hover:bg-gray-50" -->
                     <a href="{{route('dashboard')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['users','user-create','user-edit'])}}">
                         {{-- <svg class="h-6 w-6 shrink-0 text-tory-blue-600" fill="none" viewBox="0 0 24 24"

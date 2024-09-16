@@ -8,11 +8,12 @@ use App\Models\Record;
 use Livewire\Component;
 use Filament\Forms\Form;
 use App\Models\MedicalRecord;
+use App\Models\BloodPressureLevel;
 use Illuminate\Contracts\View\View;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FilamentForm;
-use App\Http\Controllers\MedicalController;
 use Filament\Forms\Contracts\HasForms;
+use App\Http\Controllers\MedicalController;
 use Filament\Forms\Concerns\InteractsWithForms;
 
 class CreateMedicalRecord extends Component implements HasForms
@@ -127,18 +128,23 @@ class CreateMedicalRecord extends Component implements HasForms
         $data['student_id_number']= $student->id_number ?? null;
         $data['recorder_id']= Auth::user()->id ?? null;
         $data['role']=  $this->user->role ?? null;
-     
         
+        $level = BloodPressureLevel::getBloodPressureLevel($data['systolic_pressure'], $data['diastolic_pressure'], $this->user->age);
+
+        if ($level) {
+            $data['blood_pressure_level_id'] = $level->id; 
+        }
+        dd($level);
         $newRecord = MedicalRecord::create($data);
-
+    
+      
         $this->form->model($newRecord)->saveRelationships();
-
         MedicalController::automaticChangeStatus($this->record);
         $this->record->refresh();
-      
-        FilamentForm::notification('Save Successfully');
-
-        return redirect()->route('individual-medical-recoding',['record'=> $this->record->id]);
+    
+        FilamentForm::notification('Saved Successfully');
+    
+        return redirect()->route('individual-medical-recoding', ['record' => $this->record->id]);
 
     }
 

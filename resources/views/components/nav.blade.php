@@ -152,7 +152,7 @@
                 </li>
                 <li>
                     <a href="{{route('courses')}}"
-                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['courses'])}}">
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['courses','course-create','course-edit'])}}">
                         {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
                         <i class="fa-solid fa-book text-2xl"></i>
                     COURSES & SECTIONS
@@ -199,6 +199,23 @@
 
                         <i class="fa-solid fa-briefcase-medical text-2xl"></i>
                         FIRSTAID & GUIDE
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('blood-pressure-levels')}}"
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                        'blood-pressure-levels',
+                        // 'first-aid-guide-view',
+                        // 'first-aid-guide-create',
+                        // 'first-aid-guide-edit',
+
+
+                        ])}}">
+                        {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+
+                        <i class="fa-solid fa-droplet text-2xl"></i>
+                        {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
+                        BLOOD PREASSURE LEVELS 
                     </a>
                 </li>
             </ul>

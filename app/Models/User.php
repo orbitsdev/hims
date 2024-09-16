@@ -96,6 +96,8 @@ class User extends Authenticatable
         switch ($this->role) {
             case User::ADMIN:
                 return redirect()->route('users');
+            case User::STUDENT:
+                return redirect()->route('student-dashboard');
             default:
                 return redirect()->route('unauthorizepage');
         }

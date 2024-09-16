@@ -55,6 +55,7 @@ use App\Livewire\Conditions\CondtionTreatmentLists;
 use App\Livewire\FirstAidGuides\ListFirstAidGuides;
 use App\Livewire\Conditions\ListConditionTreatments;
 use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
+use App\Livewire\ListBloodPressureLevel;
 use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\MedicalRecords\EditMedicalRecord;
 use App\Livewire\MonitorSendSmsJob;
@@ -63,6 +64,7 @@ use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\RecordBatchNotficationRequest;
 use App\Livewire\Records\ListMedicalRecord;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
+use App\Livewire\StudentDashboard;
 use App\Livewire\ViewSendNotification;
 
 /*
@@ -75,6 +77,12 @@ use App\Livewire\ViewSendNotification;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
+
+Route::get('/shop', function () {
+    
+    return view('shop');
+});
+
 
 Route::get('/', function () {
     
@@ -98,6 +106,8 @@ Route::middleware([
         return 'UnAuthorize';
 
     })->name('unauthorizepage');
+
+    Route::get('/student-dashboard', StudentDashboard::class)->name('student-dashboard');
 
 
 
@@ -156,6 +166,8 @@ Route::middleware([
     Route::get('/first-aid-guide/view/{record}', ViewFirstAidGuide::class)->name('first-aid-guide-view');
     Route::get('/first-aid-guide/create', CreateFirstAidGuide::class)->name('first-aid-guide-create');
     Route::get('/first-aid-guide/edit/{record}', CreateFirstAidGuide::class)->name('first-aid-guide-edit');
+
+    Route::get('/blood-pressure-levels', ListBloodPressureLevel::class)->name('blood-pressure-levels');
     
     Route::get('/records', ListRecords::class)->name('records');
     Route::get('/record/create', CreateRecord::class)->name('record-create');

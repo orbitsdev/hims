@@ -21,8 +21,8 @@
                         <input id="name" type="text" name="name" :value="old('name')" required autofocus placeholder="Your full name" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kaitoke-green-500">
                     </div>
                     <div class="mb-6">
-                        <label for="username " class="block text-gray-700 mb-2">Username</label>
-                        <input id="username " type="text" name="username " :value="old('username')" required autofocus placeholder="7Username" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kaitoke-green-500">
+                        <label for="username" class="block text-gray-700 mb-2">Username</label>
+                        <input id="username" type="text" name="username" :value="old('username')" required autofocus placeholder="Username" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-kaitoke-green-500">
                     </div>
 
                     <!-- Email Input -->

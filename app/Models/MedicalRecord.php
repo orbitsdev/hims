@@ -205,5 +205,8 @@ class MedicalRecord extends Model
     ];
 }
 
+public function bloodPressureLevel(){
+    return  $this->belongsTo(BloodPressureLevel::class);
+}
 
 }

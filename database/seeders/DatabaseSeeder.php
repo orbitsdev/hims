@@ -29,7 +29,7 @@ class DatabaseSeeder extends Seeder
             TreatmentSeeder::class,
             FirstAidGuideSeeder::class,
             CourseSeeder::class,
-            BloodPressureLevelSeeder::class,
+             BloodPressureLevelSeeder::class,
             // SectionSeeder::class,
             
         ]);

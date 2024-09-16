@@ -23,6 +23,7 @@ return new class extends Migration
             $table->foreignId('course_id')->nullable();
             $table->foreignId('department_id')->nullable();
             $table->foreignId('condition_id')->nullable(); 
+            $table->foreignId('blood_pressure_level_id')->nullable(); 
          
             //INDEPENDENT RECORD TO PRESERVE THA ACTUAL DATA
             // RECORD DETAILS

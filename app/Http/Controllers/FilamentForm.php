@@ -1943,7 +1943,74 @@ class FilamentForm extends Controller
         }
     }
     
+    public static function bloodPressureLevelForm(): array
+    {
+        return [
 
+
+            Tabs::make('Blood Pressure Level')
+            ->tabs([
+                Tabs\Tab::make('Blood Pressure Level')
+                    ->schema([
+                        TextInput::make('level_name')
+            ->required(),
+             
+
+             
+            TextInput::make('systolic_min')
+            ->required()
+                ->columnSpan(1)
+                ->maxValue(1000)
+                ->required()
+                ->numeric(),
+            TextInput::make('systolic_min')
+                ->columnSpan(1)
+                ->maxValue(1000)
+                ->required()
+                ->numeric(),
+            TextInput::make('diastolic_min')
+            ->required()
+                ->columnSpan(1)
+                ->maxValue(1000)
+
+                ->numeric(),
+            TextInput::make('diastolic_max')
+                ->columnSpan(1)
+                ->maxValue(1000)
+                ->required()
+                ->numeric(),
+                TextInput::make('age_min')
+                ->required()
+                ->mask(999)
+                ->live(),
+           
+                TextInput::make('age_max')
+                ->required()
+                ->mask(999)
+                ->live()
+                    ]),
+                Tabs\Tab::make('Suggestions & Tips')
+                    ->schema([
+
+
+                        TableRepeater::make('tips_suggestions')
+                        ->relationship('suggestions')
+                        ->schema([
+                            TextArea::make('suggestion')->required(),
+
+                        ])
+                        ->withoutHeader()
+
+
+                        ->columnSpan('full')
+                        ->label('Sections')
+                       
+                    ]),
+                
+                ]),
+            
+        ];
+    }
    
     
 }

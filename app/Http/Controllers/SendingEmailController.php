@@ -10,7 +10,7 @@ class SendingEmailController extends Controller
 {
     public static function sendBPAlertEmail($record){
         try {
-            
+
             $suggestion = $record->getBloodPressureSuggestion();
             $user = $record->user;
 
@@ -20,7 +20,7 @@ class SendingEmailController extends Controller
 
             FilamentForm::notification('success', 'Email was sent successfully.');
         } catch (\Exception $e) {
-
+            dd($e->getMessage());
             FilamentForm::error('Failed to send email. Please try again later.');
         }
 

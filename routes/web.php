@@ -47,6 +47,7 @@ use App\Livewire\Records\ListOfUsersByBatch;
 use App\Livewire\Conditions\ManageConditions;
 use App\Livewire\Departments\ListDepartments;
 use App\Livewire\AcademicYear\ListAcademicYear;
+use App\Livewire\AdminDashboard;
 use App\Livewire\Condition\ViewTreatmentCondition;
 use App\Livewire\Conditions\ListConditionSymptoms;
 use App\Livewire\FirstAidFuides\ViewFirstAidGuide;
@@ -79,13 +80,13 @@ use App\Livewire\ViewSendNotification;
 */
 
 Route::get('/shop', function () {
-    
+
     return view('shop');
 });
 
 
 Route::get('/', function () {
-    
+
     return redirect()->route('dashboard');
 });
 
@@ -96,17 +97,18 @@ Route::middleware([
 ])->group(function () {
 
     Route::get('/dashboard', function(){
-        
+
         return Auth::user()->dashBoardBaseOnRole();
 
     })->name('dashboard');
 
     Route::get('/unauthorizepage', function(){
-        
+
         return 'UnAuthorize';
 
     })->name('unauthorizepage');
 
+    Route::get('/admin-dashboard', AdminDashboard::class)->name('admin-dashboard');
     Route::get('/student-dashboard', StudentDashboard::class)->name('student-dashboard');
 
 
@@ -121,19 +123,19 @@ Route::middleware([
     Route::get('/user-create', CreateUser::class)->name('user-create');
     Route::get('/user-edit/{record}', EditUser::class)->name('user-edit');
     Route::get('/user-details/{record}', UserDetails::class)->name('details');
-    
+
     Route::get('/college-departments', ListDepartments::class)->name('departments');
 
     Route::get('/students', ListStudents::class)->name('students');
     Route::get('/student-create', CreateStudent::class)->name('create-student');
     Route::get('/student-edit/{record}', EditStudent::class)->name('edit-student');
     Route::get('/student-view/{record}', ViewStudent::class)->name('view-student');
-    
+
     Route::get('/personnels', ListPersonnels::class)->name('personnels');
     Route::get('/personnels/create', CreatePersonnel::class)->name('personnel-create');
     Route::get('/personnels/edit/{record}', EditPersonnel::class)->name('personnel-edit');
     Route::get('/personnels/view/{record}', ViewPersonnel::class)->name('personnel-view');
-    
+
     Route::get('/staffs', ListStaffs::class)->name('staffs');
     Route::get('/staffs/create', CreateStaff::class)->name('staffs-create');
     Route::get('/staffs/edit/{record}', EditStaff::class)->name('staffs-edit');
@@ -150,11 +152,11 @@ Route::middleware([
     Route::get('/event/create', CreateEvent::class)->name('event-create');
     Route::get('/event/edit/{record}', EditEvent::class)->name('event-edit');
     Route::get('/event/vew/{record}', ViewEvent::class)->name('event-view');
-    
+
     Route::get('/conditions', ListConditions::class)->name('conditions');
     Route::get('/condition/{record}', ManageCondition::class)->name('manage-condition');
     Route::get('/condition/view/{record}', ViewCondition::class)->name('view-condition');
-    
+
 
     Route::get('/condition/treatments/{record}', ListConditionTreatments::class)->name('condition-treatments-lists');
     Route::get('/condition/treatment/{record}', ViewTreatmentCondition::class)->name('condition-treatment-view');
@@ -168,11 +170,11 @@ Route::middleware([
     Route::get('/first-aid-guide/edit/{record}', CreateFirstAidGuide::class)->name('first-aid-guide-edit');
 
     Route::get('/blood-pressure-levels', ListBloodPressureLevel::class)->name('blood-pressure-levels');
-    
+
     Route::get('/records', ListRecords::class)->name('records');
     Route::get('/record/create', CreateRecord::class)->name('record-create');
     Route::get('/record/edit/{record}', EditRecord::class)->name('record-edit');
-    
+
     Route::get('/record/collection/medical-record/{record}', ListMedicalRecord::class)->name('record-list-medical-record');
     Route::get('/record/collection/medical-record/edit/{record}', EditMedicalRecord::class)->name('medical-record-edit');
 
@@ -184,13 +186,13 @@ Route::middleware([
 
     Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');
     Route::get('/medical-record/by-batch/create/{record}/{user}', CreateMedicalRecordByBatch::class)->name('medical-record-create-by-batch');
-    
+
     Route::get('/event-announcement-status', EventsAnouncmentSMSStatus::class)->name('event-announcement');
     Route::get('/monito-queue', QueueMonitor::class);
-    
+
     //
     Route::get('/sections', ListSections::class)->name('sections');
-    
+
     Route::get('/monitor-sms', MonitorSendSmsJob::class)->name('monitor-sms');
     Route::get('/view-notification-sent/{record}', ViewSendNotification::class)->name('vew-notification-sent');
 

@@ -38,9 +38,12 @@ class EditMedicalRecord extends Component implements HasForms
     {
         $data = $this->form->getState();
 
-        $record = $this->record->update($data);
+        $this->record->update($data);
+        $this->record->refresh();
+
         FilamentForm::notification();
-        SendingEmailController::sendBPAlertEmail($record);
+
+        SendingEmailController::sendBPAlertEmail($this->record);
 
         return redirect()->route('record-list-medical-record', ['record'=> $this->record->record]);
     }

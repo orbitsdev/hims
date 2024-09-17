@@ -136,7 +136,7 @@ class CreateMedicalRecord extends Component implements HasForms
         $this->form->model($newRecord)->saveRelationships();
         MedicalController::automaticChangeStatus($this->record);
         $this->record->refresh();
-        SendingEmailController::sendBPAlertEmail($newRecord);
+       SendingEmailController::sendBPAlertEmail($newRecord);
         FilamentForm::notification('Saved Successfully');
 
         return redirect()->route('individual-medical-recoding', ['record' => $this->record->id]);

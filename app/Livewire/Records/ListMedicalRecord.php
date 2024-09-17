@@ -349,8 +349,9 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->tooltip('NOTIFY USER BP STATUS BY SENDING EMAIL')
                     ->label('SEND BP EMAIL ALERT')
                     ->icon('heroicon-s-exclamation-circle')
-                    ->color('danger')
+                    ->color('info')
                     ->size('lg')
+                    ->requiresConfirmation()
                    ->action(function (Model $record) {
 
 

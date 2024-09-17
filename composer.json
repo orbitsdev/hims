@@ -14,6 +14,7 @@
         "filament/tables": "^3.2",
         "filament/widgets": "^3.2",
         "guzzlehttp/guzzle": "^7.8",
+        "icehouse-ventures/laravel-chartjs": "^4.1",
         "laravel/framework": "^10.0",
         "laravel/jetstream": "^4.3",
         "laravel/sanctum": "^3.2",

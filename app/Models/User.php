@@ -95,7 +95,7 @@ class User extends Authenticatable
     {
         switch ($this->role) {
             case User::ADMIN:
-                return redirect()->route('users');
+                return redirect()->route('admin-dashboard');
             case User::STUDENT:
                 return redirect()->route('student-dashboard');
             default:
@@ -308,7 +308,7 @@ class User extends Authenticatable
             });
         });
 
-       
+
     }
 
     public function totalNotification()
@@ -319,6 +319,6 @@ class User extends Authenticatable
     {
         return NotificationRequest::latest()->where('email', $this->email)->get();
     }
-    
+
 
 }

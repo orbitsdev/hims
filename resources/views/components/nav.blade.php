@@ -1,12 +1,12 @@
 <div class="custom-scrollbar w-[20rem] bg-[#06603A] px-6 pb-2 flex-shrink-0 h-full overflow-y-auto relative">
-    
+
     <div class="w-4 h-full bg-[#064F32] top-0 left-0 bottom-0 absolute"></div>
     <div class="h-8"></div>
 <nav class="flex flex-1 flex-col ml-4">
     <div class="hidden lg:ml-4 lg:block">
         <div class="flex flex-col items-center justify-center">
 
-           
+
 
             <div x-data="{ dropdownOpen: false }" class="relative">
                 <div>
@@ -16,8 +16,8 @@
                         <img class="h-16 w-16 rounded-full object-cover" src="{{Auth::user()->getImage()}}" alt="">
                     </button>
                 </div>
-                
-            
+
+
                 <div x-show="dropdownOpen" @click.outside="dropdownOpen = false" class="absolute left-1/2 transform -translate-x-1/2 mt-2 w-48 origin-top-center rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none" role="menu" aria-orientation="vertical" aria-labelledby="user-menu-button" tabindex="-1">
                     <x-dropdown-link href="{{Auth::user()->getImage()}}" target="_blank">
                         View Image
@@ -33,8 +33,8 @@
                     </form>
                 </div>
             </div>
-            
-            
+
+
             <p class="text-white text-xl text-ellipsis mt-2">
                 {{Auth::user()->fullName()}}
 
@@ -72,6 +72,20 @@
             <ul role="list" class="-mx-2 space-y-1">
                 <li>
                     <a href="{{route('dashboard')}}"
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['admin-dashboard'])}}">
+                        {{-- <svg class="h-6 w-6 shrink-0 text-tory-blue-600" fill="none" viewBox="0 0 24 24"
+                            stroke-width="1.5" stroke="currentColor" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round"
+                                d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" />
+                        </svg> --}}
+
+                        <i class="fa-solid fa-tachometer-alt text-2xl w-6"></i>
+                        {{-- <i class="fa-solid fa-key text-2xl"></i> --}}
+                       DASHBOARD
+                    </a>
+                </li>
+                <li>
+                    <a href="{{route('users')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['users','user-create','user-edit'])}}">
                         {{-- <svg class="h-6 w-6 shrink-0 text-tory-blue-600" fill="none" viewBox="0 0 24 24"
                             stroke-width="1.5" stroke="currentColor" aria-hidden="true">
@@ -215,7 +229,7 @@
 
                         <i class="fa-solid fa-droplet text-2xl"></i>
                         {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
-                        BLOOD PREASSURE LEVELS 
+                        BLOOD PREASSURE LEVELS
                     </a>
                 </li>
             </ul>

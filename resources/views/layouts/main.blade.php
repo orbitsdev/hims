@@ -11,7 +11,6 @@
         <link rel="preconnect" href="https://fonts.bunny.net">
         <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
-        <!-- Scripts -->
 
         <style>
             [x-cloak] {
@@ -24,8 +23,12 @@
 
         <!-- Styles -->
         @livewireStyles
+
+        {{-- <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js "></script>
+    <script src="https://fastly.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script> --}}
     </head>
     <body class="font-sans antialiased">
+
         <x-banner />
 
         <div class="min-h-screen bg-gray-100">
@@ -50,5 +53,6 @@
         @livewireScripts
         @filamentScripts
         @vite('resources/js/app.js')
+
     </body>
 </html>

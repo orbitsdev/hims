@@ -18,10 +18,10 @@ class SendingEmailController extends Controller
                 $user = $record->user;
 
 
-                 Mail::to($user->email)->send(new BloodPressureStatus($user->fullName(), $record->getBloodPressureStatus(), $suggestion));
+                //  Mail::to($user->email)->send(new BloodPressureStatus($user->fullName(), $record->getBloodPressureStatus(), $suggestion));
 
 
-                FilamentForm::notification('success', 'Email was sent successfully.');
+                FilamentForm::notification('Email was sent successfully.');
             } catch (\Exception $e) {
                 dd($e->getMessage());
                 FilamentForm::error('Failed to send email. Please try again later.');

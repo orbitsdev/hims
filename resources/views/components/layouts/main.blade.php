@@ -23,8 +23,8 @@
             background: #EFF1F6;
             padding: 8px;
             border-radius: 12px;
-          
-            
+
+
         }
         .ron-image{
             width: 90px;
@@ -32,7 +32,7 @@
 
         }
         .ron-ml{
-            margin-left: 20px; 
+            margin-left: 20px;
         }
 
         .ron-flex{
@@ -45,14 +45,17 @@
 
     <!-- Styles -->
     @livewireStyles
+
+            <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js "></script>
+    <script src="https://fastly.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
 </head>
 {{-- bg-[#E2E5E0]  --}}
 <body class="font-sans antialiased  bg-[#E2E5E0] flex flex-col">
 
             {{$slot}}
 
-{{-- 
-    @can('admin')    
+{{--
+    @can('admin')
 
     <x-admin-layout/>
     @endcan --}}

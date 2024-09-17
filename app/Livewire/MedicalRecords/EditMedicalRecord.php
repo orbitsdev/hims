@@ -11,6 +11,7 @@ use Illuminate\Contracts\View\View;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
+use App\Http\Controllers\SendingEmailController;
 
 class EditMedicalRecord extends Component implements HasForms
 {
@@ -37,8 +38,9 @@ class EditMedicalRecord extends Component implements HasForms
     {
         $data = $this->form->getState();
 
-        $this->record->update($data);
+        $record = $this->record->update($data);
         FilamentForm::notification();
+        SendingEmailController::sendBPAlertEmail($record);
 
         return redirect()->route('record-list-medical-record', ['record'=> $this->record->record]);
     }

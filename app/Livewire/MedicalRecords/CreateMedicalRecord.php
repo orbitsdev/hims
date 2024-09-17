@@ -15,6 +15,7 @@ use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use App\Http\Controllers\MedicalController;
 use Filament\Forms\Concerns\InteractsWithForms;
+use App\Http\Controllers\SendingEmailController;
 
 class CreateMedicalRecord extends Component implements HasForms
 {
@@ -128,14 +129,14 @@ class CreateMedicalRecord extends Component implements HasForms
         $data['student_id_number']= $student->id_number ?? null;
         $data['recorder_id']= Auth::user()->id ?? null;
         $data['role']=  $this->user->role ?? null;
-       
+
         $newRecord = MedicalRecord::create($data);
 
 
         $this->form->model($newRecord)->saveRelationships();
         MedicalController::automaticChangeStatus($this->record);
         $this->record->refresh();
-
+        SendingEmailController::sendBPAlertEmail($newRecord);
         FilamentForm::notification('Saved Successfully');
 
         return redirect()->route('individual-medical-recoding', ['record' => $this->record->id]);

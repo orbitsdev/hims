@@ -111,7 +111,7 @@
         <div class="header">
             <!-- Logo Section -->
             <div class="logo">
-                <img src="{{asset('images/sksu1.png')}}" alt="sksu HIMS">
+                <img src="{{asset('images/sksu1.png')}}" alt="Logo" style="width: 50px;">
             </div>
             <h1>Blood Pressure Status Alert</h1>
         </div>

@@ -9,6 +9,7 @@ use Illuminate\Database\Seeder;
 use Database\Seeders\UserSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\DepartmentSeeder;
+use Database\Seeders\SuggestionSeeder;
 use Database\Seeders\BloodPressureLevelSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -29,9 +30,10 @@ class DatabaseSeeder extends Seeder
             TreatmentSeeder::class,
             FirstAidGuideSeeder::class,
             CourseSeeder::class,
-             BloodPressureLevelSeeder::class,
+            //  BloodPressureLevelSeeder::class,
+            SuggestionSeeder::class
             // SectionSeeder::class,
-            
+
         ]);
         // \App\Models\User::factory(10)->create();
 

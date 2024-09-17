@@ -37,18 +37,6 @@ class EditMedicalRecord extends Component implements HasForms
     {
         $data = $this->form->getState();
 
-        $systolic = $data['systolic_pressure'] ?? null;
-        $diastolic = $data['diastolic_pressure'] ?? null;
-        $age = $data['age'];
-
-        if ($systolic && $diastolic) {
-            $level = BloodPressureLevel::getBloodPressureLevel($systolic, $diastolic, $age);
-    
-            if ($level) {
-                $data['blood_pressure_level_id'] = $level->id; // Update 
-            }
-        }
-       
         $this->record->update($data);
         FilamentForm::notification();
 

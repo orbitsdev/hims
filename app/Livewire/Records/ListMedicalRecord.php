@@ -8,8 +8,10 @@ use Livewire\Component;
 use Filament\Tables\Table;
 use App\Models\MedicalRecord;
 use App\Models\EmergencyContact;
+use App\Mail\BloodPressureStatus;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Textarea;
@@ -25,6 +27,7 @@ use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Concerns\InteractsWithForms;
+use App\Http\Controllers\SendingEmailController;
 use Filament\Tables\Concerns\InteractsWithTable;
 
 class ListMedicalRecord extends Component implements HasForms, HasTable
@@ -82,25 +85,25 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                 ColumnGroup::make('DATES', [
                     Tables\Columns\TextColumn::make('academic_year_name')->label('ACADEMIC YEAR')
                     ->toggleable(isToggledHiddenByDefault: true)
-                   
+
                         ->searchable(),
                     Tables\Columns\TextColumn::make('semester_name')->label('SEMESTER')
                     ->toggleable(isToggledHiddenByDefault: true)
                         ->searchable(),
-                        
+
                 ]),
 
-               
-             
-                   
+
+
+
                     ColumnGroup::make('PERSONAL DETAILS', [
                       Tables\Columns\TextColumn::make('first_name')->label('FIRST NAME')
                     ->searchable(),
-              
+
                     Tables\Columns\TextColumn::make('last_name')->label('LAST NAME')
-                
+
                     ->searchable(),
-                      
+
 
                          Tables\Columns\TextColumn::make('middle_name')->label('MIDDLE NAME')
                 ->toggleable(isToggledHiddenByDefault: true)
@@ -127,7 +130,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->toggleable(isToggledHiddenByDefault: true)
                     ->label('CIVIL STATUS')
                         ->searchable(),
-                  
+
                     ]),
 
                     ColumnGroup::make('UNIVERSITY DETAILS', [
@@ -137,26 +140,26 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                         Tables\Columns\TextColumn::make('role')->label('ROLE')
                         // ->toggleable(isToggledHiddenByDefault: true)
                                ->searchable(),
-                             
-                           
+
+
                     ]),
                     ColumnGroup::make('STUDENT INFO', [
-                       
+
                         Tables\Columns\TextColumn::make('section_name')->label('SECTION NAME')
                         ->toggleable(isToggledHiddenByDefault: true)
                             ->searchable(),
-                            
+
                  Tables\Columns\TextColumn::make('student_id_number')->label('STUDENT ID NUMBER')
                  ->toggleable(isToggledHiddenByDefault: true)
                      ->searchable(),
-                           
+
                     ]),
-                   
+
                 // Tables\Columns\TextColumn::make('student_unique_id')
                 //     ->searchable(),
-               
-               
-               
+
+
+
                 ColumnGroup::make('PHYSICAL EXAMINATION', [
                     Tables\Columns\TextColumn::make('temperature')->label('TEMPERATURE')
                     ->toggleable(isToggledHiddenByDefault: true)
@@ -180,8 +183,8 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     Tables\Columns\TextColumn::make('heart_rate')->label('HEART RATE')
                     ->toggleable(isToggledHiddenByDefault: true)
                         ->numeric()
-                        ->sortable(),              
-    
+                        ->sortable(),
+
                         Tables\Columns\TextColumn::make('condition.name')->label('CONDITION')
                          ->toggleable(isToggledHiddenByDefault: true, condition: true)
                             ->searchable(),
@@ -199,13 +202,13 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                         ->toggleable(isToggledHiddenByDefault: true)
                         ->searchable(),
                 ]),
-                
-               
-               
+
+
+
                 Tables\Columns\IconColumn::make('is_complete')->label('IS COMPLETE')
                 ->toggleable(isToggledHiddenByDefault: true)
                     ->boolean(),
-                
+
             ])
             ->filters([
                 SelectFilter::make('condition_id')
@@ -222,7 +225,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                 ,
             ])
             ->actions([
-                
+
                 ActionGroup::make([
                     Action::make('edit')
                     ->color('primary')
@@ -231,18 +234,18 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     // Identifier should be unique and camelCase
                         ->label('UPDATE RECORD') // Consistent casing
                         ->size('lg')
-                        
+
                         ->url(function (Model $record) {
                             return route('medical-record-edit', ['record' => $record]);
                         }),
 
-                    
-                   
+
+
                     // Action::make('view-report')
                     // ->color('primary')
                     // ->icon('heroicon-s-eye')
                     // ->tooltip('DONNLOAD REPORT')
-                    
+
                     // ->label('VIEW REPORT') // Consistent casing
                     // ->size('lg')
                     // ->url(function(Model $record){
@@ -255,7 +258,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->icon('heroicon-s-arrow-down-tray')
                     ->tooltip('DONNLOAD REPORT')
                     ->action(function(){
-                        FilamentForm::notification('DOWNLOAD REPORT COMING SOOND');
+                        FilamentForm::notification('DOWNLOAD REPORT COMING SOON');
                     })
                     ->label('DOWNLOAD PDF') // Consistent casing
                     ->size('lg')
@@ -266,9 +269,10 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ,
 
                     Action::make('sms')
+
                     ->label('SEND SMS')
                     ->icon('heroicon-s-chat-bubble-left-ellipsis')
-                    ->color('primary')
+                    ->color('info')
                     ->size('lg')
                     ->requiresConfirmation()
                     ->fillForm(function (Model $record) {
@@ -293,14 +297,17 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                                 'email' => $owner->email
                             ]);
                         }
-                       
-                    }),
+
+                    })
+                    ->tooltip('SEND MESSAGE TO USER')
+                    ,
                     Action::make('send-email')
+                    ->tooltip('SEND EMAIL TO USER')
                     ->label('SEND EMAIL')
                     ->icon('heroicon-s-envelope')
-                    ->color('primary')
+                    ->color('info')
                     ->size('lg')
-                  
+
                     ->fillForm(function (Model $record) {
 
                         return [
@@ -323,15 +330,41 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                                 'email' => $owner->email
                             ]);
                         }
-                       
+
                     }),
 
-                   
-                    
+                //     Action::make('send-blood-sms-alert')
+                //     ->tooltip('NOTIFY USER BP STATUS BY SENDING SMS')
+                //     ->label('SEND BP SMS ALERT')
+                //     ->icon('heroicon-s-exclamation-circle')
+                //     ->color('danger')
+                //     ->size('lg')
+                //    ->action(function (Model $record) {
+                //     $suggestion = $record->getBloodPressureSuggestion();
+                //     dd($suggestion);
+
+                //     }),
+
+                    Action::make('send-blood-email-alert')
+                    ->tooltip('NOTIFY USER BP STATUS BY SENDING EMAIL')
+                    ->label('SEND BP EMAIL ALERT')
+                    ->icon('heroicon-s-exclamation-circle')
+                    ->color('danger')
+                    ->size('lg')
+                   ->action(function (Model $record) {
+
+
+                      SendingEmailController::sendBPAlertEmail($record);
+
+                }),
+
+
+
+
                     Tables\Actions\DeleteAction::make()->label('DELETE'),
                 ])->hidden(function (Model $record) {
 
-                    
+
                     return $record->status;
                     // return $record->totalBatches() <= 0;
                 }) ->tooltip('MANAGEMENT')   ,

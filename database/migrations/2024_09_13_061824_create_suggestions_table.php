@@ -13,10 +13,9 @@ return new class extends Migration
     {
         Schema::create('suggestions', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('blood_pressure_level_id');
-            $table->text('suggestion'); // Specific suggestion text
-         
-
+            $table->string('status');
+            $table->string('age_group');
+            $table->text('suggestion');
             $table->timestamps();
         });
     }

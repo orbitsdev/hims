@@ -24,8 +24,8 @@ class CreateMedicalRecord extends Component implements HasForms
     public ?array $data = [];
 
     public function mount(): void
-    {   
-       
+    {
+
         $personalDetails = $this->user->getPersonalDetailsBaseOnRole();
 
 
@@ -35,51 +35,51 @@ class CreateMedicalRecord extends Component implements HasForms
         // $student =null;
         // $course = null;
         // $section = null;
-       
 
-    
 
-        
+
+
+
         if($this->user->role == User::STUDENT){
             // $section= $this->user->section;
-            // $student = $this->user->student;    
-            // $course = $this->user->student->course;    
-            // $section = $this->user->student->section;    
+            // $student = $this->user->student;
+            // $course = $this->user->student->course;
+            // $section = $this->user->student->section;
         }
 
         $this->form->fill([
 
             // // RELATIONSHIP
-         
-            // 'record_id'=> $this->record->id,           
-            // 'user_id'=> $this->user->id,                   
+
+            // 'record_id'=> $this->record->id,
+            // 'user_id'=> $this->user->id,
             // 'section_id'=> $section->id,
             // 'department_id'=> $department->id,
-            
-            
-            // 'record_title'=> $this->record->title,          
-            // 'academic_year_name'=> $academicYear->name,          
-            // 'semester_name'=> $semester->name_in_text,          
-            
-            // 'department_name'=> $department->name,          
-            // 'course_name'=>$course->name,          
-            // 'section_name'=>$section->name,          
-            // 'student_unique_id'=>$student->unique_id,          
-            // 'role'=>$this->user->role,       
-            
-            
+
+
+            // 'record_title'=> $this->record->title,
+            // 'academic_year_name'=> $academicYear->name,
+            // 'semester_name'=> $semester->name_in_text,
+
+            // 'department_name'=> $department->name,
+            // 'course_name'=>$course->name,
+            // 'section_name'=>$section->name,
+            // 'student_unique_id'=>$student->unique_id,
+            // 'role'=>$this->user->role,
+
+
             // PERSONAL DETAILS
-            'first_name'=>$personalDetails->first_name ?? null,          
-            'last_name'=>$personalDetails->last_name ?? null,                
-            'middle_name'=>$personalDetails->middle_name ?? null,          
-            'email'=>$this->user->email ?? null,          
-            'age'=>$personalDetails->age ?? null,          
-            'weight'=>$personalDetails->weight ?? null,          
-            'height'=>$personalDetails->height ?? null,          
-            'birth_date'=>$personalDetails->birth_date ?? null,          
-            'birth_place'=>$personalDetails->birth_place ?? null,          
-            'address'=>$personalDetails->address ?? null,          
-            'civil_status'=>$personalDetails->civil_status ?? null,          
+            'first_name'=>$personalDetails->first_name ?? null,
+            'last_name'=>$personalDetails->last_name ?? null,
+            'middle_name'=>$personalDetails->middle_name ?? null,
+            'email'=>$this->user->email ?? null,
+            'age'=>$personalDetails->age ?? null,
+            'weight'=>$personalDetails->weight ?? null,
+            'height'=>$personalDetails->height ?? null,
+            'birth_date'=>$personalDetails->birth_date ?? null,
+            'birth_place'=>$personalDetails->birth_place ?? null,
+            'address'=>$personalDetails->address ?? null,
+            'civil_status'=>$personalDetails->civil_status ?? null,
 
         ]);
     }
@@ -96,20 +96,20 @@ class CreateMedicalRecord extends Component implements HasForms
     {
 
 
-       
+
         $department= $this->user->getDepartmentBaseOnRole();
         $academicYear = $this->record->academicYear;
         $semester = $this->record->semester;
         $student =null;
         $course = null;
         $section = null;
-       
-        
+
+
         if($this->user->role == User::STUDENT){
             $section= $this->user->section;
-            $student = $this->user->student;    
-            $course = $this->user->student->course;    
-            $section = $this->user->student->section;    
+            $student = $this->user->student;
+            $course = $this->user->student->course;
+            $section = $this->user->student->section;
         }
 
         $data = $this->form->getState();
@@ -128,22 +128,16 @@ class CreateMedicalRecord extends Component implements HasForms
         $data['student_id_number']= $student->id_number ?? null;
         $data['recorder_id']= Auth::user()->id ?? null;
         $data['role']=  $this->user->role ?? null;
-        
-        $level = BloodPressureLevel::getBloodPressureLevel($data['systolic_pressure'], $data['diastolic_pressure'], $this->user->age);
-
-        if ($level) {
-            $data['blood_pressure_level_id'] = $level->id; 
-        }
-        dd($level);
+       
         $newRecord = MedicalRecord::create($data);
-    
-      
+
+
         $this->form->model($newRecord)->saveRelationships();
         MedicalController::automaticChangeStatus($this->record);
         $this->record->refresh();
-    
+
         FilamentForm::notification('Saved Successfully');
-    
+
         return redirect()->route('individual-medical-recoding', ['record' => $this->record->id]);
 
     }
@@ -153,8 +147,8 @@ class CreateMedicalRecord extends Component implements HasForms
     public function render(): View
     {
 
-        
+
         return view('livewire.medical-records.create-medical-record');
     }
-   
+
 }

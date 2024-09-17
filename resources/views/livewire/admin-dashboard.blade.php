@@ -45,9 +45,16 @@
                 </div>
             </div>
         </div>
-
+        {{$selectedAcademicYear}}
+        {{$selectedSemester}}
+           {{-- {{$conditions}}
+           <br> --}}
+    @php
+    print_r($data)
+    @endphp
         <div class="mb-6" wire:ignore>
-            {{$conditions}}
+
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Academic Year Select -->
                 <div>
@@ -73,22 +80,19 @@
             </div>
         </div>
 
-        <div wire:ignore >
+        <div  >
             <canvas id="myChart"></canvas>
         </div>
 
 
 
-
-
+        @push('scripts')
+        <script src="https://fastly.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
+        @endpush
 
 
     </div>
 
-
-{{--
-        <script src="https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js "></script>
-        <script src="https://fastly.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script> --}}
 
     <script>
         const ctx = document.getElementById('myChart');

@@ -9,7 +9,6 @@ use App\Models\AcademicYear;
 
 class AdminDashboard extends Component
 {
-
     public $academicYears = [];
     public $semesters = [];
     public $selectedAcademicYear = null;
@@ -17,14 +16,12 @@ class AdminDashboard extends Component
     public $data = [];
     public $conditions = [];
 
-
-
     public function mount()
     {
         // Fetch all academic years for the dropdown
         $this->academicYears = AcademicYear::all();
 
-        // Optionally set the default academic year (current one)
+        // Set the default academic year
         $this->selectedAcademicYear = $this->academicYears->first()->id ?? null;
 
         // Fetch semesters for the selected academic year
@@ -39,17 +36,12 @@ class AdminDashboard extends Component
         if ($this->selectedAcademicYear) {
             $this->semesters = Semester::where('academic_year_id', $this->selectedAcademicYear)->get();
             $this->selectedSemester = $this->semesters->first()->id ?? null;
-
-
         }
     }
 
-    // Method to fetch chart data based on the selected academic year and semester
     public function fetchChartData()
     {
         if ($this->selectedAcademicYear && $this->selectedSemester) {
-
-            // Fetch the top 5 conditions for the selected academic year and semester
             $this->conditions = Condition::whereHas('medicalRecords', function ($query) {
                 $query->whereHas('record', function ($query) {
                     $query->where('academic_year_id', $this->selectedAcademicYear)
@@ -61,7 +53,6 @@ class AdminDashboard extends Component
             ->limit(5)
             ->get();
 
-            // Format the data for Chart.js
             $this->data = [
                 'labels' => $this->conditions->pluck('name')->toArray(),
                 'datasets' => [
@@ -74,31 +65,23 @@ class AdminDashboard extends Component
                     ]
                 ]
             ];
-
-
-
         }
     }
 
-    // Updated the chart when academic year changes
-
-    public function updatedSelectedAcademicYear($value)
+    public function updatedSelectedAcademicYear()
     {
 
-        $this->fetchSemesters(); // Fetch semesters when the academic year changes
-        $this->fetchChartData();  // Fetch chart data based on the new selections
+        $this->fetchSemesters();
+        $this->fetchChartData();
     }
 
-    // Update the chart when semester changes
-    public function updatedSelectedSemester($value)
+    public function updatedSelectedSemester()
     {
-
-        $this->fetchChartData(); // Fetch chart data when the semester changes
+        $this->fetchChartData();
     }
-
 
     public function render()
     {
-        return view('livewire.admin-dashboard');
+        return view('livewire.admin-dashboard', ['conditions' => $this->conditions]);
     }
 }

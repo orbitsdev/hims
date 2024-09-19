@@ -45,23 +45,19 @@
                 </div>
             </div>
         </div>
-        {{$selectedAcademicYear}}
-        {{$selectedSemester}}
-           {{-- {{$conditions}}
-           <br> --}}
-    @php
-    print_r($data)
-    @endphp
+      
         <div class="mb-6" wire:ignore>
 
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <!-- Academic Year Select -->
                 <div>
-                    <label for="academic-year" class="block text-sm font-medium text-gray-700">Select Academic Year</label>
-                    <select id="academic-year" wire:model.live="selectedAcademicYear" class="block w-full mt-1 p-2 border-gray-300 rounded-md">
+                    <label for="academic-year" class="block text-sm font-medium text-gray-700">Select Academic
+                        Year</label>
+                    <select id="academic-year" wire:model.live="selectedAcademicYear"
+                        class="block w-full mt-1 p-2 border-gray-300 rounded-md">
                         <option value="">Select Year</option>
-                        @foreach($academicYears as $year)
+                        @foreach ($academicYears as $year)
                             <option value="{{ $year->id }}">{{ $year->name }}</option>
                         @endforeach
                     </select>
@@ -70,9 +66,10 @@
                 <!-- Semester Select -->
                 <div>
                     <label for="semester" class="block text-sm font-medium text-gray-700">Select Semester</label>
-                    <select id="semester" wire:model.live="selectedSemester" class="block w-full mt-1 p-2 text-red border-gray-300 rounded-md">
+                    <select id="semester" wire:model.live="selectedSemester"
+                        class="block w-full mt-1 p-2 text-red border-gray-300 rounded-md">
                         <option value="">Select Semester</option>
-                        @foreach($semesters as $semester)
+                        @foreach ($semesters as $semester)
                             <option value="{{ $semester->id }}">{{ $semester->name_in_number }}</option>
                         @endforeach
                     </select>
@@ -80,33 +77,46 @@
             </div>
         </div>
 
-        <div  >
-            <canvas id="myChart"></canvas>
-        </div>
+       
 
-
-
-        @push('scripts')
-        <script src="https://fastly.jsdelivr.net/npm/echarts@5.4.1/dist/echarts.min.js"></script>
-        @endpush
-
-
+        <canvas wire:ignore id="myChart"></canvas>
     </div>
 
 
     <script>
+        let chart = null;
         const ctx = document.getElementById('myChart');
 
-        new Chart(ctx, {
-            type: 'bar',
-            data:{!! json_encode($data) !!},
-            options: {
-                scales: {
-                    y: {
-                        beginAtZero: true
+        console.log({!! json_encode($data) !!});
+    
+     
+        function initOrUpdateChart(data) {
+            if (chart) {
+                chart.destroy(); 
+            }
+    
+            
+            chart = new Chart(ctx, {
+                type: 'bar',
+                data: data,
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
                     }
                 }
-            }
+            });
+        }
+    
+    
+        let chartData = {!! json_encode($data) !!};
+        initOrUpdateChart(chartData);
+    
+        document.addEventListener('livewire:init', () => {
+            Livewire.on('chart-updated', (updatedData) => { 
+                initOrUpdateChart(updatedData[0]); 
+            });
         });
     </script>
 </x-admin-layout>

@@ -379,6 +379,7 @@ class FilamentForm extends Controller
                                             return [];
                                         }
                                     })
+                                    ->helperText('If no section is available, go to Course & Section page to manage it')
                                         ->required()
                                         ->preload()
                                         ->searchable()

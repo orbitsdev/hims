@@ -216,22 +216,35 @@
                     </a>
                 </li>
                 <li>
-                    <a href="{{route('blood-pressure-levels')}}"
+                    <a href="{{route('suggestions')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
-                        'blood-pressure-levels',
-                        // 'first-aid-guide-view',
-                        // 'first-aid-guide-create',
-                        // 'first-aid-guide-edit',
+                        'suggestions',
+                        
 
 
                         ])}}">
                         {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
 
-                        <i class="fa-solid fa-droplet text-2xl"></i>
+                        <i class="fa-solid fa-lightbulb text-2xl"></i>
+
                         {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
-                        BLOOD PREASSURE LEVELS
+                        SUGGESTION
                     </a>
                 </li>
+                {{-- <li>
+                    <a href="{{route('blood-pressure-levels')}}"
+                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                        'blood-pressure-levels',
+
+
+                        ])}}">
+                     
+
+                        <i class="fa-solid fa-droplet text-2xl"></i>
+                     
+                        BLOOD PREASSURE LEVELS
+                    </a>
+                </li> --}}
             </ul>
         </li>
     </ul>

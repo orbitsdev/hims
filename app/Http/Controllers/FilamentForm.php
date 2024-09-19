@@ -2016,6 +2016,15 @@ class FilamentForm extends Controller
 
         ];
     }
+    public static function suggestionForm(): array
+    {
+        return [
+
+            Textarea::make('suggestion')
+            ->required(),
+
+        ];
+    }
 
 
 }

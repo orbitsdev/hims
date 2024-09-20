@@ -4,7 +4,7 @@
         {{$selectedSemester}} --}}
 
         <div class="mb-6">
-            <h2 class="text-2xl font-semibold text-gray-800 uppercase">Dashboard Overview</h2>
+            <h2 class="text-2xl font-semibold text-gray-800 uppercase ">Dashboard Overview</h2>
         </div>
 
        <!-- Filter Section with Label Button and Width Adjustment -->
@@ -149,7 +149,7 @@
 
     <!-- Emergency Contact List -->
     <ul class="space-y-4">
-        <!-- Police Contact -->
+
         <li class="flex justify-between items-center">
             <div class="flex items-center">
                 <img src="{{asset('images/sksu1.png')}}" alt="Police" class="w-12 h-12 mr-4 rounded-full object-cover">
@@ -195,7 +195,7 @@
         </li>
 
         <!-- Doctor Contact -->
-        <li class="flex justify-between items-center">
+        {{-- <li class="flex justify-between items-center">
             <div class="flex items-center">
                 <img src="{{asset('images/sksu1.png')}}" alt="Doctor" class="w-12 h-12 mr-4 rounded-full object-cover">
                 <div>
@@ -207,7 +207,7 @@
                 <p class="text-sm font-semibold text-green-600">Active</p>
                 <p class="text-xs text-gray-500">ID: 0JWEJS7SNC</p>
             </div>
-        </li>
+        </li> --}}
 
         <!-- Health Hotline -->
         <li class="flex justify-between items-center">
@@ -239,59 +239,78 @@
 
 
 
+        <div class="bg-[#F9F9F9] border border-[#F2F2F2] p-6 rounded-lg">
+            <h3 class="text-lg font-semibold text-gray-700 mb-4">Blood Pressure Alerts</h3>
 
-        <!-- Abnormal Blood Pressure Section -->
-<div class="bg-[#F9F9F9]  border border-[#F2F2F2] p-6 rounded-lg ">
-    <h3 class="text-lg font-semibold text-gray-700 mb-4">Blood Pressure Alerts</h3>
+            <!-- Blood Pressure Alerts Table -->
+            <table class="min-w-full bg-white">
+                <thead>
+                    <tr class="w-full  text-left">
+                        <th class="px-4 py-2 text-sm font-semibold text-gray-700">Patient Name</th>
+                        <th class="px-4 py-2 text-sm font-semibold text-gray-700">Blood Pressure</th>
+                        <th class="px-4 py-2 text-sm font-semibold text-gray-700">Date</th>
+                        <th class="px-4 py-2 text-sm font-semibold text-gray-700">Condition</th>
+                        <th class="px-4 py-2 text-sm font-semibold text-gray-700">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Row 1 -->
+                    <tr class="border-t">
+                        <td class="px-4 py-3">
+                            <div class="flex items-center">
+                                <img src="{{ asset('images/sksu1.png') }}" alt="Patient Image" class="w-10 h-10 mr-4 rounded-full object-cover">
+                                <span class="text-md font-semibold text-gray-900">John Doe</span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-500">Systolic: 140 mmHg, Diastolic: 90 mmHg</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">Sep 20, 2024</td>
+                        <td class="px-4 py-3">
+                            <span class="bg-red-100 text-red-600 text-sm font-semibold px-2 py-1 rounded-lg">Hypertension</span>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">Send Notification</button>
+                        </td>
+                    </tr>
 
-    <!-- Blood Pressure List -->
-    <ul class="space-y-4">
-        <!-- Blood Pressure Record 1 -->
-        <li class="flex justify-between items-center">
-            <div class="flex items-center">
-                <i class="fa-solid fa-exclamation-circle text-red-500 text-3xl mr-4"></i>
-                <div>
-                    <h4 class="text-md font-semibold text-gray-900">Patient: John Doe</h4>
-                    <p class="text-sm text-gray-500">Systolic: 140 mmHg, Diastolic: 90 mmHg</p>
-                    <p class="text-xs text-gray-400">Date: Sep 20, 2024</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <p class="text-sm font-semibold text-red-600">Hypertension</p>
-            </div>
-        </li>
+                    <!-- Row 2 -->
+                    <tr class="border-t">
+                        <td class="px-4 py-3">
+                            <div class="flex items-center">
+                                <img src="{{ asset('images/sksu1.png') }}" alt="Patient Image" class="w-10 h-10 mr-4 rounded-full object-cover">
+                                <span class="text-md font-semibold text-gray-900">Jane Smith</span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-500">Systolic: 90 mmHg, Diastolic: 60 mmHg</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">Sep 18, 2024</td>
+                        <td class="px-4 py-3">
+                            <span class="bg-yellow-100 text-yellow-600 text-sm font-semibold px-2 py-1 rounded-lg">Hypotension</span>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">Send Notification</button>
+                        </td>
+                    </tr>
 
-        <!-- Blood Pressure Record 2 -->
-        <li class="flex justify-between items-center">
-            <div class="flex items-center">
-                <i class="fa-solid fa-exclamation-circle text-red-500 text-3xl mr-4"></i>
-                <div>
-                    <h4 class="text-md font-semibold text-gray-900">Patient: Jane Smith</h4>
-                    <p class="text-sm text-gray-500">Systolic: 90 mmHg, Diastolic: 60 mmHg</p>
-                    <p class="text-xs text-gray-400">Date: Sep 18, 2024</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <p class="text-sm font-semibold text-yellow-600">Hypotension</p>
-            </div>
-        </li>
+                    <!-- Row 3 -->
+                    <tr class="border-t">
+                        <td class="px-4 py-3">
+                            <div class="flex items-center">
+                                <img src="{{ asset('images/sksu1.png') }}" alt="Patient Image" class="w-10 h-10 mr-4 rounded-full object-cover">
+                                <span class="text-md font-semibold text-gray-900">Mark Lee</span>
+                            </div>
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-500">Systolic: 160 mmHg, Diastolic: 95 mmHg</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">Sep 15, 2024</td>
+                        <td class="px-4 py-3">
+                            <span class="bg-red-100 text-red-600 text-sm font-semibold px-2 py-1 rounded-lg">Severe Hypertension</span>
+                        </td>
+                        <td class="px-4 py-3 text-right">
+                            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">Send Notification</button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
 
-        <!-- Blood Pressure Record 3 -->
-        <li class="flex justify-between items-center">
-            <div class="flex items-center">
-                <i class="fa-solid fa-exclamation-circle text-red-500 text-3xl mr-4"></i>
-                <div>
-                    <h4 class="text-md font-semibold text-gray-900">Patient: Mark Lee</h4>
-                    <p class="text-sm text-gray-500">Systolic: 160 mmHg, Diastolic: 95 mmHg</p>
-                    <p class="text-xs text-gray-400">Date: Sep 15, 2024</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <p class="text-sm font-semibold text-red-600">Severe Hypertension</p>
-            </div>
-        </li>
-    </ul>
-</div>
 
     </div>
 

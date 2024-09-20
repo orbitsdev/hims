@@ -1,9 +1,14 @@
 <x-admin-layout>
     <div class="px-6 py-8 bg-white rounded-md min-h-screen">
-        {{$selectedAcademicYear}}
-        {{$selectedSemester}}
+        {{-- {{$selectedAcademicYear}}
+        {{$selectedSemester}} --}}
+
+        <div class="mb-6">
+            <h2 class="text-2xl font-semibold text-gray-800 uppercase">Dashboard Overview</h2>
+        </div>
+
        <!-- Filter Section with Label Button and Width Adjustment -->
-<div class="mb-8 grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="mb-6 grid grid-cols-1 md:grid-cols-3 gap-6">
     <!-- Filter Label Button -->
 
 
@@ -11,7 +16,7 @@
     <div>
         <label for="academic-year" class="block text-sm font-medium text-gray-700 mb-2">Select Academic Year</label>
         <select id="academic-year" wire:model.live="selectedAcademicYear"
-            class="block w-full min-w-[250px] md:min-w-[400px] border-gray-300 focus:border-kaitoke-green-700 focus:ring-kaitoke-green-700 rounded-md shadow-sm mt-1 p-3 bg-white">
+            class="block w-full min-w-[250px] md:min-w-[400px] border-gray-300 focus:border-kaitoke-green-700 focus:ring-kaitoke-green-700 rounded-md shadow-sm mt-1  px-3 bg-white">
             <option value="">Select Year</option>
             @foreach ($academicYears as $year)
                 <option value="{{ $year->id }}">{{ $year->name }}</option>
@@ -23,7 +28,7 @@
     <div>
         <label for="semester" class="block text-sm font-medium text-gray-700 mb-2">Select Semester</label>
         <select id="semester" wire:model.live="selectedSemester"
-            class="block w-full min-w-[250px] md:min-w-[400px] border-gray-300 focus:border-kaitoke-green-700 focus:ring-kaitoke-green-700 rounded-md shadow-sm mt-1 p-3 bg-white">
+            class="block w-full min-w-[250px] md:min-w-[400px] border-gray-300 focus:border-kaitoke-green-700 focus:ring-kaitoke-green-700 rounded-md shadow-sm mt-1  px-3 bg-white">
             <option value="">Select Semester</option>
             @foreach ($semesters as $semester)
                 <option value="{{ $semester->id }}">{{ $semester->name_in_number }}</option>
@@ -237,7 +242,7 @@
 
         <!-- Abnormal Blood Pressure Section -->
 <div class="bg-[#F9F9F9]  border border-[#F2F2F2] p-6 rounded-lg ">
-    <h3 class="text-lg font-semibold text-gray-700 mb-4">Abnormal Blood Pressure Records</h3>
+    <h3 class="text-lg font-semibold text-gray-700 mb-4">Blood Pressure Alerts</h3>
 
     <!-- Blood Pressure List -->
     <ul class="space-y-4">
@@ -315,6 +320,7 @@
                         }
                     }
                 }
+
             });
         }
 

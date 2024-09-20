@@ -141,41 +141,39 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
             <!-- Emergency Contacts Section -->
             <!-- Emergency Contacts Section with Images -->
-<div class="bg-[#F9F9F9] border border-[#F2F2F2] p-6 rounded-lg ">
-    <div class="flex justify-between items-center mb-4">
-        <h3 class="text-lg font-semibold text-gray-700">Emergency Contacts</h3>
-        <i class="fa-solid fa-ellipsis-vertical text-gray-500"></i>
-    </div>
-
-    <!-- Emergency Contact List -->
-    <ul class="space-y-4 overflow-y-auto">
-
-            @foreach ($contacts as $contact )
-
-
-        <li class="flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="{{$contact->getImage()}}" alt="{{$contact->name}}" class="w-12 h-12 mr-4 rounded-full object-cover">
-                <div>
-                    <h4 class="text-md font-semibold text-gray-900">{{$contact->name}}</h4>
-                    <p class="text-sm text-gray-500">{{$contact->contact}}</p>
+            <div class="bg-[#F9F9F9] border border-[#F2F2F2] p-6 rounded-lg ">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-lg font-semibold text-gray-700">Emergency Contacts</h3>
+                    <i class="fa-solid fa-ellipsis-vertical text-gray-500"></i>
                 </div>
+
+                <!-- Emergency Contact List -->
+                <ul class="space-y-4 overflow-y-auto custom-scrollbar" style="max-height: 300px;">
+                    @foreach ($contacts as $contact)
+                    <li class="flex justify-between items-center">
+                        <div class="flex items-center">
+                            <a href="{{$contact->getImage()}}">
+                            <img src="{{$contact->getImage()}}" alt="{{$contact->name}}" class="w-12 h-12 mr-4 rounded-full object-cover">
+                        </a>
+                            <div>
+                                <h4 class="text-md font-semibold text-gray-900">{{$contact->name}}</h4>
+                                <p class="text-sm text-gray-500">{{$contact->contact}}</p>
+                            </div>
+                        </div>
+                        <div class="text-right">
+                            @if ($contact->active == true)
+                            <p class="text-sm font-semibold text-green-600">{{$contact->textStatus()}}</p>
+                            @else
+                            <p class="text-sm font-semibold text-gray-600">{{$contact->textStatus()}}</p>
+                            @endif
+                            <p class="text-xs text-gray-500">Location: {{$contact->address}}</p>
+                        </div>
+                    </li>
+                    @endforeach
+                </ul>
             </div>
-            <div class="text-right">
 
-                @if ($contact->active == true)
-                <p class="text-sm font-semibold text-green-600">{{$contact->textStatus()}}</p>
-                @else
-                <p class="text-sm font-semibold text-gray-600">{{$contact->textStatus()}}</p>
-                @endif
-                <p class="text-xs text-gray-500">Location: {{$contact->address}}</p>
 
-            </div>
-        </li>
-        @endforeach
-
-    </ul>
-</div>
 
 
             <div class="bg-[#F9F9F9]  border border-[#F2F2F2] p-6 rounded-lg">

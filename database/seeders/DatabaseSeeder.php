@@ -10,6 +10,7 @@ use Database\Seeders\UserSeeder;
 use Database\Seeders\CourseSeeder;
 use Database\Seeders\DepartmentSeeder;
 use Database\Seeders\SuggestionSeeder;
+use Database\Seeders\EmergencyContactSeeder;
 use Database\Seeders\BloodPressureLevelSeeder;
 
 class DatabaseSeeder extends Seeder
@@ -31,7 +32,8 @@ class DatabaseSeeder extends Seeder
             FirstAidGuideSeeder::class,
             CourseSeeder::class,
             //  BloodPressureLevelSeeder::class,
-            SuggestionSeeder::class
+            SuggestionSeeder::class,
+            EmergencyContactSeeder::class
             // SectionSeeder::class,
 
         ]);

@@ -2,11 +2,19 @@
 
 namespace App\Livewire;
 
+use App\Models\User;
+use App\Models\Event;
+use App\Models\Staff;
+use App\Models\Record;
+use App\Models\Student;
 use Livewire\Component;
 use App\Models\Semester;
 use App\Models\Condition;
-use App\Models\AcademicYear;
+use App\Models\Personnel;
 use Livewire\Attributes\On;
+use App\Models\AcademicYear;
+use App\Models\EmergencyContact;
+use App\Models\MedicalRecord;
 
 class AdminDashboard extends Component
 {
@@ -102,6 +110,27 @@ class AdminDashboard extends Component
 
     public function render()
     {
-        return view('livewire.admin-dashboard', []);
+        $total_users = User::hasAccountOwner()->count();
+        $total_students = Student::whereHas('user')->count();
+        $total_personnel = Personnel::whereHas('user')->count();
+        $total_staff = Staff::where('status', true)->whereHas('user')->count();
+        $total_screening = Record::where('academic_year_id', $this->selectedAcademicYear)->where('semester_id', $this->selectedSemester)->count();
+        $total_medical_record = MedicalRecord::whereHas('record',function($query){
+            $query->where('academic_year_id', $this->selectedAcademicYear)->where('semester_id', $this->selectedSemester);
+        })->count();
+
+        $total_events = Event::where('academic_year_id', $this->selectedAcademicYear)->where('semester_id', $this->selectedSemester)->count();
+        $contacts = EmergencyContact::all();
+
+        return view('livewire.admin-dashboard', [
+            'total_users'=> $total_users ,
+            'total_students'=> $total_students ,
+            'total_personnel'=> $total_personnel ,
+            'total_staff'=> $total_staff ,
+            'total_screening'=> $total_screening ,
+            'total_medical_record'=> $total_medical_record ,
+            'total_events'=> $total_events ,
+            'contacts'=> $contacts ,
+        ]);
     }
 }

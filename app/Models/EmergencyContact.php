@@ -10,8 +10,8 @@ class EmergencyContact extends Model
 {
     use HasFactory;
 
-    
-     
+
+
     public function getImage()
     {
         if (!empty($this->image) && Storage::disk('public')->exists($this->image)) {
@@ -20,4 +20,9 @@ class EmergencyContact extends Model
             return asset('images/placeholder-image.jpg'); // Return default image URL
         }
     }
+    public function textStatus()
+    {
+        return $this->active == true ? 'Active': 'Inactive';
+    }
+
 }

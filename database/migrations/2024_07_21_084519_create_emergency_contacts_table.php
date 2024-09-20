@@ -16,6 +16,8 @@ return new class extends Migration
             $table->string('name')->nullable();
             $table->string('image')->nullable();
             $table->string('contact')->nullable();
+            $table->string('address')->nullable();
+            $table->boolean('active')->default(true)->nullable();
             $table->timestamps();
         });
     }

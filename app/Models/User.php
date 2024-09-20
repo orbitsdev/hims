@@ -321,5 +321,10 @@ class User extends Authenticatable
         return NotificationRequest::latest()->where('email', $this->email)->get();
     }
 
+    public function scopeHasAccountOwner($query)
+    {
+    return $query->whereHas('student')->orWhereHas('personnel')->orWhereHas('staff');
+    }
+
 
 }

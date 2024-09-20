@@ -8,7 +8,9 @@ use Filament\Tables\Table;
 use App\Models\EmergencyContact;
 use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Textarea;
 use Filament\Tables\Actions\BulkAction;
+use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
@@ -17,6 +19,7 @@ use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\CreateAction;
 use Illuminate\Database\Eloquent\Builder;
+use Filament\Forms\Components\ToggleButtons;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -33,7 +36,9 @@ class ListContacts extends Component implements HasForms, HasTable
              ->columnSpanFull(),
             TextInput::make('contact')->required()->label('CONTACT')
              ->columnSpanFull(),
-          
+            Textarea::make('address')->required()->label('ADDRESS')
+             ->columnSpanFull(),
+
             FileUpload::make('image')
                     ->disk('public')
                     ->directory('contacts')
@@ -41,7 +46,11 @@ class ListContacts extends Component implements HasForms, HasTable
                     ->imageEditor()
                     // ->required()
                     ->columnSpanFull()
-                    ->label('PHOTO')
+                    ->label('PHOTO'),
+
+                    ToggleButtons::make('active')
+    ->label('Active')
+    ->boolean()
         ];
     }
     public function table(Table $table): Table
@@ -61,25 +70,30 @@ class ListContacts extends Component implements HasForms, HasTable
                 ,
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
-            
+
                 Tables\Columns\TextColumn::make('contact')
                     ->searchable(),
-                
+                Tables\Columns\TextColumn::make('address')
+                ->wrap()
+                ->searchable(),
+                IconColumn::make('active')
+    ->boolean(),
+
             ])
             ->filters([
-                
+
             ])
             ->headerActions([
-               
+
                 CreateAction::make('create')
                 ->size('lg')
                 ->mutateFormDataUsing(function (array $data): array {
-             
+
                     return $data;
                 })
                 ->modalHeading('CREATE CONTACT')
                 ->icon('heroicon-s-plus')
-               
+
                 ->label('New Contact')
                 ->form($this->emergencyContactForm())->modalWidth('7xl')
                 ->createAnother(false)
@@ -90,7 +104,7 @@ class ListContacts extends Component implements HasForms, HasTable
                 Tables\Actions\DeleteAction::make(),
             ]),
             //edit actions
-          
+
                 // ->createAnother(false)
         ])
         ->bulkActions([

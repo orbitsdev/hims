@@ -51,7 +51,7 @@
         <div class="flex justify-between items-center">
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">System Users</h3>
-                <p class="text-3xl font-bold text-gray-900">1,000</p>
+                <p class="text-3xl font-bold text-gray-900">{{$total_users}}</p>
                 <p class="text-sm text-gray-500">Total number of users in the system</p>
             </div>
         </div>
@@ -62,7 +62,7 @@
         <div class="flex justify-between items-center">
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">Students</h3>
-                <p class="text-3xl font-bold text-gray-900">123,000</p>
+                <p class="text-3xl font-bold text-gray-900">{{$total_students}}</p>
                 <p class="text-sm text-red-500">↓ 5% from last month</p>
                 <p class="text-xs text-gray-500">Active students</p>
             </div>
@@ -74,8 +74,8 @@
         <div class="flex justify-between items-center">
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">Personnels</h3>
-                <p class="text-3xl font-bold text-gray-900">24,000</p>
-                <p class="text-sm text-red-500">↓ 71% of total personnel targets</p>
+                <p class="text-3xl font-bold text-gray-900">{{$total_personnel}}</p>
+                {{-- <p class="text-sm text-red-500">↓ 71% of total personnel targets</p> --}}
                 <p class="text-xs text-gray-500">Total personnel involved</p>
             </div>
         </div>
@@ -86,9 +86,9 @@
         <div class="flex justify-between items-center">
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">Staff</h3>
-                <p class="text-3xl font-bold text-gray-900">423</p>
-                <p class="text-sm text-green-500">↑ 22% higher than last quarter</p>
-                <p class="text-xs text-gray-500">Active staff members</p>
+                <p class="text-3xl font-bold text-gray-900">{{$total_staff}}</p>
+                <p class="text-sm text-green-500"> Active staff members</p>
+                {{-- <p class="text-xs text-gray-500">Active staff members</p> --}}
             </div>
         </div>
     </div>
@@ -98,8 +98,8 @@
         <div class="flex justify-between items-center">
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">Screening</h3>
-                <p class="text-3xl font-bold text-gray-900">1,230</p>
-                <p class="text-xs text-gray-500">Screenings conducted this year</p>
+                <p class="text-3xl font-bold text-gray-900">{{$total_screening}}</p>
+                <p class="text-xs text-gray-500">Screenings conducted this semester</p>
             </div>
             <div class="text-gray-500">
                 <i class="fa-solid fa-users text-2xl"></i>
@@ -112,7 +112,7 @@
         <div class="flex justify-between items-center">
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">Medical Records</h3>
-                <p class="text-3xl font-bold text-gray-900">850</p>
+                <p class="text-3xl font-bold text-gray-900">{{$total_medical_record}}</p>
                 <p class="text-xs text-gray-500">Total medical records</p>
             </div>
             <div class="text-gray-500">
@@ -126,8 +126,8 @@
         <div class="flex justify-between items-center">
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">Events</h3>
-                <p class="text-3xl font-bold text-gray-900">25</p>
-                <p class="text-xs text-gray-500">Events created this year</p>
+                <p class="text-3xl font-bold text-gray-900">{{$total_events}}</p>
+                <p class="text-xs text-gray-500">Events created this semester</p>
             </div>
             <div class="text-gray-500">
                 <i class="fa-solid fa-calendar text-2xl"></i>
@@ -148,81 +148,32 @@
     </div>
 
     <!-- Emergency Contact List -->
-    <ul class="space-y-4">
+    <ul class="space-y-4 overflow-y-auto">
+
+            @foreach ($contacts as $contact )
+
 
         <li class="flex justify-between items-center">
             <div class="flex items-center">
-                <img src="{{asset('images/sksu1.png')}}" alt="Police" class="w-12 h-12 mr-4 rounded-full object-cover">
+                <img src="{{$contact->getImage()}}" alt="{{$contact->name}}" class="w-12 h-12 mr-4 rounded-full object-cover">
                 <div>
-                    <h4 class="text-md font-semibold text-gray-900">Police</h4>
-                    <p class="text-sm text-gray-500">Emergency Hotline: 117</p>
+                    <h4 class="text-md font-semibold text-gray-900">{{$contact->name}}</h4>
+                    <p class="text-sm text-gray-500">{{$contact->contact}}</p>
                 </div>
             </div>
             <div class="text-right">
-                <p class="text-sm font-semibold text-green-600">Active</p>
-                <p class="text-xs text-gray-500">ID: 0JWEJS7SNC</p>
+
+                @if ($contact->active == true)
+                <p class="text-sm font-semibold text-green-600">{{$contact->textStatus()}}</p>
+                @else
+                <p class="text-sm font-semibold text-gray-600">{{$contact->textStatus()}}</p>
+                @endif
+                <p class="text-xs text-gray-500">Location: {{$contact->address}}</p>
+
             </div>
         </li>
+        @endforeach
 
-        <!-- 911 Emergency Contact -->
-        <li class="flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="{{asset('images/sksu1.png')}}" alt="911" class="w-12 h-12 mr-4 rounded-full object-cover">
-                <div>
-                    <h4 class="text-md font-semibold text-gray-900">Emergency 911</h4>
-                    <p class="text-sm text-gray-500">National Emergency Hotline</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <p class="text-sm font-semibold text-green-600">Active</p>
-                <p class="text-xs text-gray-500">ID: 0JWEJS7SNC</p>
-            </div>
-        </li>
-
-        <!-- Fire Department Contact -->
-        <li class="flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="{{asset('images/sksu1.png')}}" alt="Fire Department" class="w-12 h-12 mr-4 rounded-full object-cover">
-                <div>
-                    <h4 class="text-md font-semibold text-gray-900">Fire Department</h4>
-                    <p class="text-sm text-gray-500">Fire Hotline: 160</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <p class="text-sm font-semibold text-green-600">Active</p>
-                <p class="text-xs text-gray-500">ID: 0JWEJS7SNC</p>
-            </div>
-        </li>
-
-        <!-- Doctor Contact -->
-        {{-- <li class="flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="{{asset('images/sksu1.png')}}" alt="Doctor" class="w-12 h-12 mr-4 rounded-full object-cover">
-                <div>
-                    <h4 class="text-md font-semibold text-gray-900">Doctor</h4>
-                    <p class="text-sm text-gray-500">Medical Assistance: +63 912 345 6789</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <p class="text-sm font-semibold text-green-600">Active</p>
-                <p class="text-xs text-gray-500">ID: 0JWEJS7SNC</p>
-            </div>
-        </li> --}}
-
-        <!-- Health Hotline -->
-        <li class="flex justify-between items-center">
-            <div class="flex items-center">
-                <img src="{{asset('images/sksu1.png')}}" alt="Health Hotline" class="w-12 h-12 mr-4 rounded-full object-cover">
-                <div>
-                    <h4 class="text-md font-semibold text-gray-900">Health Hotline</h4>
-                    <p class="text-sm text-gray-500">+63 922 111 2222</p>
-                </div>
-            </div>
-            <div class="text-right">
-                <p class="text-sm font-semibold text-green-600">Active</p>
-                <p class="text-xs text-gray-500">ID: 0JWEJS7SNC</p>
-            </div>
-        </li>
     </ul>
 </div>
 

@@ -203,26 +203,39 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <!-- Row 1 -->
+
+
+                    @foreach ($total_not_normal_bp_record as $key=> $medicalRecord )
+
                     <tr class="border-t">
                         <td class="px-4 py-3">
                             <div class="flex items-center">
                                 <img src="{{ asset('images/sksu1.png') }}" alt="Patient Image" class="w-10 h-10 mr-4 rounded-full object-cover">
-                                <span class="text-md font-semibold text-gray-900">John Doe</span>
+                                <span class="text-md font-semibold text-gray-900">{{$medicalRecord->fullNameLower()}}</span>
                             </div>
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-500">Systolic: 140 mmHg, Diastolic: 90 mmHg</td>
-                        <td class="px-4 py-3 text-sm text-gray-500">Sep 20, 2024</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">Systolic: {{$medicalRecord->systolic_pressure}} mmHg, Diastolic: {{$medicalRecord->diastolic_pressure}} mmHg</td>
+                        <td class="px-4 py-3 text-sm text-gray-500">{{$medicalRecord->created_at->format('F j, Y')}}</td>
+
                         <td class="px-4 py-3">
-                            <span class="bg-red-100 text-red-600 text-sm font-semibold px-2 py-1 rounded-lg">Hypertension</span>
+                            <span class="bg-red-100 text-red-600 text-sm font-semibold px-2 py-1 rounded-lg">{{$medicalRecord->getBloodPressureStatus()}}</span>
                         </td>
                         <td class="px-4 py-3 text-right">
-                            <button class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">Send Notification</button>
+
+                                <x-filament-actions::group :actions="[
+                                    ($this->manageAction)(['record' => $medicalRecord->id]),
+                                    ($this->sendSmsAction)(['record' => $medicalRecord->id]),
+                                    ($this->sendEmailAction)(['record' => $medicalRecord->id]),
+                                    ($this->sendBloodEmailAlertAction)(['record' => $medicalRecord->id])
+                                ]" />
+                           
+
+
                         </td>
                     </tr>
+                    @endforeach
 
-                    <!-- Row 2 -->
-                    <tr class="border-t">
+                    {{-- <tr class="border-t">
                         <td class="px-4 py-3">
                             <div class="flex items-center">
                                 <img src="{{ asset('images/sksu1.png') }}" alt="Patient Image" class="w-10 h-10 mr-4 rounded-full object-cover">
@@ -239,7 +252,6 @@
                         </td>
                     </tr>
 
-                    <!-- Row 3 -->
                     <tr class="border-t">
                         <td class="px-4 py-3">
                             <div class="flex items-center">
@@ -255,7 +267,7 @@
                         <td class="px-4 py-3 text-right">
                             <button class="bg-blue-500 text-white px-4 py-2 rounded-lg shadow hover:bg-blue-600">Send Notification</button>
                         </td>
-                    </tr>
+                    </tr> --}}
                 </tbody>
             </table>
         </div>
@@ -302,4 +314,5 @@
             });
         });
     </script>
+       <x-filament-actions::modals />
 </x-admin-layout>

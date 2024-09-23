@@ -143,6 +143,9 @@ class MedicalRecord extends Model
     public function fullName(){
         return  Str::upper($this->last_name) .' ' .Str::upper($this->first_name);
     }
+    public function fullNameLower(){
+        return  $this->last_name .' ' .$this->first_name;
+    }
 
     public function birthDateFormat(){
         return Carbon::parse($this->birth_date)->format('F j, Y');

@@ -13,11 +13,25 @@ use App\Models\Condition;
 use App\Models\Personnel;
 use Livewire\Attributes\On;
 use App\Models\AcademicYear;
-use App\Models\EmergencyContact;
+use Filament\Actions\Action;
 use App\Models\MedicalRecord;
+use App\Models\EmergencyContact;
+use Filament\Actions\EditAction;
+use App\Http\Controllers\FilamentForm;
+use Filament\Forms\Contracts\HasForms;
+use Filament\Forms\Components\Textarea;
+use Filament\Forms\Components\TextInput;
+use Filament\Actions\Contracts\HasActions;
+use Filament\Forms\Concerns\InteractsWithForms;
+use App\Http\Controllers\SendingEmailController;
+use Filament\Actions\Concerns\InteractsWithActions;
 
-class AdminDashboard extends Component
+class AdminDashboard extends Component implements HasForms, HasActions
 {
+    use InteractsWithActions;
+    use InteractsWithForms;
+
+
     public $academicYears = [];
     public $semesters = [];
     public $selectedAcademicYear = null;
@@ -55,6 +69,109 @@ class AdminDashboard extends Component
             $this->selectedSemester = null;
         }
     }
+
+    public function manageAction(): Action
+    {
+        return Action::make('download')
+
+        ->color('primary')
+        ->icon('heroicon-s-arrow-down-tray')
+        ->tooltip('DONNLOAD REPORT')
+        ->action(function(){
+            FilamentForm::notification('DOWNLOAD REPORT COMING SOON');
+        })
+            ->url(function(array $arguments){
+                $medicalRecord = MedicalRecord::find($arguments['record']);
+                return route('reports.medical-record',['record'=> $medicalRecord]);
+            })
+            ->openUrlInNewTab()
+            ;
+
+
+
+    }
+    public function sendSmsAction(): Action
+    {
+        return Action::make('sendSms')
+
+        ->label('SEND SMS')
+        ->icon('heroicon-s-chat-bubble-left-ellipsis')
+        ->color('info')
+        ->size('lg')
+        ->requiresConfirmation()
+        ->action(function(array $arguments){
+            $medicalRecord = MedicalRecord::find($arguments['record']);
+            FilamentForm::notification('DOWNLOAD REPORT COMING SOON');
+        })
+        ->tooltip('SEND MESSAGE TO USER');
+
+
+
+
+    }
+
+    public function sendEmailAction(): Action
+    {
+        return Action::make('sendEmail')
+
+        ->tooltip('SEND EMAIL TO USER')
+                    ->label('SEND EMAIL')
+                    ->icon('heroicon-s-envelope')
+                    ->color('info')
+                    ->size('lg')
+
+                    ->fillForm(function (array $arguments) {
+                        $medicalRecord = MedicalRecord::find($arguments['record']);
+                        return [
+                            'to' => $medicalRecord->user->email,
+                        ];
+                    })
+                    ->form([
+                        TextInput::make('to')->required()->disabled()->label('To'),
+                        Textarea::make('message')->required(),
+
+
+                    ])
+                    ->action(function (array $data, array $arguments) {
+                        $medicalRecord = MedicalRecord::find($arguments['record']);
+                        $owner= $medicalRecord->user;
+                        if($owner){
+                            FilamentForm::notification('SEND EMAIL TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
+                            $medicalRecord->record->notificationRequests()->create([
+                                'message' => $data['message'],
+                                'email' => $owner->email
+                            ]);
+                        }
+
+                    });
+
+
+
+
+    }
+    public function sendBloodEmailAlertAction(): Action
+    {
+        return Action::make('sendBloodEmailAlert')
+
+        ->tooltip('NOTIFY USER BP STATUS BY SENDING EMAIL')
+                    ->label('SEND BP EMAIL ALERT')
+                    ->icon('heroicon-s-exclamation-circle')
+                    ->color('info')
+                    ->size('lg')
+                    ->requiresConfirmation()
+                   ->action(function (array $arguments) {
+                    $medicalRecord = MedicalRecord::find($arguments['record']);
+
+                      SendingEmailController::sendBPAlertEmail($medicalRecord);
+
+                });
+
+
+
+
+    }
+
+
 
     // Fetch and prepare chart data
     public function fetchChartData()
@@ -122,6 +239,15 @@ class AdminDashboard extends Component
         $total_events = Event::where('academic_year_id', $this->selectedAcademicYear)->where('semester_id', $this->selectedSemester)->count();
         $contacts = EmergencyContact::all();
 
+        $total_not_normal_bp_record = MedicalRecord::whereHas('record', function($query) {
+            $query->where('academic_year_id', $this->selectedAcademicYear)
+                  ->where('semester_id', $this->selectedSemester);
+        })->get()->filter(function($medicalRecord) {
+            return $medicalRecord->getBloodPressureStatus() != 'Normal';
+        });
+
+
+
         return view('livewire.admin-dashboard', [
             'total_users'=> $total_users ,
             'total_students'=> $total_students ,
@@ -129,6 +255,7 @@ class AdminDashboard extends Component
             'total_staff'=> $total_staff ,
             'total_screening'=> $total_screening ,
             'total_medical_record'=> $total_medical_record ,
+            'total_not_normal_bp_record' => $total_not_normal_bp_record,
             'total_events'=> $total_events ,
             'contacts'=> $contacts ,
         ]);

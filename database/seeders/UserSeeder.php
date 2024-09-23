@@ -30,14 +30,14 @@ class UserSeeder extends Seeder
            'password'=> Hash::make('password'),
         ]);
         User::create([
-           'name'=> 'Student2 User ',
+           'name'=> 'Student2 User',
            'email'=> 'student2@gmail.com',
            'username'=> 'student2',
            'role'=> User::STUDENT,
            'password'=> Hash::make('password'),
         ]);
         User::create([
-           'name'=> 'Personnel1 User   ',
+           'name'=> 'Personnel1 User',
            'email'=> 'personnel1@gmail.com',
            'username'=> 'personnel1',
            'role'=> User::PERSONNEL,
@@ -45,7 +45,7 @@ class UserSeeder extends Seeder
         ]);
 
         User::create([
-            'name'=> 'Personnel2 User   ',
+            'name'=> 'Personnel2 User',
             'email'=> 'personnel2@gmail.com',
             'username'=> 'personnel2',
             'role'=> User::PERSONNEL,
@@ -53,7 +53,7 @@ class UserSeeder extends Seeder
          ]);
 
         User::create([
-            'name'=> 'Staff1 User   ',
+            'name'=> 'Staff1 User',
             'email'=> 'staff1@gmail.com',
             'username'=> 'staff1',
             'role'=> User::STAFF,
@@ -61,7 +61,7 @@ class UserSeeder extends Seeder
          ]);
 
         User::create([
-            'name'=> 'Staff2 User   ',
+            'name'=> 'Staff2 User',
             'email'=> 'staff2@gmail.com',
             'username'=> 'staff2',
             'role'=> User::STAFF,

@@ -5,6 +5,7 @@
 
         <div class="mb-6">
             <h2 class="text-2xl font-semibold text-gray-800 uppercase ">Dashboard Overview</h2>
+            {{-- @dump(Auth::user()->hasRoleOf(['Admin','Staff'])) --}}
         </div>
 
        <!-- Filter Section with Label Button and Width Adjustment -->
@@ -63,7 +64,7 @@
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">Students</h3>
                 <p class="text-3xl font-bold text-gray-900">{{$total_students}}</p>
-                <p class="text-sm text-red-500">↓ 5% from last month</p>
+                {{-- <p class="text-sm text-red-500">↓ 5% from last month</p> --}}
                 <p class="text-xs text-gray-500">Active students</p>
             </div>
         </div>
@@ -121,6 +122,9 @@
         </div>
     </div>
 
+    @can('admin')
+
+
     <!-- Events -->
     <div class="bg-[#F9F9F9] border border-[#F2F2F2] p-6 rounded-lg">
         <div class="flex justify-between items-center">
@@ -134,6 +138,8 @@
             </div>
         </div>
     </div>
+    @endcan
+
 </div>
 
 
@@ -228,7 +234,7 @@
                                     ($this->sendEmailAction)(['record' => $medicalRecord->id]),
                                     ($this->sendBloodEmailAlertAction)(['record' => $medicalRecord->id])
                                 ]" />
-                           
+
 
 
                         </td>

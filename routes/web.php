@@ -68,6 +68,7 @@ use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
+use App\Livewire\StaffDashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -111,8 +112,7 @@ Route::middleware([
 
     Route::get('/admin-dashboard', AdminDashboard::class)->name('admin-dashboard');
     Route::get('/student-dashboard', StudentDashboard::class)->name('student-dashboard');
-
-
+    Route::get('/staff-dashboard', StaffDashboard::class)->name('staff-dashboard');
 
     Route::middleware('')->group(function(){
 

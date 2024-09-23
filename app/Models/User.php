@@ -9,13 +9,14 @@ use App\Models\Personnel;
 use App\Models\MedicalRecord;
 use App\Models\PersonalDetail;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Facades\Auth;
 use Laravel\Jetstream\HasProfilePhoto;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Fortify\TwoFactorAuthenticatable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable
 {
@@ -99,6 +100,8 @@ class User extends Authenticatable
                 return redirect()->route('admin-dashboard');
             case User::STUDENT:
                 return redirect()->route('student-dashboard');
+            case User::STAFF:
+                return redirect()->route('admin-dashboard');
             default:
                 return redirect()->route('unauthorizepage');
         }
@@ -256,6 +259,12 @@ class User extends Authenticatable
         $query->whereIn('role', $roles);
     }
 
+    public function hasRoleOf($roles){
+        return in_array($this->role, (array) $roles);
+    }
+
+
+
     public function scopeNoRecordInThisAcademicYearAndSemester($query, $record)
     {
         return $query->whereDoesntHave('medicalRecords.record', function ($q) use ($record) {
@@ -325,6 +334,7 @@ class User extends Authenticatable
     {
     return $query->whereHas('student')->orWhereHas('personnel')->orWhereHas('staff');
     }
+
 
 
 }

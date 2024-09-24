@@ -140,75 +140,65 @@
 
 
         <main class="flex-1  mx-8">
-            <div class="space-y-6">
-
+                <div class="space-y-6">
+                    <div class="flex justify-end">
+                        <a href="#" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
+                            Create Event
+                        </a>
+                    </div>
                 @forelse ($events as $event)
 
 
 
 
-            <div class="bg-white p-6 shadow-md rounded-lg">
-                <!-- Event Header: User Details and Time -->
-                <div class="flex justify-between">
-                    @if ($event->user)
+                <div class="bg-white p-6 shadow-md rounded-lg">
+                    <!-- Event Header: User Details and Time -->
+                    <div class="flex justify-between">
+                        <div class="flex items-center space-x-4">
+                            <!-- User Profile Image -->
+                            @if ($event->user)
+                            <img src="{{ $event->user->getImage() ?? asset('images/sksu1.png') }}" alt="User Profile" class="w-10 h-10 rounded-full">
 
-                    <div class="flex items-center space-x-4">
-                        <!-- User Profile Image -->
-                        <img src="{{ $event->user->getImage() ?? asset('images/sksu1.png') }}"
-                        alt="User Profile" class="w-10 h-10 rounded-full">
+                                @endif
+                                <!-- User Info -->
+                                <div>
+                                    <h4 class="font-bold">{{ $event->user->name ?? 'Anonymous' }}</h4>
+                                    <p class="text-sm text-gray-500">{{ $event->created_at->diffForHumans() }}</p>
+                                </div>
+                            </div>
 
-                        <!-- User Info -->
-                        <div>
-                            <h4 class="font-bold">{{ $event->user->name ?? 'Anonymous' }}</h4>
-                            <p class="text-sm text-gray-500">{{ $event->event_date->diffForHumans() }}</p>
-                        </div>
+
                     </div>
+
+                    <!-- Event Image -->
+                    @if ($event->getImage())
+                        <div class="mt-4">
+                            <img src="{{ $event->getImage() }}" alt="{{ $event->title }}" class="w-full rounded-lg">
+                        </div>
                     @endif
 
-                    <!-- Options Button -->
-                    <button class="text-gray-500 hover:text-gray-700">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-                        </svg>
-                    </button>
-                </div>
-
-                <!-- Event Image -->
-                @if ($event->getImage())
+                    <!-- Event Title and Content -->
                     <div class="mt-4">
-                        <img src="{{ $event->getImage() }}" alt="{{ $event->title }}" class="w-full rounded-lg">
+                        <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
+                        <p class="text-sm text-gray-500">
+                            @markdown($event->content ?? '')
+                        </p>
                     </div>
-                @endif
 
-                <!-- Event Title and Content -->
-                <div class="mt-4">
-                    <h3 class="text-lg font-semibold">{{ $event->title }}</h3>
-                    <p class="text-sm text-gray-500">
-                        @markdown($event->content ?? '')
-                    </p>
+                    {{-- <!-- Event Footer: Likes (Static for now) -->
+                    <div class="flex justify-between mt-4">
+                        <div class="flex space-x-4 text-gray-500">
+                            <!-- Likes -->
+                            <div class="flex items-center space-x-1">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                                </svg>
+                                <p>89 Likes</p>
+                            </div>
+                        </div>
+                    </div> --}}
                 </div>
 
-                <!-- Event Footer: Likes and Comments (Static for now) -->
-                <div class="flex justify-between mt-4">
-                    <div class="flex space-x-4 text-gray-500">
-                        <!-- Likes -->
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                            </svg>
-                            <p>89 Likes</p>
-                        </div>
-
-                        <!-- Comments -->
-                        <div class="flex items-center space-x-1">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 10h4M3 21l9-9M13 5h-6" />
-                            </svg>
-                            <p>21 Comments</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
             @empty
 
             @endforelse

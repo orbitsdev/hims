@@ -41,7 +41,7 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
 
                 Tables\Columns\TextColumn::make('condition.name')
                     ->sortable(),
-               
+
             ])
             ->filters([
                 SelectFilter::make('condition')
@@ -60,7 +60,7 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                 // ->color('primary')
                 // ->label('First Aid')
                 // ->icon('heroicon-s-plus')
-               
+
                 // ->url(function(){
                 //     return route('staffs-create');
                 // }),
@@ -69,11 +69,12 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                 ActionGroup::make([
                     Action::make('view')
                     ->color('success')
+
                     ->label('View')
                     ->size('xl')
-                    ->icon(null)
-                    ->link()
-                  
+                    ->icon('heroicon-m-eye')
+
+
                     ->extraAttributes([
                         'class' => 'border: none !imporant',
                     ])
@@ -85,16 +86,16 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                     ->disabledForm()
                      ->slideOver()
                      ->closeModalByClickingAway(true)
-               
+
                     ->modalWidth(MaxWidth::Full),
-                        Tables\Actions\EditAction::make()->form(FilamentForm::firstAidGuideForm()) ->modalWidth(MaxWidth::SevenExtraLarge), 
+                        Tables\Actions\EditAction::make()->form(FilamentForm::firstAidGuideForm()) ->modalWidth(MaxWidth::SevenExtraLarge),
                         Tables\Actions\DeleteAction::make(),
                 ]),
-               
-       
+
+
                 ])
                 ->bulkActions([
-    
+
                     Tables\Actions\BulkActionGroup::make([
                         BulkAction::make('delete')
                             ->requiresConfirmation()
@@ -102,7 +103,7 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                     ])
                     ->label('ACTION')
                     ,
-                   
+
                 ]);
     }
 

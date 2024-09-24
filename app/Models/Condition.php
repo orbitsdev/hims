@@ -9,6 +9,7 @@ use App\Models\FirstAidGuide;
 use App\Models\MedicalRecord;
 use App\Models\ConditionSymptom;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
@@ -24,6 +25,17 @@ class Condition extends Model
     public function file(): MorphOne
     {
         return $this->morphOne(File::class, 'fileable');
+    }
+    public function getImage()
+    {
+
+        $file = $this->file;
+        if ($file && Storage::disk('public')->exists($file->file)) {
+            return Storage::disk('public')->url($file->file);
+        } else {
+
+            return asset('images/placeholder-image.jpg');
+        }
     }
 
     public function treatments(){

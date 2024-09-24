@@ -21,10 +21,10 @@ return new class extends Migration
             // $table->dateTime('event_date')->nullable(); // Se
             $table->date('event_date')->nullable(); // Se
             $table->text('image')->nullable();
-            $table->boolean('is_published')->nullable();
+            $table->boolean('is_published')->default(true)->nullable();
             $table->timestamps();
         });
-    }   
+    }
 
     /**
      * Reverse the migrations.

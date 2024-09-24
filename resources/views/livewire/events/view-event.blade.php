@@ -17,11 +17,11 @@
                 </div>
 
                 <div class="mt-8 prose max-w-none ">
-                    @markdown($record->content)
+                    @markdown($record->content ??'')
                 </div>
             </div>
         </div>
-    
-      
+
+
 
 </div>

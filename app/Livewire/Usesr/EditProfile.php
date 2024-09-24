@@ -38,7 +38,9 @@ class EditProfile extends Component implements HasForms
 
         $this->record->update($data);
         FilamentForm::notification();
-        return redirect()->route('dashboard');
+
+
+        return $this->record->dashBoardBaseOnRole();
     }
 
     public function render(): View

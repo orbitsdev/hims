@@ -277,13 +277,7 @@
                         STUDENTS
                     </a>
                 </li>
-                <li>
-                    <a href="{{route('staffs')}}"
-                        class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['staffs','staffs-edit','staffs-create','staffs-view'])}} ">
-                        <i class="fa-solid fa-clipboard-user text-2xl w-6"></i>
-                        STAFFS
-                    </a>
-                </li>
+
                 <li>
                     <a href="{{route('personnels')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['personnels','personnel-edit','personnel-create'])}} ">
@@ -300,95 +294,97 @@
                     </a>
                 </li>
 
-                <li>
-                    <div class="text-xl font-semibold leading-6 text-gray-100 mb-2">DISPLAY MANAGEMENT</div>
-                    <ul role="list" class="-mx-2 mt-2 space-y-1">
-                        <li>
-                            <a href="{{route('academic-year')}}"
-                                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['academic-year'])}}">
-                                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
-                                <i class="fa-solid fa-calendar text-2xl"></i>
-                              ACADEMIC YEAR
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('departments')}}"
-                                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['departments'])}}">
-                                <i class="fa-solid fa-building-columns text-2xl"></i>
-                                DEPARMENT/BUILDING
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('courses')}}"
-                                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['courses','course-create','course-edit'])}}">
-                                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
-                                <i class="fa-solid fa-book text-2xl"></i>
-                            COURSES & SECTIONS
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('sections')}}"
-                                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['sections'])}}">
 
-                                <i class="fa-solid fa-book text-2xl"></i>
-                             SECTIONS
-                            </a>
-                        </li>
-
-
-
-                        <li>
-                            <a href="{{route('conditions')}}"
-                                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
-                                'conditions',
-                                'manage-condition',
-                                'view-condition',
-                                'condition-treatments-lists',
-                                'condition-treatment-view',
-                                'condition-symptoms-list',
-
-                                ])}}">
-                                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
-                                <i class="fa-solid fa-notes-medical text-2xl"></i>
-                                CONDITIONS | TREATMENTS | SYMPTOMS
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('first-aid-guides')}}"
-                                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
-                                'first-aid-guides',
-                                'first-aid-guide-view',
-                                'first-aid-guide-create',
-                                'first-aid-guide-edit',
-
-
-                                ])}}">
-                                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
-
-                                <i class="fa-solid fa-briefcase-medical text-2xl"></i>
-                                FIRSTAID & GUIDE
-                            </a>
-                        </li>
-                        <li>
-                            <a href="{{route('suggestions')}}"
-                                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
-                                'suggestions',
-
-
-
-                                ])}}">
-                                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
-
-                                <i class="fa-solid fa-lightbulb text-2xl"></i>
-
-                                {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
-                                SUGGESTION
-                            </a>
-                        </li>
-
-                    </ul>
-                </li>
             </ul>
+
+            <li>
+                <div class="text-xl font-semibold leading-6 text-gray-100 mb-2 ">DISPLAY MANAGEMENT</div>
+                <ul role="list" class="-mx-2 mt-2 space-y-1">
+                    <li>
+                        <a href="{{route('academic-year')}}"
+                            class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['academic-year'])}}">
+                            {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+                            <i class="fa-solid fa-calendar text-2xl"></i>
+                          ACADEMIC YEAR
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('departments')}}"
+                            class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['departments'])}}">
+                            <i class="fa-solid fa-building-columns text-2xl"></i>
+                            DEPARMENT/BUILDING
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('courses')}}"
+                            class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['courses','course-create','course-edit'])}}">
+                            {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+                            <i class="fa-solid fa-book text-2xl"></i>
+                        COURSES & SECTIONS
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('sections')}}"
+                            class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['sections'])}}">
+
+                            <i class="fa-solid fa-book text-2xl"></i>
+                         SECTIONS
+                        </a>
+                    </li>
+
+
+
+                    <li>
+                        <a href="{{route('conditions')}}"
+                            class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                            'conditions',
+                            'manage-condition',
+                            'view-condition',
+                            'condition-treatments-lists',
+                            'condition-treatment-view',
+                            'condition-symptoms-list',
+
+                            ])}}">
+                            {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+                            <i class="fa-solid fa-notes-medical text-2xl"></i>
+                            CONDITIONS | TREATMENTS | SYMPTOMS
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('first-aid-guides')}}"
+                            class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                            'first-aid-guides',
+                            'first-aid-guide-view',
+                            'first-aid-guide-create',
+                            'first-aid-guide-edit',
+
+
+                            ])}}">
+                            {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+
+                            <i class="fa-solid fa-briefcase-medical text-2xl"></i>
+                            FIRSTAID & GUIDE
+                        </a>
+                    </li>
+                    <li>
+                        <a href="{{route('suggestions')}}"
+                            class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                            'suggestions',
+
+
+
+                            ])}}">
+                            {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+
+                            <i class="fa-solid fa-lightbulb text-2xl"></i>
+
+                            {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
+                            SUGGESTION
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
         @endcan
     </ul>
 

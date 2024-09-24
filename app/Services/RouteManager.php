@@ -9,7 +9,11 @@ class RouteManager
     {
         return in_array($route,$routes) ? 'active-link' : 'inactive-link';
     }
-    public function route($route) : String 
+    public function isCurrentPublicPage($route, $routes)
+    {
+        return in_array($route,$routes) ? 'active-link' : 'inactive-link';
+    }
+    public function route($route) : String
     {
         Session::put('route', $route);
         return $route;

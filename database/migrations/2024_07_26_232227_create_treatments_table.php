@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('condition_id')->nullable();
             $table->string('name')->nullable();
             $table->text('description')->nullable();
+            $table->text('image')->nullable();
             $table->timestamps();
         });
     }

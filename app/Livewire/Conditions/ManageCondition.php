@@ -34,10 +34,10 @@ class ManageCondition extends Component implements HasForms, HasActions
     public Condition $record;
 
     public function mount(): void
-    {   
-       
+    {
 
-        // $this->form->fill($this->record->attributesToArray());
+
+         $this->form->fill($this->record->attributesToArray());
     }
 
     public function form(Form $form): Form
@@ -53,7 +53,7 @@ class ManageCondition extends Component implements HasForms, HasActions
         $data = $this->form->getState();
 
         $this->record->update($data);
-        
+
         FilamentForm::notification();
         return redirect()->route('conditions');
     }
@@ -75,21 +75,21 @@ class ManageCondition extends Component implements HasForms, HasActions
         return CreateAction::make('createTreatment')
         ->label('New Treatment')
         ->size('lg')
-        
+
         ->icon(null)
-     
+
         ->extraAttributes(['style' => 'border: 0px transparent'])
         ->model(Treatment::class)
         ->modalWidth(MaxWidth::SevenExtraLarge)
         ->mutateFormDataUsing(function (array $data): array {
             $data['condition_id'] = $this->record->id;
-     
+
             return $data;
         })
-        
+
         ->createAnother(false)
         ->form(FilamentForm::treatmentForm());
-        
+
     }
     public function editTreatmentAction(): EditAction
     {
@@ -107,17 +107,17 @@ class ManageCondition extends Component implements HasForms, HasActions
 
         ->size('lg')
         ->iconButton()
-        
+
 
         ->record(fn (array $arguments) => Treatment::find($arguments['record']))
         ->modalWidth(MaxWidth::SevenExtraLarge)
         // ->mutateFormDataUsing(function (array $data, array $arguments): array {
         //     $data['condition_id'] = $this->record->id;
-     
+
         //     return $data;
         // })
         ->form(FilamentForm::treatmentForm());
-        
+
     }
 
     public function deleteTreatmentAction(): Action
@@ -143,7 +143,7 @@ class ManageCondition extends Component implements HasForms, HasActions
             ->size('xl')
             ->icon(null)
             ->link()
-          
+
             ->extraAttributes([
                 'class' => 'border: none !imporant',
             ])
@@ -156,9 +156,9 @@ class ManageCondition extends Component implements HasForms, HasActions
             ->disabledForm()
              ->slideOver()
              ->closeModalByClickingAway(true)
-       
+
             ->modalWidth(MaxWidth::Full);
-            
+
     }
 
 
@@ -168,22 +168,22 @@ class ManageCondition extends Component implements HasForms, HasActions
         return CreateAction::make('createSymptom')
         ->label('New Symptom')
         ->size('lg')
-        
+
         ->icon(null)
-     
+
         ->extraAttributes(['style' => 'border: 0px transparent'])
         ->model(Symptom::class)
         ->modalWidth(MaxWidth::SevenExtraLarge)
         ->using(function (array $data, string $model): Model {
-         
+
             $symptom = $model::create($data);
             $symptom->conditions()->attach([$this->record->id]);
             return $symptom;
         })
-        
+
         ->createAnother(false)
         ->form(FilamentForm::symptomForm());
-        
+
     }
     public function editSymptomAction(): EditAction
     {
@@ -201,17 +201,17 @@ class ManageCondition extends Component implements HasForms, HasActions
 
         ->size('lg')
         ->iconButton()
-        
+
 
         ->record(fn (array $arguments) => Symptom::find($arguments['record']))
         ->modalWidth(MaxWidth::SevenExtraLarge)
         // ->mutateFormDataUsing(function (array $data, array $arguments): array {
         //     $data['condition_id'] = $this->record->id;
-     
+
         //     return $data;
         // })
         ->form(FilamentForm::symptomForm());
-        
+
     }
 
     public function deleteSymptomAction(): Action
@@ -237,7 +237,7 @@ class ManageCondition extends Component implements HasForms, HasActions
             ->size('xl')
             ->icon(null)
             ->link()
-          
+
             ->extraAttributes([
                 'class' => 'border: none !imporant',
             ])
@@ -250,9 +250,9 @@ class ManageCondition extends Component implements HasForms, HasActions
             ->disabledForm()
              ->slideOver()
              ->closeModalByClickingAway(true)
-       
+
             ->modalWidth(MaxWidth::Full);
-            
+
     }
 
 

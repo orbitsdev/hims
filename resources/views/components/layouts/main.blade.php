@@ -51,7 +51,7 @@
 </head>
 {{-- bg-[#E2E5E0]  --}}
 <body class="font-sans antialiased  bg-[#E2E5E0] flex flex-col">
-
+    
             {{$slot}}
 
 {{--

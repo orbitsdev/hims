@@ -2,8 +2,12 @@
 <?php
 
 use App\Livewire\Dashboard;
+use App\Livewire\EventList;
 use App\Livewire\QueueMonitor;
 use App\Livewire\AdminDashboard;
+use App\Livewire\ListSuggestion;
+use App\Livewire\SearchFirstAid;
+use App\Livewire\StaffDashboard;
 use App\Livewire\Users\EditUser;
 use App\Livewire\Users\ListUser;
 use App\Livewire\Events\EditEvent;
@@ -23,6 +27,7 @@ use App\Livewire\Records\EditRecord;
 use App\Livewire\Staffs\CreateStaff;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Courses\ListCourses;
+use App\Livewire\FirstAidDetailsPage;
 use App\Livewire\Records\ListBatches;
 use App\Livewire\Records\ListRecords;
 use Illuminate\Support\Facades\Route;
@@ -63,12 +68,10 @@ use App\Livewire\Conditions\CondtionTreatmentLists;
 use App\Livewire\FirstAidGuides\ListFirstAidGuides;
 use App\Livewire\Conditions\ListConditionTreatments;
 use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
-use App\Livewire\ListSuggestion;
 use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
-use App\Livewire\StaffDashboard;
 
 /*
 |--------------------------------------------------------------------------
@@ -121,6 +124,7 @@ Route::middleware([
     // SYSTEM SUERS
     Route::get('/users', ListUser::class)->name('users');
     Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
+    // Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
     Route::get('/user-create', CreateUser::class)->name('user-create');
     Route::get('/user-edit/{record}', EditUser::class)->name('user-edit');
     Route::get('/user-details/{record}', UserDetails::class)->name('details');
@@ -137,10 +141,7 @@ Route::middleware([
     Route::get('/personnels/edit/{record}', EditPersonnel::class)->name('personnel-edit');
     Route::get('/personnels/view/{record}', ViewPersonnel::class)->name('personnel-view');
 
-    Route::get('/staffs', ListStaffs::class)->name('staffs');
-    Route::get('/staffs/create', CreateStaff::class)->name('staffs-create');
-    Route::get('/staffs/edit/{record}', EditStaff::class)->name('staffs-edit');
-    Route::get('/staffs/view/{record}', ViewStaff::class)->name('staffs-view');
+
 
     Route::get('/emergency-contacts', ListContacts::class)->name('emergency-contacts');
     Route::get('/academic-year', ListAcademicYear::class)->name('academic-year');
@@ -148,11 +149,19 @@ Route::middleware([
     Route::get('/course', ListCourses::class)->name('courses');
     Route::get('/course/create', CreateCourse::class)->name('course-create');
     Route::get('/course/edit/{record}', EditCourse::class)->name('course-edit');
+    Route::middleware(['can:admin'])->group(function(){
 
-    Route::get('/events', ListEvents::class)->name('events');
-    Route::get('/event/create', CreateEvent::class)->name('event-create');
-    Route::get('/event/edit/{record}', EditEvent::class)->name('event-edit');
-    Route::get('/event/vew/{record}', ViewEvent::class)->name('event-view');
+        Route::get('/staffs', ListStaffs::class)->name('staffs');
+        Route::get('/staffs/create', CreateStaff::class)->name('staffs-create');
+        Route::get('/staffs/edit/{record}', EditStaff::class)->name('staffs-edit');
+        Route::get('/staffs/view/{record}', ViewStaff::class)->name('staffs-view');
+        Route::get('/events', ListEvents::class)->name('events');
+
+        Route::get('/event/create', CreateEvent::class)->name('event-create');
+        Route::get('/event/edit/{record}', EditEvent::class)->name('event-edit');
+        Route::get('/event/vew/{record}', ViewEvent::class)->name('event-view');
+    });
+
 
     Route::get('/conditions', ListConditions::class)->name('conditions');
     Route::get('/condition/{record}', ManageCondition::class)->name('manage-condition');
@@ -207,6 +216,10 @@ Route::middleware([
     });
     Route::prefix('reports')->name('reports.')->group(function(){
         Route::get('medical-report/{record}', [ReportController::class, 'generatePdf'])->name('medical-record');
-
     });
+
+
+    Route::get('/public/events', EventList::class)->name('events.index');
+    Route::get('/first-aid-search', SearchFirstAid::class)->name('first-aid.search');
+Route::get('/first-aid-details/{id}', FirstAidDetailsPage::class)->name('first-aid.details');
 });

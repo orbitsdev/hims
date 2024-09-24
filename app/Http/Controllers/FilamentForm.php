@@ -708,7 +708,20 @@ class FilamentForm extends Controller
                                 'undo',
                             ])
                                 ->columnSpanFull(),
+                                Group::make()
+                                ->relationship('file')
+                                ->schema([
 
+                                    FileUpload::make('file')
+                                        ->disk('public')
+                                        ->directory('events')
+                                        ->image()
+                                        ->imageEditor()
+                                        // ->required()
+                                        ->columnSpanFull()
+                                        ->label('IMAGE'),
+
+                                ])->columnSpanFull(),
                             // Textarea::make('content')
                             //     ->columnSpanFull(),
 
@@ -798,8 +811,6 @@ class FilamentForm extends Controller
                             ])
                                 ->columnSpanFull(),
 
-                            // Textarea::make('content')
-                            //     ->columnSpanFull(),
 
 
                             Group::make()
@@ -808,7 +819,7 @@ class FilamentForm extends Controller
 
                                     FileUpload::make('file')
                                         ->disk('public')
-                                        ->directory('events')
+                                        ->directory('condition')
                                         ->image()
                                         ->imageEditor()
                                         // ->required()
@@ -912,7 +923,7 @@ class FilamentForm extends Controller
 
                     FileUpload::make('file')
                         ->disk('public')
-                        ->directory('events')
+                        ->directory('treatments')
                         ->image()
                         ->imageEditor()
 
@@ -960,7 +971,7 @@ class FilamentForm extends Controller
 
                     FileUpload::make('file')
                         ->disk('public')
-                        ->directory('events')
+                        ->directory('symptoms')
                         ->image()
                         ->imageEditor()
 
@@ -1008,6 +1019,23 @@ class FilamentForm extends Controller
                 ->required()
 
                 ->columnSpanFull(),
+
+                Group::make()
+                ->relationship('file')
+                ->schema([
+
+                    FileUpload::make('file')
+                        ->disk('public')
+                        ->directory('firstaids')
+                        ->image()
+                        ->imageEditor()
+                        // ->required()
+                        ->columnSpanFull()
+                        ->label('IMAGE'),
+
+                ])->columnSpanFull(),
+
+
         ];
     }
 

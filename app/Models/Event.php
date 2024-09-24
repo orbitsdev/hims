@@ -8,6 +8,7 @@ use App\Models\AcademicYear;
 use App\Models\DepartmentEvent;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Relations\MorphOne;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Event extends Model
@@ -16,15 +17,15 @@ class Event extends Model
 
     public function academicYear(){
         return $this->belongsTo(AcademicYear::class);
-    
+
     }
     public function semester(){
         return $this->belongsTo(Semester::class);
-    
-    }
 
-    public function evenDate(){
-        return optional($this->created_at)->format('F d, Y');
+    }
+    public function file(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable');
     }
     public function getImage()
         {
@@ -35,12 +36,17 @@ class Event extends Model
             }
         }
 
-        
+    public function evenDate(){
+        return optional($this->created_at)->format('F d, Y');
+    }
+
+
+
         public function departments(){
             return $this->belongsToMany(Department::class ,'department_events', 'event_id', 'department_id');
         }
 
-      
+
         public function departmentEvents(){
             return $this->hasMany(DepartmentEvent::class);
         }

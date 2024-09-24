@@ -99,7 +99,7 @@ class User extends Authenticatable
             case User::ADMIN:
                 return redirect()->route('admin-dashboard');
             case User::STUDENT:
-                return redirect()->route('student-dashboard');
+                return redirect()->route('events.index');
             case User::STAFF:
                 return redirect()->route('admin-dashboard');
             default:

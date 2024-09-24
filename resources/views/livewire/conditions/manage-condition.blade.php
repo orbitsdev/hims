@@ -15,9 +15,9 @@
                 </x-filament::button>
             </form>
             {{-- <div class="col-span-6 ">
-                
+
                 @livewire('conditions.condtion-treatment-lists', ['record' => $record])
-                
+
             </div> --}}
 
             <div class="col-span-6  grid grid-cols-12">
@@ -82,7 +82,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="border-t text-center text-sm  py-4  sm:pr-0 text-blue-600">
+                        <div class="border-t text-center text-sm  py-4  sm:pr-0 text-green-600">
                             <a href="{{ route('condition-treatments-lists', ['record' => $record]) }}">VIEW ALL
                                 TREATMENTS</a>
                         </div>
@@ -146,13 +146,13 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="border-t text-center text-sm  py-4  sm:pr-0 text-blue-600">
+                        <div class="border-t text-center text-sm  py-4  sm:pr-0 text-green-600">
                             <a href="{{ route('condition-symptoms-list', ['record' => $record]) }}">VIEW ALL
                                 SYMPTOMS</a>
                         </div>
                     </div>
                 </div>
-              
+
 
             </div>
         </div>
@@ -166,7 +166,7 @@
 
         {{-- <div class="relative  bg-white py-6 px-8 rounded  mt-6  " id="ps">
             <div class="">
-                <h1 class="pb-4 pl-4 pr-4 text-lg text-gray-700"> Treatments</h1>            
+                <h1 class="pb-4 pl-4 pr-4 text-lg text-gray-700"> Treatments</h1>
             </div> --}}
     </div>
 

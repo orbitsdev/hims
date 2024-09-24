@@ -28,9 +28,9 @@ class ConditionSeeder extends Seeder
             ],
             [
                 'name' => 'Cut',
-                'description' => 'A cut is an injury caused by a sharp object slicing through the skin. Initial steps for treating a cut include stopping the bleeding by applying gentle pressure with a clean cloth or bandage. Once the bleeding has stopped, clean the wound thoroughly with water and mild soap. Avoid using hydrogen peroxide or iodine, as they can irritate the tissue. Apply an antibiotic ointment to prevent infection and cover the cut with a sterile bandage. Change the bandage daily and keep the wound clean and dry. If the cut is deep, won’t stop bleeding, or shows signs of infection (such as redness, swelling, pus, or increased pain), seek medical attention. Stitches may be needed for deeper cuts. To minimize scarring, keep the wound moist with an ointment and covered until it heals. After the wound has healed, using sunscreen on the scar can help reduce its appearance.',
+            'description' => 'A cut is an injury caused by a sharp object slicing through the skin. Initial steps for treating a cut include stopping the bleeding by applying gentle pressure with a clean cloth or bandage. Once the bleeding has stopped, clean the wound thoroughly with water and mild soap. Avoid using hydrogen peroxide or iodine, as they can irritate the tissue. Apply an antibiotic ointment to prevent infection and cover the cut with a sterile bandage. Change the bandage daily and keep the wound clean and dry. If the cut is deep, won’t stop bleeding, or shows signs of infection (such as redness, swelling, pus, or increased pain), seek medical attention. Stitches may be needed for deeper cuts. To minimize scarring, keep the wound moist with an ointment and covered until it heals. After the wound has healed, using sunscreen on the scar can help reduce its appearance.',
             ],
         ]);
-        
+
     }
 }

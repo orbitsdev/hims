@@ -46,7 +46,7 @@ class ListContacts extends Component implements HasForms, HasTable
                     ->imageEditor()
                     // ->required()
                     ->columnSpanFull()
-                    ->label('PHOTO'),
+                    ->label('Image'),
 
                     ToggleButtons::make('active')
     ->label('Active')

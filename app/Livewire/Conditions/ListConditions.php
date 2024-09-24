@@ -43,7 +43,7 @@ class ListConditions extends Component implements HasForms, HasTable
                 ->url(fn (Model $record): null|string => $record->file ?  Storage::disk('public')->url($record->file) : null)
                 ->defaultImageUrl(url('/images/placeholder-image.jpg'))
                 ->openUrlInNewTab(),
-               
+
                 Tables\Columns\TextColumn::make('name')
                     ->searchable(),
 
@@ -78,8 +78,8 @@ class ListConditions extends Component implements HasForms, HasTable
                     ->color('success')
                     ->label('View')
                     ->size('xl')
-                    ->icon(null)
-                    
+                    ->icon('heroicon-m-eye')
+
                     ->modalContent(function (Model $record) {
                         return view('livewire.conditions.view-condition', ['record' => $record]);
                     })
@@ -89,26 +89,28 @@ class ListConditions extends Component implements HasForms, HasTable
                     ->disabledForm()
                      ->slideOver()
                      ->closeModalByClickingAway(true)
-               
+
                     ->modalWidth(MaxWidth::Full),
-                    
+
                     Action::make('MANAGE')
                     ->color('info')
                     ->icon('heroicon-m-pencil-square')
                     ->label('Manage')
                     ->url(function (Model $record) {
+                       
+
                             return route('manage-condition', ['record' => $record]);
                     } ),
-    
-    
-                
-                   
+
+
+
+
                     // EditAction::make('edit')->form([
                     // TextInput::make('name')->required(),
                     // ]),
                     DeleteAction::make(),
                 ]),
-               
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

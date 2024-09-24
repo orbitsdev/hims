@@ -44,9 +44,8 @@
             @endif
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
-            </main>
+
+            {{ $slot }}
         </div>
 
 

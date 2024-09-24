@@ -11,7 +11,7 @@ class RouteManager
     }
     public function isCurrentPublicPage($route, $routes)
     {
-        return in_array($route,$routes) ? 'active-link' : 'inactive-link';
+        return in_array($route,$routes) ? 'public-active-link' : 'public-inactive-link';
     }
     public function route($route) : String
     {

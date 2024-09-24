@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('events', function (Blueprint $table) {
             $table->id();
+            $table->foreignId('user_id')->nullable();
             $table->foreignId('academic_year_id')->nullable();
             $table->foreignId('semester_id')->nullable();
             $table->text('title')->nullable();

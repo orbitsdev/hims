@@ -1,4 +1,6 @@
-<div class="bg-white h-full h-screen">
-       <x-main-header />
-    {{$slot}}
+<div class="bg-[#E2E5E0] min-h-screen">
+    <x-main-header />
+    <div class="container mx-auto py-6">
+        {{ $slot }}
+    </div>
 </div>

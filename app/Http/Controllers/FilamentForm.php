@@ -708,20 +708,20 @@ class FilamentForm extends Controller
                                 'undo',
                             ])
                                 ->columnSpanFull(),
-                                Group::make()
-                                ->relationship('file')
-                                ->schema([
+                                // Group::make()
+                                // ->relationship('file')
+                                // ->schema([
 
-                                    FileUpload::make('file')
-                                        ->disk('public')
-                                        ->directory('events')
-                                        ->image()
-                                        ->imageEditor()
-                                        // ->required()
-                                        ->columnSpanFull()
-                                        ->label('IMAGE'),
+                                //     FileUpload::make('file')
+                                //         ->disk('public')
+                                //         ->directory('events')
+                                //         ->image()
+                                //         ->imageEditor()
+                                //         // ->required()
+                                //         ->columnSpanFull()
+                                //         ->label('IMAGE'),
 
-                                ])->columnSpanFull(),
+                                // ])->columnSpanFull(),
                             // Textarea::make('content')
                             //     ->columnSpanFull(),
 

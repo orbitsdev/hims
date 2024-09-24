@@ -45,7 +45,9 @@
 
             <!-- Page Content -->
 
-            {{ $slot }}
+            <main>
+                {{ $slot }}
+            </main>
         </div>
 
 

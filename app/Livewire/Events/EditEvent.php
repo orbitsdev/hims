@@ -27,7 +27,7 @@ class EditEvent extends Component implements HasForms
     public function form(Form $form): Form
     {
         return $form
-             ->schema(FilamentForm::eventForm())->columns(3)
+             ->schema(FilamentForm::eventForm())
             ->statePath('data')
             ->model($this->record);
     }

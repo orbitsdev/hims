@@ -106,6 +106,19 @@ class User extends Authenticatable
                 return redirect()->route('unauthorizepage');
         }
     }
+    public function routeBaseOnRole()
+    {
+        switch ($this->role) {
+            case User::ADMIN:
+                return route('admin-dashboard');
+            case User::STUDENT:
+                return route('events.index');
+            case User::STAFF:
+                return route('admin-dashboard');
+            default:
+                return route('unauthorizepage');
+        }
+    }
 
     public function getImage()
     {

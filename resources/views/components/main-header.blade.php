@@ -4,13 +4,14 @@
         <!-- Left side: Static First Aid & Treatment Section -->
         <div class="flex items-center space-x-6">
             <!-- First Aid & Treatment -->
-            <a href="{{route('first-aid.search')}}" class="{{ RouteManager::isCurrentPublicPage(Session::get('current_route_name'), ['first-aid.search','first-aid.details']) }}">
-                First Aid & Treatment
-            </a>
+           
 
             <!-- Events -->
             <a href="{{route('events.index')}}" class="{{ RouteManager::isCurrentPublicPage(Session::get('current_route_name'), ['events.index']) }}">
                 Events
+            </a>
+            <a href="{{route('first-aid.search')}}" class="{{ RouteManager::isCurrentPublicPage(Session::get('current_route_name'), ['first-aid.search','first-aid.details']) }}">
+                First Aid & Treatment
             </a>
         </div>
 

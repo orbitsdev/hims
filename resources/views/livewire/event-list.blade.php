@@ -1,4 +1,4 @@
-<x-student-layout>
+{{-- <x-student-layout>
     <div class="container mx-auto flex py-6">
         <main class="flex-1 mx-8  max-w-4xl mx-auto">
             <div class="space-y-6">
@@ -92,4 +92,94 @@
         </aside>
         @endif
     </div>
+</x-student-layout> --}}
+
+
+<x-student-layout>
+    <div class="flex space-x-8 p-4">
+        <!-- Left Sidebar -->
+        <div class="w-1/4 bg-white rounded-lg shadow-md p-6">
+            <div class="flex flex-col items-center">
+                <img src="{{Auth::user()->getImage()}}" alt="Profile Image" class="border rounded-full mb-4">
+                <h2 class="text-xl font-semibold">{{Auth::user()->name}}</h2>
+                <p class="text-gray-500 mb-4">{{Auth::user()->email}}</p>
+
+                <div class="flex space-x-3 mb-4">
+                    <button class="bg-gray-100 p-4 rounded-full">
+                       
+                    </button>
+                    <button class="bg-gray-100 p-4 rounded-full">
+                    </button>
+                    <button class="bg-gray-100 p-4 rounded-full">
+                    </button>
+                </div>
+                <a href="{{ route('edit-profile', ['record' => Auth::user()]) }}" class="bg-kaitoke-green-600 text-white w-full py-2 rounded-lg block text-center">Update Profile</a>
+            </div>
+
+        </div>
+
+        <!-- Main Section -->
+        <div class="w-2/3 bg-white rounded-lg shadow-md p-6">
+            <div class="flex justify-between items-center border-b pb-2 mb-4">
+                <div class="flex space-x-4">
+                    <button class="text-gray-600 font-semibold">Activity</button>
+                    <button class="text-gray-600 font-semibold border-b-2 border-orange-500">Notes</button>
+                    <button class="text-gray-600 font-semibold">Emails</button>
+                    <button class="text-gray-600 font-semibold">Calls</button>
+                    <button class="text-gray-600 font-semibold">Task</button>
+                    <button class="text-gray-600 font-semibold">Meetings</button>
+                </div>
+                <input type="search" placeholder="Search activity, notes, email and more" class="border rounded-lg p-2 text-sm w-1/3">
+            </div>
+
+            <!-- Add New Note -->
+            <div class="mb-6">
+                <h3 class="text-lg font-semibold mb-2">Add new note</h3>
+                <textarea class="w-full border rounded-lg p-4 mb-2" rows="4" placeholder="Note title"></textarea>
+                <textarea class="w-full border rounded-lg p-4" rows="6" placeholder="Note description"></textarea>
+                <button class="mt-4 bg-kaitoke-green-600 text-white py-2 px-4 rounded-lg">Add note</button>
+            </div>
+
+            <!-- Existing Notes -->
+            <div>
+                <div class="border rounded-lg p-4 mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-gray-600 font-bold">Note by Esther Howard</h3>
+                        <span class="text-gray-400 text-sm">Today, 12:00 PM</span>
+                    </div>
+                    <p class="mb-4">This is note title</p>
+                    <p class="text-gray-500">She's interested in our new product line and wants our very best price. Please include a detailed breakdown of costs.</p>
+                </div>
+
+                <div class="border rounded-lg p-4 mb-4">
+                    <div class="flex justify-between items-center mb-2">
+                        <h3 class="text-gray-600 font-bold">Note by Esther Howard</h3>
+                        <span class="text-gray-400 text-sm">Today, 12:00 PM</span>
+                    </div>
+                    <p class="mb-4">This is note title</p>
+                    <p class="text-gray-500">She's interested in our new product line and wants our very best price. Please include a detailed breakdown of costs.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Sidebar -->
+        <div class="w-1/4 bg-white rounded-lg shadow-md p-6">
+            <div class="mb-8">
+                <h3 class="text-gray-600 font-bold">Company</h3>
+                <p class="text-gray-400">Google Inc.</p>
+                <p class="text-gray-400">emailkuyahut@gmail.com</p>
+                <p class="text-gray-400">(405) 555-0128</p>
+            </div>
+
+            <div class="mb-8">
+                <h3 class="text-gray-600 font-bold">Deals</h3>
+                <div class="border rounded-lg p-4 mb-2">
+                    <p class="text-sm">Closing date: 18 Jan 2021</p>
+                    <p class="text-sm font-semibold">Web Development</p>
+                    <p class="text-orange-500 font-semibold">$120,000</p>
+                </div>
+            </div>
+        </div>
+    </div>
 </x-student-layout>
+

@@ -1,6 +1,10 @@
 <div class="flex justify-center items-center min-h-screen bg-gray-100">
     <!-- Container to center the form -->
+
+    
+
     <div class="bg-white p-6 rounded-lg shadow-md w-full max-w-4xl">
+        <a href="{{ Auth::user()->routeBaseOnRole() }}" class="mb-2 block">Go Back</a>
         <form wire:submit.prevent="save">
             {{ $this->form }}
 

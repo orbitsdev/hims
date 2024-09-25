@@ -1,3 +1,4 @@
+<x-student-layout>
 <div class="container mx-auto py-6">
     <div class="bg-white p-6 shadow-md rounded-lg">
 
@@ -47,3 +48,4 @@
         </div>
     </div>
 </div>
+</x-student-layout>

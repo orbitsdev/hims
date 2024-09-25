@@ -122,14 +122,12 @@
         <div class="w-2/3 bg-white rounded-lg shadow-md p-6">
             <div class="flex justify-between items-center border-b pb-2 mb-4">
                 <div class="flex space-x-4">
-                    <button class="text-gray-600 font-semibold">Activity</button>
-                    <button class="text-gray-600 font-semibold border-b-2 border-orange-500">Notes</button>
-                    <button class="text-gray-600 font-semibold">Emails</button>
-                    <button class="text-gray-600 font-semibold">Calls</button>
-                    <button class="text-gray-600 font-semibold">Task</button>
-                    <button class="text-gray-600 font-semibold">Meetings</button>
+                    <button class="text-gray-600 font-semibold border-b-2 border-orange-500">Events</button>
+                    <button class="text-gray-600 font-semibold">FirstAids</button>
+                    <button class="text-gray-600 font-semibold">Notifications</button>
+                    <button class="text-gray-600 font-semibold">Medical Records</button>
+
                 </div>
-                <input type="search" placeholder="Search activity, notes, email and more" class="border rounded-lg p-2 text-sm w-1/3">
             </div>
 
             <!-- Add New Note -->
@@ -165,14 +163,14 @@
         <!-- Right Sidebar -->
         <div class="w-1/4 bg-white rounded-lg shadow-md p-6">
             <div class="mb-8">
-                <h3 class="text-gray-600 font-bold">Company</h3>
-                <p class="text-gray-400">Google Inc.</p>
-                <p class="text-gray-400">emailkuyahut@gmail.com</p>
-                <p class="text-gray-400">(405) 555-0128</p>
+                <h3 class="text-gray-600 font-bold">Latest Medical Record</h3>
+                <p class="text-gray-400">2021-2022.</p>
+                <p class="text-gray-400">First Semester </p>
+                <p class="text-gray-400">Dental CheckUp For Sksu Student</p>
             </div>
 
             <div class="mb-8">
-                <h3 class="text-gray-600 font-bold">Deals</h3>
+                <h3 class="text-gray-600 font-bold">Vital Signs</h3>
                 <div class="border rounded-lg p-4 mb-2">
                     <p class="text-sm">Closing date: 18 Jan 2021</p>
                     <p class="text-sm font-semibold">Web Development</p>

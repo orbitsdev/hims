@@ -6,6 +6,7 @@ use App\Models\Semester;
 use App\Models\RecordBatch;
 use App\Models\AcademicYear;
 use App\Models\MedicalRecord;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
@@ -48,24 +49,27 @@ class Record extends Model
     }
 
     public function isComplete(){
-        
+
         $count = User::query()
         ->notAdmin()
         ->notStaff()
         ->hasPersonalDetails()
         ->noRecordInThisAcademicYearAndSemester($this)
-        ->count();   
+        ->count();
 
         return $count > 0 ? false :true;
     }
 
     public function academicYearAndSemester(){
-        return  $this->academicYear->name.' ('.$this->semester->name_in_number.')';   
+        return  $this->academicYear->name.' ('.$this->semester->name_in_number.')';
     }
 
     public function notificationRequests()
     {
         return $this->morphMany(NotificationRequest::class, 'requestable');
     }
-   
+
+    
+
+
 }

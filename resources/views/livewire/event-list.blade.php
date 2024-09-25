@@ -141,11 +141,11 @@
 
         <main class="flex-1  mx-8">
                 <div class="space-y-6">
-                    <div class="flex justify-end">
+                    {{-- <div class="flex justify-end">
                         <a href="#" class="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 transition">
                             Create Event
                         </a>
-                    </div>
+                    </div> --}}
                 @forelse ($events as $event)
 
 
@@ -228,87 +228,43 @@
         </main>
 
 
-        <aside class="w-1/4 bg-white  max-h-screen p-4 rounded-lg">
+        <aside class="w-1/4 bg-white  max-h-screen p-4 rounded-lg overflow-y-scroll">
             <h4 class="text-lg font-bold mb-4">Medical Records</h4>
+
+            @if ($academicYears)
+
             <ul class="space-y-4">
-                <!-- Academic Year 2021-2022 -->
+                @forelse ($academicYears as $academicYear)
                 <li>
-                    <h5 class="font-semibold text-gray-700">Academic Year 2021-2022</h5>
+                    <h5 class="font-semibold text-gray-700 ">{{$academicYear->name}}</h5>
 
-                    <!-- 1st Semester -->
+                    @forelse ($academicYear->semesters as  $semester)
                     <div class="ml-4">
-                        <h6 class="text-md font-semibold text-gray-600">1st Semester</h6>
+                        <h6 class="text-md font-semibold text-gray-600">{{$semester->name_in_text}}</h6>
                         <ul class="space-y-2">
+                            @forelse ($semester->records as  $record )
                             <li class="flex items-center space-x-3">
-                                <img src="{{ asset('images/sksu1.png') }}" alt="Profile" class="w-8 h-8 rounded-full">
                                 <div>
-                                    <p class="text-sm font-semibold">John Doe</p>
-                                    <p class="text-sm text-gray-500">Condition: Fever</p>
-                                    <p class="text-xs text-gray-400">Date: January 15, 2022</p>
-                                </div>
-                            </li>
-                            <li class="flex items-center space-x-3">
-                                <img src="{{ asset('images/sksu1.png') }}" alt="Profile" class="w-8 h-8 rounded-full">
-                                <div>
-                                    <p class="text-sm font-semibold">Jane Doe</p>
-                                    <p class="text-sm text-gray-500">Condition: Cough</p>
-                                    <p class="text-xs text-gray-400">Date: February 10, 2022</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
+                                    <p class="text-sm font-semibold">{{$record->title}}</p>
 
-                    <!-- 2nd Semester -->
-                    <div class="ml-4 mt-2">
-                        <h6 class="text-md font-semibold text-gray-600">2nd Semester</h6>
-                        <ul class="space-y-2">
-                            <li class="flex items-center space-x-3">
-                                <img src="{{ asset('images/sksu1.png') }}" alt="Profile" class="w-8 h-8 rounded-full">
-                                <div>
-                                    <p class="text-sm font-semibold">Mark Smith</p>
-                                    <p class="text-sm text-gray-500">Condition: Hypertension</p>
-                                    <p class="text-xs text-gray-400">Date: May 5, 2022</p>
                                 </div>
                             </li>
+                            @empty
+                            @endforelse
                         </ul>
                     </div>
+                    @empty
+                    @endforelse
+
+
                 </li>
+                @empty
 
-                <!-- Academic Year 2022-2023 -->
-                <li class="mt-4">
-                    <h5 class="font-semibold text-gray-700">Academic Year 2022-2023</h5>
+                @endforelse
 
-                    <!-- 1st Semester -->
-                    <div class="ml-4">
-                        <h6 class="text-md font-semibold text-gray-600">1st Semester</h6>
-                        <ul class="space-y-2">
-                            <li class="flex items-center space-x-3">
-                                <img src="{{ asset('images/sksu1.png') }}" alt="Profile" class="w-8 h-8 rounded-full">
-                                <div>
-                                    <p class="text-sm font-semibold">Sarah Johnson</p>
-                                    <p class="text-sm text-gray-500">Condition: Allergy</p>
-                                    <p class="text-xs text-gray-400">Date: August 20, 2022</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
 
-                    <!-- 2nd Semester -->
-                    <div class="ml-4 mt-2">
-                        <h6 class="text-md font-semibold text-gray-600">2nd Semester</h6>
-                        <ul class="space-y-2">
-                            <li class="flex items-center space-x-3">
-                                <img src="{{ asset('images/sksu1.png') }}" alt="Profile" class="w-8 h-8 rounded-full">
-                                <div>
-                                    <p class="text-sm font-semibold">Michael Lee</p>
-                                    <p class="text-sm text-gray-500">Condition: Hypertension</p>
-                                    <p class="text-xs text-gray-400">Date: November 12, 2022</p>
-                                </div>
-                            </li>
-                        </ul>
-                    </div>
-                </li>
             </ul>
+            @endif
         </aside>
 
     </div>

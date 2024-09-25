@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('semesters', function (Blueprint $table) {
             $table->id();
             $table->foreignId('academic_year_id')->nullable();
-            $table->string('name_in_text')->nullable();
+        $table->string('name_in_text')->nullable();
             $table->string('name_in_number')->nullable();
             $table->timestamps();
         });

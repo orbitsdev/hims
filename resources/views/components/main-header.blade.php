@@ -1,5 +1,6 @@
-<nav class="px-4 bg-[#067547] shadow-md">
-    <div class="container mx-auto flex justify-between items-center py-4">
+<nav class=" bg-[#067547] shadow-md">
+    <div class="h-4 bg-[#064F32]"></div>
+    <div class="container mx-auto flex justify-between items-center py-4 max-w-4xl mx-auto">
         <!-- Left side: Static First Aid & Treatment Section -->
         <div class="flex items-center space-x-6">
             <!-- First Aid & Treatment -->
@@ -25,7 +26,13 @@
                     <span class="absolute -top-1 -right-1 bg-red-600 text-white rounded-full h-5 w-5 text-xs flex items-center justify-center z-20">3</span>
                 </button>
             </div>
+            <div>
+                <p class="text-white">
+                    {{Auth::user()->name}}
 
+                </p>
+
+            </div>
             <!-- User Dropdown -->
             <div x-data="{ dropdownOpen: false }" class="relative">
                 <div>

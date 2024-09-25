@@ -35,7 +35,7 @@ class EditEvent extends Component implements HasForms
     public function save()
     {
         $data = $this->form->getState();
-
+        // $data['user']= Auth::user()->id;
         $this->record->update($data);
         FilamentForm::notification();
         return redirect()->route('events');

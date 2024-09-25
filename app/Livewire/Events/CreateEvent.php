@@ -7,6 +7,7 @@ use App\Models\Event;
 use Livewire\Component;
 use Filament\Forms\Form;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -33,6 +34,7 @@ class CreateEvent extends Component implements HasForms
     public function create()
     {
         $data = $this->form->getState();
+        $data['user_id']= Auth::user()->id;
 
         $record = Event::create($data);
 

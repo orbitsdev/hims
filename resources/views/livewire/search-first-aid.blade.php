@@ -1,6 +1,6 @@
 <x-student-layout>
 
-    <div class="container mx-auto py-4 px-4">
+    <div class="container max-w-4xl mx-auto  py-4 px-4">
         <!-- Search Form -->
         <div class="relative mb-6">
             <!-- Search Icon -->

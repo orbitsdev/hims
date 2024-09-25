@@ -242,15 +242,26 @@
                     <div class="ml-4">
                         <h6 class="text-md font-semibold text-gray-600">{{$semester->name_in_text}}</h6>
                         <ul class="space-y-2">
-                            @forelse ($semester->records as  $record )
+                            @forelse ($semester->records as $record)
                             <li class="flex items-center space-x-3">
                                 <div>
-                                    <p class="text-sm font-semibold">{{$record->title}}</p>
+                                    <p class="text-sm font-semibold">{{ $record->title }}</p>
 
+                                    <!-- Loop through medical records under each record -->
+                                    @forelse ($record->medicalRecords as $medicalRecord)
+                                        <!-- Link to the medical record details route -->
+                                        <a href="{{ route('medical-record-details', ['id' => $medicalRecord->id]) }}" class="text-blue-500 hover:underline">
+                                            {{ $medicalRecord->created_at->format('F d, Y H:i:s') }}
+                                        </a>
+                                    @empty
+                                        <p>No medical records available.</p>
+                                    @endforelse
                                 </div>
                             </li>
-                            @empty
-                            @endforelse
+                        @empty
+                            <p>No records available for this semester.</p>
+                        @endforelse
+
                         </ul>
                     </div>
                     @empty

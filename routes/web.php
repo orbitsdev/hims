@@ -32,6 +32,7 @@ use App\Livewire\Records\ListBatches;
 use App\Livewire\Records\ListRecords;
 use Illuminate\Support\Facades\Route;
 use App\Livewire\Courses\CreateCourse;
+use App\Livewire\MedicalRecordDetails;
 use App\Livewire\Records\CreateRecord;
 use App\Livewire\Students\EditStudent;
 use App\Livewire\Students\ViewStudent;
@@ -222,4 +223,6 @@ Route::middleware([
     Route::get('/public/events', EventList::class)->name('events.index');
     Route::get('/first-aid-search', SearchFirstAid::class)->name('first-aid.search');
 Route::get('/first-aid-details/{id}', FirstAidDetailsPage::class)->name('first-aid.details');
+
+Route::get('/medical-records/{id}', MedicalRecordDetails::class)->name('medical-record-details');
 });

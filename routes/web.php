@@ -73,6 +73,7 @@ use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
+use App\Livewire\UserMedicalRecords;
 
 /*
 |--------------------------------------------------------------------------
@@ -221,8 +222,8 @@ Route::middleware([
 
 
     Route::get('/public/events', EventList::class)->name('events.index');
-    Route::get('/first-aid-search', SearchFirstAid::class)->name('first-aid.search');
-Route::get('/first-aid-details/{id}', FirstAidDetailsPage::class)->name('first-aid.details');
-
-Route::get('/medical-records/{id}', MedicalRecordDetails::class)->name('medical-record-details');
+    Route::get('/public/first-aid-search', SearchFirstAid::class)->name('first-aid.search');
+    Route::get('/public/first-aid-details/{id}', FirstAidDetailsPage::class)->name('first-aid.details');
+    Route::get('/public/medical-records', UserMedicalRecords::class)->name('user.medical-records');
+    Route::get('/public/medical-records/{id}', MedicalRecordDetails::class)->name('medical-record-details');
 });

@@ -31,6 +31,11 @@ class MedicalRecord extends Model
     const HYPERTENSIVE_CRISIS = 'Hypertension Stage 2';
 
 
+    public function medicalCreated(){
+        return optional($this->created_at)->format('F d, Y');
+    }
+
+
 
     // $record->date_of_examination = Carbon::now()->format('Y-m-d');
 

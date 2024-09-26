@@ -20,6 +20,8 @@ class MedicalRecordDetails extends Component
 
     public function render()
     {
+
+        
         return view('livewire.medical-record-details');
     }
 

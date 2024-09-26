@@ -47,11 +47,11 @@
                 @endforelse
             </div>
             @dump($academicYears)
-        @if ($academicYears->isNotEmpty())  
+        @if ($academicYears->isNotEmpty())
         <aside class="w-1/4 bg-white max-h-screen p-4 rounded-lg overflow-y-auto">
             <h4 class="text-lg font-bold mb-4">Medical Records</h4>
 
-           
+
                 <ul class="space-y-4">
                     @forelse ($academicYears as $academicYear)
                         <li>
@@ -88,7 +88,7 @@
                     @empty
                     @endforelse
                 </ul>
-          
+
         </aside>
         @endif
     </div>
@@ -96,44 +96,51 @@
 
 
 <x-student-layout>
-    
+
         <!-- Left Sidebar -->
-        
+
 
         <!-- Main Section -->
         <div class="mb-8">
             @forelse ($events as $event)
             <div class="bg-white p-6 border border-gray rounded-lg mb-6">
                 <!-- Event Header: User Details and Time -->
-                <div class="flex justify-between items-center mb-4">
+                <div class="flex justify-between items-center">
                     <div class="flex items-center space-x-4">
                         <!-- User Profile Image -->
                         @if ($event->user)
                             <img src="{{ $event->user->getImage() ?? asset('images/sksu1.png') }}" alt="User Profile" class="w-8 h-8 rounded-full">
                         @endif
+
                         <!-- User Info -->
                         <div>
                             <h4 class="font-bold text-sm">{{ $event->user->name ?? 'Anonymous' }}</h4>
                         </div>
                     </div>
+
                     <div class="flex items-center space-x-2 text-sm text-gray-400">
-                        <i class="fas fa-calendar-alt"></i>
+
                         <span>{{ $event->created_at->diffForHumans() }}</span>
                     </div>
                 </div>
-        
+                <div class="mt-2 text-sm text-gray-400">
+                    <i class="fas fa-calendar-alt mr-2"></i>
+                  {{ $event->evenDate() }}
+
+                </div>
+
                 <!-- Event Title and Content -->
-                <div class="mb-4">
+                <div class="mb-4 mt-4">
                     <h3 class="text-base font-bold">{{ $event->title }}</h3>
                     <p class="text-gray-500 text-sm">
                  {{$event->description ??''}}
                     </p>
                 </div>
-        
+
                 <!-- Event Image -->
                 @if ($event->getImage())
                     <div class="mt-4">
-                        <img src="{{ $event->getImage() }}" alt="{{ $event->title }}" class="w-full h-48 object-cover rounded-lg">
+                        <img src="{{ $event->getImage() }}" alt="{{ $event->title }}" class="w-full max-h-96 object-cover rounded-lg">
                     </div>
                 @endif
                 <div class="mt-4 ">
@@ -150,8 +157,8 @@
                 </p>
             </div>
         @endforelse
-        
+
         </div>
-       
+
 </x-student-layout>
 

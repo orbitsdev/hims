@@ -24,14 +24,15 @@ class EventList extends Component
     public function render()
     {
         $events = Event::where('is_published', true)
+        ->latest()
             ->orderBy('event_date', 'desc')
             ->get();
 
-        $academicYears = AcademicYear::userRecord()->get();
+        // $academicYears = AcademicYear::userRecord()->latest()->get();
 
         return view('livewire.event-list', [
             'events' => $events,
-            'academicYears' => $academicYears,
+            // 'academicYears' => $academicYears,
         ]);
     }
 }

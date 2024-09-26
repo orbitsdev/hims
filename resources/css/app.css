@@ -24,6 +24,14 @@
 .public-inactive-link {
     @apply flex items-center px-4 py-2 gap-x-3 rounded-md text-white hover:bg-green-600 hover:text-white transition-colors duration-200 ease-in-out text-sm;
 }
+.new-public-active-link {
+    @apply text-gray-600 font-semibold border-b-2 border-kaitoke-green-500;
+}
+
+/* Inactive Link Styling */
+.new-public-public-inactive-link {
+    @apply text-gray-600 font-semibold;
+}
 
 
 

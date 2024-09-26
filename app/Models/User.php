@@ -100,6 +100,8 @@ class User extends Authenticatable
                 return redirect()->route('admin-dashboard');
             case User::STUDENT:
                 return redirect()->route('events.index');
+            case User::PERSONNEL:
+                return redirect()->route(route: 'events.index');
             case User::STAFF:
                 return redirect()->route('admin-dashboard');
             default:
@@ -112,6 +114,8 @@ class User extends Authenticatable
             case User::ADMIN:
                 return route('admin-dashboard');
             case User::STUDENT:
+                return route('events.index');
+            case User::PERSONNEL:
                 return route('events.index');
             case User::STAFF:
                 return route('admin-dashboard');

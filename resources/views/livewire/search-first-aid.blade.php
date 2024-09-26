@@ -34,15 +34,26 @@
                         <!-- Condition Details -->
                         <div class="flex-1">
                             <h3 class="text-xl font-semibold text-kaitoke-green-800">{{ $condition->name }}</h3>
-                            <p class="text-gray-600 mt-2">@markdown(Str::limit($condition->description, 200))</p>
+                            <p class="text-gray-600 mt-2">@markdown($condition->description ?? '')</p>
 
+                            @if ($condition->symptoms->isNotEmpty())
+                                <div class="mt-4">
+                                    <h4 class="text-md font-semibold">Symptoms</h4>
+                                    @foreach ($condition->symptoms as $symptom)
+                                        <div class="mt-2 border-l-4 border-green-600 pl-4">
+                                            <h5 class="font-semibold">{{ $symptom->name }}</h5>
+                                            <p class="text-gray-600 mt-1">@markdown($symptom->description ??'')</p>
+                                        </div>
+                                    @endforeach
+                                </div>
+                            @endif
                             @if ($condition->treatments->isNotEmpty())
                                 <div class="mt-4">
                                     <h4 class="text-md font-semibold">Treatments</h4>
                                     @foreach ($condition->treatments as $treatment)
                                         <div class="mt-2 border-l-4 border-green-600 pl-4">
                                             <h5 class="font-semibold">{{ $treatment->name }}</h5>
-                                            <p class="text-gray-600 mt-1">@markdown(Str::limit($treatment->description, 150))</p>
+                                            <p class="text-gray-600 mt-1">@markdown($treatment->description ??'')</p>
                                         </div>
                                     @endforeach
                                 </div>

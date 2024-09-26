@@ -26,32 +26,38 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
 
-
+        $this->registerPolicies();
 
         Gate::define('admin', function () {
             return Auth::user()->role === User::ADMIN;
          });
-        Gate::define('staff', function () {
-            return Auth::user()->role === User::STAFF;
-         });
-        Gate::define('personnel', function () {
-            return Auth::user()->role === User::PERSONNEL;
-         });
 
-        Gate::define('student', function () {
-            return Auth::user()->role === User::STUDENT;
-         });
-         
+
+         Gate::define('staff', function ($user) {
+            return $user->role === User::STAFF && $user->staff()->exists();
+        });
+         Gate::define('personnel', function ($user) {
+            return $user->role === User::PERSONNEL && $user->personnel()->exists();
+        });
+         Gate::define('student', function ($user) {
+            return $user->role === User::STUDENT && $user->student()->exists();
+        });
+
+
          Gate::define('admin-and-staff', function () {
             $user = Auth::user();
             return $user && $user->hasRoleOf([User::ADMIN, User::STAFF]);
+        });
+
+        Gate::define('student-and-personnel', function ($user) {
+            return ($user->role === User::STUDENT && $user->student()->exists()) ||
+                   ($user->role === User::PERSONNEL && $user->personnel()->exists());
         });
 
 
 
 
 
-         $this->registerPolicies();
         //
     }
 }

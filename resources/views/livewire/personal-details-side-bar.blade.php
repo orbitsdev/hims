@@ -6,6 +6,7 @@
         </a>
         <h2 class="text-xl font-semibold">{{Auth::user()->name}}</h2>
         <p class="text-gray-500 mb-4">{{Auth::user()->email}}</p>
+        <p class="text-gray-500 mb-4">({{Auth::user()->role}})</p>
 
         <div class="flex space-x-3 mb-4">
             <button class="bg-gray-100 p-4 rounded-full">

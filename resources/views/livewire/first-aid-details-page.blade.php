@@ -21,29 +21,45 @@
 
                 <!-- Symptoms Section -->
                 @if ($condition->symptoms->isNotEmpty())
-                    <div class="mt-10 bg-[#f8f9fa] p-6 rounded-lg">
-                        <h4 class="text-2xl font-bold text-gray-800 mb-4">Symptoms</h4>
-                        @foreach ($condition->symptoms as $symptom)
-                            <div class="mt-4 border-l-4 border-green-700 pl-4 py-2 bg-white shadow-sm rounded-md">
+                <div class="mt-10 bg-[#f8f9fa] p-6 rounded-lg">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Symptoms</h4>
+                    @foreach ($condition->symptoms as $symptom)
+                        <div class="mt-4 flex items-start space-x-4 border-l-4 border-green-700 pl-4 py-2 bg-white shadow-sm rounded-md">
+                            <!-- Symptom Image -->
+                            <a href="{{ $symptom->getImage() }}" class="flex-shrink-0 w-16 h-16" target="_blank">
+                                <img src="{{ $symptom->getImage() }}" alt="{{ $symptom->name }}" class="w-full h-full object-cover rounded-md">
+                            </a>
+                            <!-- Symptom Details -->
+                            <div>
                                 <h5 class="font-semibold text-lg text-gray-900">{{ $symptom->name }}</h5>
                                 <p class="text-gray-600 mt-1 leading-relaxed">@markdown($symptom->description ?? '')</p>
                             </div>
-                        @endforeach
-                    </div>
-                @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
 
-                <!-- Treatments Section -->
-                @if ($condition->treatments->isNotEmpty())
-                    <div class="mt-10 bg-[#f8f9fa] p-6 rounded-lg">
-                        <h4 class="text-2xl font-bold text-gray-800 mb-4">Treatments</h4>
-                        @foreach ($condition->treatments as $treatment)
-                            <div class="mt-4 border-l-4 border-green-700 pl-4 py-2 bg-white shadow-sm rounded-md">
+            <!-- Treatments Section -->
+            @if ($condition->treatments->isNotEmpty())
+                <div class="mt-10 bg-[#f8f9fa] p-6 rounded-lg">
+                    <h4 class="text-2xl font-bold text-gray-800 mb-4">Treatments</h4>
+                    @foreach ($condition->treatments as $treatment)
+                        <div class="mt-4 flex items-start space-x-4 border-l-4 border-green-700 pl-4 py-2 bg-white shadow-sm rounded-md">
+                            <!-- Treatment Image -->
+                            <a href="{{ $treatment->getImage() }}" class="flex-shrink-0 w-16 h-16" target="_blank">
+                                <img src="{{ $treatment->getImage() }}" alt="{{ $treatment->name }}" class="w-full h-full object-cover rounded-md">
+                            </a>
+                            <!-- Treatment Details -->
+                            <div>
                                 <h5 class="font-semibold text-lg text-gray-900">{{ $treatment->name }}</h5>
                                 <p class="text-gray-600 mt-1 leading-relaxed">@markdown($treatment->description ?? '')</p>
                             </div>
-                        @endforeach
-                    </div>
-                @endif
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+
+
             </div>
         </div>
     </div>

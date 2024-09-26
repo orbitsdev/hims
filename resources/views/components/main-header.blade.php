@@ -37,7 +37,7 @@
             <!-- User Dropdown -->
             <div x-data="{ dropdownOpen: false }" class="relative">
                 <div>
-                    <button @click="dropdownOpen = !dropdownOpen" type="button" class="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-kaitoke-green-500 focus:ring-offset-2" id="user-menu-button">
+                    <button @click="dropdownOpen = !dropdownOpen" type="button" class="relative flex rounded-full bg-white text-sm focus:outline-none focus:ring-2 focus:ring-kaitoke-green-600 " id="user-menu-button">
                         <span class="sr-only">Open user menu</span>
                         <img class="h-10 w-10 rounded-full object-cover" src="{{ Auth::user()->getImage() }}" alt="User Image">
                     </button>

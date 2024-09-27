@@ -1,4 +1,4 @@
-<div class="w-1/4 bg-white rounded-lg shadow-md p-6 max-h-screen">
+<div class="w-1/4 bg-white rounded-lg shadow-md p-6 max-h-screen overflow-y-auto">
     <div class="flex flex-col items-center">
         <a href="{{Auth::user()->getImage()}}" alt="{{Auth::user()->name}}" target="_blank">
 

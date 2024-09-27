@@ -92,6 +92,11 @@ Route::get('/shop', function () {
     return view('shop');
 });
 
+Route::get('/test', function () {
+
+    return view('notifications.index');
+});
+
 
 Route::get('/', function () {
 

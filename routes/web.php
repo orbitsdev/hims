@@ -104,55 +104,90 @@ Route::middleware([
     'verified',
 ])->group(function () {
 
-    Route::get('/dashboard', function(){
+    Route::get('/dashboard', function () {
 
         return Auth::user()->dashBoardBaseOnRole();
-
     })->name('dashboard');
 
-    Route::get('/unauthorizepage', function(){
+    Route::get('/unauthorizepage', function () {
 
         return 'UnAuthorize';
-
     })->name('unauthorizepage');
 
     Route::get('/admin-dashboard', AdminDashboard::class)->name('admin-dashboard');
     Route::get('/student-dashboard', StudentDashboard::class)->name('student-dashboard');
     Route::get('/staff-dashboard', StaffDashboard::class)->name('staff-dashboard');
 
-    Route::middleware('')->group(function(){
+    Route::middleware('admin-and-staff')->group(function () {
+        Route::get('/users', ListUser::class)->name('users');
+        Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
+        // Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
+        Route::get('/user-create', CreateUser::class)->name('user-create');
+        Route::get('/user-edit/{record}', EditUser::class)->name('user-edit');
+        Route::get('/user-details/{record}', UserDetails::class)->name('details');
 
+        Route::get('/college-departments', ListDepartments::class)->name('departments');
+
+        Route::get('/students', ListStudents::class)->name('students');
+        Route::get('/student-create', CreateStudent::class)->name('create-student');
+        Route::get('/student-edit/{record}', EditStudent::class)->name('edit-student');
+        Route::get('/student-view/{record}', ViewStudent::class)->name('view-student');
+
+        Route::get('/personnels', ListPersonnels::class)->name('personnels');
+        Route::get('/personnels/create', CreatePersonnel::class)->name('personnel-create');
+        Route::get('/personnels/edit/{record}', EditPersonnel::class)->name('personnel-edit');
+        Route::get('/personnels/view/{record}', ViewPersonnel::class)->name('personnel-view');
+
+        Route::get('/emergency-contacts', ListContacts::class)->name('emergency-contacts');
+        Route::get('/academic-year', ListAcademicYear::class)->name('academic-year');
+
+        Route::get('/course', ListCourses::class)->name('courses');
+        Route::get('/course/create', CreateCourse::class)->name('course-create');
+        Route::get('/course/edit/{record}', EditCourse::class)->name('course-edit');
+
+        Route::get('/conditions', ListConditions::class)->name('conditions');
+        Route::get('/condition/{record}', ManageCondition::class)->name('manage-condition');
+        Route::get('/condition/view/{record}', ViewCondition::class)->name('view-condition');
+
+
+        Route::get('/condition/treatments/{record}', ListConditionTreatments::class)->name('condition-treatments-lists');
+        Route::get('/condition/treatment/{record}', ViewTreatmentCondition::class)->name('condition-treatment-view');
+        Route::get('/condition/symptoms/{record}', ListConditionSymptoms::class)->name('condition-symptoms-list');
+        Route::get('/symptoms', ListSymptoms::class)->name('symptoms');
+
+        //FIRT AID GUIDES
+        Route::get('/first-aid-guides', ListFirstAidGuides::class)->name('first-aid-guides');
+        Route::get('/first-aid-guide/view/{record}', ViewFirstAidGuide::class)->name('first-aid-guide-view');
+        Route::get('/first-aid-guide/create', CreateFirstAidGuide::class)->name('first-aid-guide-create');
+        Route::get('/first-aid-guide/edit/{record}', CreateFirstAidGuide::class)->name('first-aid-guide-edit');
+
+        Route::get('/blood-pressure-levels', ListBloodPressureLevel::class)->name('blood-pressure-levels');
+        Route::get('/suggestions', ListSuggestion::class)->name('suggestions');
+
+        Route::get('/records', ListRecords::class)->name('records');
+        Route::get('/record/create', CreateRecord::class)->name('record-create');
+        Route::get('/record/edit/{record}', EditRecord::class)->name('record-edit');
+
+        Route::get('/record/collection/medical-record/{record}', ListMedicalRecord::class)->name('record-list-medical-record');
+        Route::get('/record/collection/medical-record/edit/{record}', EditMedicalRecord::class)->name('medical-record-edit');
+
+
+        Route::get('/medical-record/user-list/{record}', ListOfUserForIndividualScreening::class)->name('individual-medical-recoding');
+        Route::get('/medical-record/list-batch/{record}', ListBatches::class)->name('batches');
+        Route::get('/medical-record/list-batch/request/{record}', RecordBatchNotficationRequest::class)->name('batches-request-notification');
+        Route::get('/medical-record/user-list-by-batch/{record}', ListOfUsersByBatch::class)->name('by-batch-medical-recoding');
+
+        Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');
+        Route::get('/medical-record/by-batch/create/{record}/{user}', CreateMedicalRecordByBatch::class)->name('medical-record-create-by-batch');
     });
 
     // SYSTEM SUERS
-    Route::get('/users', ListUser::class)->name('users');
-    Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
-    // Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
-    Route::get('/user-create', CreateUser::class)->name('user-create');
-    Route::get('/user-edit/{record}', EditUser::class)->name('user-edit');
-    Route::get('/user-details/{record}', UserDetails::class)->name('details');
-
-    Route::get('/college-departments', ListDepartments::class)->name('departments');
-
-    Route::get('/students', ListStudents::class)->name('students');
-    Route::get('/student-create', CreateStudent::class)->name('create-student');
-    Route::get('/student-edit/{record}', EditStudent::class)->name('edit-student');
-    Route::get('/student-view/{record}', ViewStudent::class)->name('view-student');
-
-    Route::get('/personnels', ListPersonnels::class)->name('personnels');
-    Route::get('/personnels/create', CreatePersonnel::class)->name('personnel-create');
-    Route::get('/personnels/edit/{record}', EditPersonnel::class)->name('personnel-edit');
-    Route::get('/personnels/view/{record}', ViewPersonnel::class)->name('personnel-view');
 
 
 
-    Route::get('/emergency-contacts', ListContacts::class)->name('emergency-contacts');
-    Route::get('/academic-year', ListAcademicYear::class)->name('academic-year');
 
-    Route::get('/course', ListCourses::class)->name('courses');
-    Route::get('/course/create', CreateCourse::class)->name('course-create');
-    Route::get('/course/edit/{record}', EditCourse::class)->name('course-edit');
-    Route::middleware(['can:admin'])->group(function(){
+
+    Route::middleware(['can:admin'])->group(function () {
 
         Route::get('/staffs', ListStaffs::class)->name('staffs');
         Route::get('/staffs/create', CreateStaff::class)->name('staffs-create');
@@ -166,43 +201,8 @@ Route::middleware([
     });
 
 
-    Route::get('/conditions', ListConditions::class)->name('conditions');
-    Route::get('/condition/{record}', ManageCondition::class)->name('manage-condition');
-    Route::get('/condition/view/{record}', ViewCondition::class)->name('view-condition');
 
 
-    Route::get('/condition/treatments/{record}', ListConditionTreatments::class)->name('condition-treatments-lists');
-    Route::get('/condition/treatment/{record}', ViewTreatmentCondition::class)->name('condition-treatment-view');
-    Route::get('/condition/symptoms/{record}', ListConditionSymptoms::class)->name('condition-symptoms-list');
-    Route::get('/symptoms', ListSymptoms::class)->name('symptoms');
-
-    //FIRT AID GUIDES
-    Route::get('/first-aid-guides', ListFirstAidGuides::class)->name('first-aid-guides');
-    Route::get('/first-aid-guide/view/{record}', ViewFirstAidGuide::class)->name('first-aid-guide-view');
-    Route::get('/first-aid-guide/create', CreateFirstAidGuide::class)->name('first-aid-guide-create');
-    Route::get('/first-aid-guide/edit/{record}', CreateFirstAidGuide::class)->name('first-aid-guide-edit');
-
-    Route::get('/blood-pressure-levels', ListBloodPressureLevel::class)->name('blood-pressure-levels');
-    Route::get('/suggestions', ListSuggestion::class)->name('suggestions');
-
-    Route::get('/records', ListRecords::class)->name('records');
-    Route::get('/record/create', CreateRecord::class)->name('record-create');
-    Route::get('/record/edit/{record}', EditRecord::class)->name('record-edit');
-
-    Route::get('/record/collection/medical-record/{record}', ListMedicalRecord::class)->name('record-list-medical-record');
-    Route::get('/record/collection/medical-record/edit/{record}', EditMedicalRecord::class)->name('medical-record-edit');
-
-
-    Route::get('/medical-record/user-list/{record}', ListOfUserForIndividualScreening::class)->name('individual-medical-recoding');
-    Route::get('/medical-record/list-batch/{record}', ListBatches::class)->name('batches');
-    Route::get('/medical-record/list-batch/request/{record}', RecordBatchNotficationRequest::class)->name('batches-request-notification');
-    Route::get('/medical-record/user-list-by-batch/{record}', ListOfUsersByBatch::class)->name('by-batch-medical-recoding');
-
-    Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');
-    Route::get('/medical-record/by-batch/create/{record}/{user}', CreateMedicalRecordByBatch::class)->name('medical-record-create-by-batch');
-
-    Route::get('/event-announcement-status', EventsAnouncmentSMSStatus::class)->name('event-announcement');
-    Route::get('/monito-queue', QueueMonitor::class);
 
     //
     Route::get('/sections', ListSections::class)->name('sections');
@@ -213,15 +213,14 @@ Route::middleware([
     Route::get('/test-report', function () {
         return view('reports.medical-report');
     });
-    Route::prefix('reports')->name('reports.')->group(function(){
+    Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('medical-report/view/{record}', [ReportController::class, 'viewMedicalReport'])->name('view-medical-record');
-
     });
-    Route::prefix('reports')->name('reports.')->group(function(){
+    Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('medical-report/{record}', [ReportController::class, 'generatePdf'])->name('medical-record');
     });
 
-    Route::middleware(['can:student-and-personnel'])->group(function(){
+    Route::middleware(['can:student-and-personnel'])->group(function () {
         Route::get('/public/events', EventList::class)->name('events.index');
         Route::get('/public/first-aid-search', SearchFirstAid::class)->name('first-aid.search');
         Route::get('/public/first-aid-details/{id}', FirstAidDetailsPage::class)->name('first-aid.details');
@@ -229,6 +228,4 @@ Route::middleware([
         Route::get('/public/medical-records/{id}', MedicalRecordDetails::class)->name('medical-record-details');
         Route::get('/public/emergency-contacts', PublicEmergencyContact::class)->name('public.emergency-contacts');
     });
-
-
 });

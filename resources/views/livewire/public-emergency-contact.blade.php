@@ -6,7 +6,7 @@
         <div id="emergency" class="tab-content">
             <!-- Search Bar (optional) -->
             <div class="mb-6">
-                <input type="text" placeholder="Search Emergency Contacts..." class="w-full p-4 rounded-lg border focus:border-kaitoke-green-700 focus:ring-kaitoke-green-700" wire:model.debounce.300ms.live="search" >
+                <input type="text" placeholder="Search Emergency Contacts..." class="w-full p-4 pl-12 border-gray-300 focus:border-kaitoke-green-700 focus:ring-kaitoke-green-700 rounded-md shadow-sm" wire:model.debounce.300ms.live="search" >
             </div>
 
             <!-- Emergency Contacts List -->

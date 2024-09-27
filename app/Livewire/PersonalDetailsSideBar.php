@@ -9,7 +9,7 @@ class PersonalDetailsSideBar extends Component
 {
     public function render()
     {
-        $emergencyContacts  = EmergencyContact::take(5)->get();
+        $emergencyContacts  = EmergencyContact::take(3)->get();
         return view('livewire.personal-details-side-bar',['emergencyContacts'=> $emergencyContacts]);
     }
 }

@@ -14,6 +14,8 @@
                             class="{{ RouteManager::isCurrentPublicPage(Session::get('current_route_name'), ['first-aid.search', 'first-aid.details']) }}">Firstaid & Treatments</a>
                         <a href="{{ route('user.medical-records') }}"
                             class="{{ RouteManager::isCurrentPublicPage(Session::get('current_route_name'), ['user.medical-records','medical-record-details']) }}">Medical Records</a>
+                        <a href="{{ route('public.emergency-contacts') }}"
+                            class="{{ RouteManager::isCurrentPublicPage(Session::get('current_route_name'), ['public.emergency-contacts']) }}">Emergency Contacts</a>
                         {{-- <a class="text-gray-600 font-semibold">Notifications</a>
                         <a class="text-gray-600 font-semibold">Medical Records</a> --}}
 

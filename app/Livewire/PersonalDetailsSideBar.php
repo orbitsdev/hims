@@ -2,12 +2,14 @@
 
 namespace App\Livewire;
 
+use App\Models\EmergencyContact;
 use Livewire\Component;
 
 class PersonalDetailsSideBar extends Component
 {
     public function render()
     {
-        return view('livewire.personal-details-side-bar');
+        $emergencyContacts  = EmergencyContact::take(5)->get();
+        return view('livewire.personal-details-side-bar',['emergencyContacts'=> $emergencyContacts]);
     }
 }

@@ -19,5 +19,22 @@
         </div>
         <a href="{{ route('edit-profile', ['record' => Auth::user()]) }}" class="bg-kaitoke-green-600 text-white w-full py-2 rounded-lg block text-center">Update Profile</a>
     </div>
-
+    <div class="mt-6">
+        <h3 class="text-lg font-semibold mb-4 text-center">Emergency Contacts</h3>
+        <div class="space-y-4">
+            @foreach ($emergencyContacts as $contact)
+                <div class="flex items-center space-x-4">
+                    <!-- Emergency Contact Image -->
+                    <a href="{{ $contact->getImage() }}" target="_blank" class="w-12 h-12">
+                        <img src="{{ $contact->getImage() }}" alt="{{ $contact->name }}" class="rounded-full object-cover w-full h-full">
+                    </a>
+                    <!-- Emergency Contact Details -->
+                    <div>
+                        <h4 class="font-semibold">{{ $contact->name }}</h4>
+                        <p class="text-sm text-gray-500">{{ $contact->contact }}</p>
+                    </div>
+                </div>
+            @endforeach
+        </div>
+    </div>
 </div>

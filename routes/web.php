@@ -72,6 +72,7 @@ use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
+use App\Livewire\PublicEmergencyContact;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
 use App\Livewire\UserMedicalRecords;
 
@@ -226,6 +227,7 @@ Route::middleware([
         Route::get('/public/first-aid-details/{id}', FirstAidDetailsPage::class)->name('first-aid.details');
         Route::get('/public/medical-records', UserMedicalRecords::class)->name('user.medical-records');
         Route::get('/public/medical-records/{id}', MedicalRecordDetails::class)->name('medical-record-details');
+        Route::get('/public/emergency-contacts', PublicEmergencyContact::class)->name('public.emergency-contacts');
     });
 
 

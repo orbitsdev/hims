@@ -48,7 +48,7 @@
               </div>
 
 
-              <a class="flex items-center justify-center w-full border border-gray-300 rounded-lg p-2 hover:bg-gray-100 shadow-md mt-4">
+              <a href="{{ route('auth.google.redirect') }}" class="flex items-center justify-center w-full border border-gray-300 rounded-lg p-2 hover:bg-gray-100 shadow-md mt-4">
                 <img src="https://www.gstatic.com/firebasejs/ui/2.0.0/images/auth/google.svg" alt="Google Icon" class="h-5 w-5 mr-2">
                 <span class=" font-medium text-gray-600">Continue With Google</span>
               </a>

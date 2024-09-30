@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('provider')->default('CREDENTIALS');
             $table->string('provider_id')->nullable();
             $table->string('name');
-            $table->string('username')->unique();
+            $table->string('username')->nullable()->unique();
             $table->string('role')->nullable();
 
             $table->string('email')->unique();

@@ -31,6 +31,9 @@ class AuthServiceProvider extends ServiceProvider
         Gate::define('admin', function () {
             return Auth::user()->role === User::ADMIN;
          });
+        Gate::define('no-role', function () {
+            return Auth::user()->role === null;
+         });
 
 
          Gate::define('staff', function ($user) {
@@ -42,6 +45,14 @@ class AuthServiceProvider extends ServiceProvider
          Gate::define('student', function ($user) {
             return $user->role === User::STUDENT && $user->student()->exists();
         });
+        Gate::define('student-no-account', function ($user) {
+            return $user->role === User::STUDENT && $user->student()->doesntExist();
+        });
+        Gate::define('personnel-no-account', function ($user) {
+            return $user->role === User::PERSONNEL && $user->personnel()->doesntExist();
+        });
+
+
 
 
          Gate::define('admin-and-staff', function () {

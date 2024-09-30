@@ -93,15 +93,34 @@ class User extends Authenticatable
         return '( '.($this->role ?? '').') '. ($this->name ?? '');
     }
 
+    // public function checkIfHasAccount(){
+    //     switch ($this->role) {
+    //         case User::STUDENT:
+
+    //         default:
+    //           return redirect()->route('unauthorizepage');
+    //     }
+
+    // }
+
     public function dashBoardBaseOnRole()
     {
         switch ($this->role) {
             case User::ADMIN:
-                return redirect()->route('admin-dashboard');
+                 return redirect()->route('admin-dashboard');
             case User::STUDENT:
-                return redirect()->route('events.index');
+                if ($this->student()->exists()) {
+                    return redirect()->route('events.index');
+                } else {
+                    return redirect()->route('fill.student-form');
+                }
+
             case User::PERSONNEL:
-                return redirect()->route(route: 'events.index');
+                if ($this->personnel()->exists()) {
+                    return redirect()->route('events.index');
+                } else {
+                    return redirect()->route('fill.personnel-form');
+                }
             case User::STAFF:
                 return redirect()->route('admin-dashboard');
             default:

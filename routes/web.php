@@ -4,6 +4,7 @@
 use App\Livewire\Dashboard;
 use App\Livewire\EventList;
 use App\Livewire\QueueMonitor;
+use App\Livewire\RoleSelection;
 use App\Livewire\AdminDashboard;
 use App\Livewire\ListSuggestion;
 use App\Livewire\SearchFirstAid;
@@ -25,6 +26,7 @@ use App\Livewire\Courses\EditCourse;
 use App\Livewire\Events\CreateEvent;
 use App\Livewire\Records\EditRecord;
 use App\Livewire\Staffs\CreateStaff;
+use App\Livewire\UserMedicalRecords;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Courses\ListCourses;
 use App\Livewire\FirstAidDetailsPage;
@@ -43,13 +45,17 @@ use App\Livewire\Symptoms\ListSymptoms;
 use Filament\Tables\Actions\EditAction;
 use App\Livewire\Emergency\ListContacts;
 use App\Livewire\ListBloodPressureLevel;
+use App\Livewire\PublicEmergencyContact;
 use App\Livewire\Students\CreateStudent;
+use App\Livewire\User\CreateStudentForm;
+use Laravel\Socialite\Facades\Socialite;
 use App\Livewire\Personels\EditPersonnel;
 use App\Http\Controllers\ReportController;
 use App\Livewire\Conditions\EditCondition;
 use App\Livewire\Conditions\ListCondtions;
 use App\Livewire\Conditions\ViewCondition;
 use App\Livewire\Personnels\ViewPersonnel;
+use App\Livewire\User\CreatePersonnelForm;
 use App\Livewire\Conditions\ListConditions;
 use App\Livewire\Personels\CreatePersonnel;
 use App\Livewire\Personnels\ListPersonnels;
@@ -58,8 +64,10 @@ use App\Livewire\Conditions\ManageCondition;
 use App\Livewire\Records\ListOfUsersByBatch;
 use App\Livewire\Conditions\ManageConditions;
 use App\Livewire\Departments\ListDepartments;
+use App\Livewire\User\FillStudentInformation;
 use App\Livewire\AcademicYear\ListAcademicYear;
 use App\Livewire\RecordBatchNotficationRequest;
+use App\Http\Controllers\GoogleCallbackController;
 use App\Livewire\Condition\ViewTreatmentCondition;
 use App\Livewire\Conditions\ListConditionSymptoms;
 use App\Livewire\FirstAidFuides\ViewFirstAidGuide;
@@ -72,9 +80,7 @@ use App\Livewire\FirstAidGuides\CreateFirstAidGuide;
 use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
-use App\Livewire\PublicEmergencyContact;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
-use App\Livewire\UserMedicalRecords;
 
 /*
 |--------------------------------------------------------------------------
@@ -103,6 +109,9 @@ Route::get('/', function () {
     return redirect()->route('dashboard');
 });
 
+Route::get('/auth/google', [GoogleCallbackController::class,'redirect'])->middleware('guest')->name('auth.google.redirect');
+Route::get('/auth/google/callback', [GoogleCallbackController::class,'callBack'])->middleware('guest')->name('auth.google.callBack');
+
 Route::middleware([
     'auth:sanctum',
     config('jetstream.auth_session'),
@@ -111,19 +120,31 @@ Route::middleware([
 
     Route::get('/dashboard', function () {
 
-        return Auth::user()->dashBoardBaseOnRole();
+        if(Auth::user()->role == null){
+            return redirect()->route('role.selection');
+        }else{
+
+            return Auth::user()->dashBoardBaseOnRole();
+        }
+
     })->name('dashboard');
 
-    Route::get('/unauthorizepage', function () {
+    Route::get('/student-create-form', CreateStudentForm::class)->name('fill.student-form')->middleware(['can:student-no-account']);
+    Route::get('/personnel-create-form', CreatePersonnelForm::class)->name('fill.personnel-form')->middleware(['can:personnel-no-account']);
 
-        return 'UnAuthorize';
-    })->name('unauthorizepage');
+
+
+
+
+    Route::get('/role-selection', RoleSelection::class)->name('role.selection')->middleware(['can:no-role']);
+
+    Route::get('/unauthorizepage', function () { return 'UnAuthorize'; })->name('unauthorizepage');
 
     Route::get('/admin-dashboard', AdminDashboard::class)->name('admin-dashboard');
     Route::get('/student-dashboard', StudentDashboard::class)->name('student-dashboard');
     Route::get('/staff-dashboard', StaffDashboard::class)->name('staff-dashboard');
 
-    Route::middleware('admin-and-staff')->group(function () {
+    Route::middleware('can:admin-and-staff')->group(function () {
         Route::get('/users', ListUser::class)->name('users');
         Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
         // Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');

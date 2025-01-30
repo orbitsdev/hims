@@ -30,13 +30,13 @@ class SmsService
                 'apikey' => $this->apiKey,
                 'number' => $number,
                 'message' => $message,
-                'sendername' => $this->senderName,
+                // 'sendername' => $this->senderName,
             ];
     
             // Log the request
             \Log::info('Semaphore SMS Request:', $payload);
     
-            $response = Http::post('https://semaphore.co/api/v4/messages', $payload);
+            $response = Http::post('https://api.semaphore.co/api/v4/messages', $payload);
     
             // Log the response
             \Log::info('Semaphore SMS Response:', $response->json());

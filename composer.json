@@ -13,7 +13,7 @@
         "filament/notifications": "^3.2",
         "filament/tables": "^3.2",
         "filament/widgets": "^3.2",
-        "guzzlehttp/guzzle": "^7.8",
+        "guzzlehttp/guzzle": "^7.9",
         "icehouse-ventures/laravel-chartjs": "^4.1",
         "kreait/laravel-firebase": "^5.9",
         "laravel/framework": "^10.0",

@@ -311,7 +311,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
     $smsService = new SmsService();
 
     // Directly use the correctly formatted number
-    $testNumber = '+639366303145'; // Already in correct format
+    $testNumber = '09366303145'; // Already in correct format
 
     // Send the SMS
     $response = $smsService->sendSms($testNumber, $data['message']);

@@ -6,6 +6,7 @@ use Filament\Tables;
 use App\Models\Record;
 use Livewire\Component;
 use Filament\Tables\Table;
+use App\Services\SmsService;
 use App\Models\MedicalRecord;
 use App\Models\EmergencyContact;
 use App\Mail\BloodPressureStatus;
@@ -101,6 +102,9 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->searchable(),
 
                     Tables\Columns\TextColumn::make('last_name')->label('LAST NAME')
+
+                    ->searchable(),
+                    Tables\Columns\TextColumn::make('phone')->label('Phone')
 
                     ->searchable(),
 
@@ -267,7 +271,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->fillForm(function (Model $record) {
 
                         return [
-                            'to' => $record->user->email,
+                            'to' => $record->phone,
                         ];
                     })
                     ->form([
@@ -278,14 +282,30 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ])
                     ->action(function (Model $record, array $data) {
 
-                        $owner= $record->user;
-                        if($owner){
-                            FilamentForm::notification('SEND SMS TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
-                            $record->record->notificationRequests()->create([
-                                'message' => $data['message'],
-                                'email' => $owner->email
-                            ]);
+                        // $owner= $record->user;
+                        // if($owner){
+                        //     $contact = $record->phone;
+                        //     FilamentForm::notification('SEND SMS TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
+                        //     $record->record->notificationRequests()->create([
+                        //         'message' => $data['message'],
+                        //         'email' => $owner->email
+                        //     ]);
+                        // }
+
+                        $smsService = new SmsService();
+                        $response = $smsService->sendSms($record->phone, $data['message']);
+                
+                        if (isset($response['error']) && $response['error']) {
+                            FilamentForm::notification('Failed to send SMS: ' . $response['message']);
+                        } else {
+                            FilamentForm::notification('SMS sent successfully to ' . $record->phone);
                         }
+                
+                        // Save notification request for tracking
+                        $record->record->notificationRequests()->create([
+                            'message' => $data['message'],
+                            'email' => $record->user->email ?? null
+                        ]);
 
                     })
                     ->tooltip('SEND MESSAGE TO USER')

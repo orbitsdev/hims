@@ -21,10 +21,10 @@ return [
     //     'scheme' => 'https',
     // ],
     'mailgun' => [
-    'transport' => 'mailgun',
-    'domain' => env('MAILGUN_DOMAIN'),
-    'secret' => env('MAILGUN_SECRET'),
-],
+        'transport' => 'mailgun',
+        'domain' => env('MAILGUN_DOMAIN'),
+        'secret' => env('MAILGUN_SECRET'),
+    ],
 
     'postmark' => [
         'token' => env('POSTMARK_TOKEN'),
@@ -42,10 +42,15 @@ return [
         'from' => env('TWILIO_FROM'),
     ],
 
-   'google' => [
-    'client_id' => env('GOOGLE_CLIENT_ID'),
-    'client_secret' => env('GOOGLE_CLIENT_SECRET'),
-    'redirect' => config('app_url'). '/auth/google/callback',
-],
+    'google' => [
+        'client_id' => env('GOOGLE_CLIENT_ID'),
+        'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+        'redirect' => config('app_url') . '/auth/google/callback',
+    ],
+
+    'semaphore' => [
+        'api_key' => env('SEMAPHORE_API_KEY'),
+        'sender_name' => env('SEMAPHORE_SENDER_NAME', 'HIMS'),
+    ],
 
 ];

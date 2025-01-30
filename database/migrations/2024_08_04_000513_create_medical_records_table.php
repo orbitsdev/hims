@@ -33,6 +33,7 @@ return new class extends Migration
             // DATES
             $table->string('academic_year_name')->nullable();
             $table->string('semester_name')->nullable();
+            $table->string('phone')->nullable();
 
             // UNIVERSITY DETAILS
             $table->string('department_name')->nullable();

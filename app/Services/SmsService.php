@@ -30,7 +30,7 @@ class SmsService
                 'apikey' => $this->apiKey,
                 'number' => $number,
                 'message' => $message,
-                // 'sendername' => $this->senderName,
+                'sendername' => '',
             ];
     
             // Log the request

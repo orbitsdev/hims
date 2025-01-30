@@ -129,6 +129,7 @@ class ListBatches extends Component implements HasForms, HasTable
                                     'message' => $data['message'],
                                     'email' => $user->email
                                 ]);
+                                
                                 //  SendNotificationJob::dispatch($user, $record);
                             }
                         })->hidden(function (Model $record) {

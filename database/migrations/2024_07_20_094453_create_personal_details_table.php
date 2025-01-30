@@ -24,6 +24,7 @@ return new class extends Migration
             $table->text('birth_place')->nullable();
             $table->date('birth_date')->nullable();
             $table->string('address')->nullable();
+            $table->string('phone')->nullable();
             $table->text('image')->nullable();
             $table->timestamps();
         });

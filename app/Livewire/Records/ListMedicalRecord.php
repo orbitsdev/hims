@@ -293,19 +293,20 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                         // }
 
                         $smsService = new SmsService();
-                        $response = $smsService->sendSms($record->phone, $data['message']);
-                
-                        if (isset($response['error']) && $response['error']) {
-                            FilamentForm::notification('Failed to send SMS: ' . $response['message']);
-                        } else {
-                            FilamentForm::notification('SMS sent successfully to ' . $record->phone);
-                        }
-                
-                        // Save notification request for tracking
-                        $record->record->notificationRequests()->create([
-                            'message' => $data['message'],
-                            'email' => $record->user->email ?? null
-                        ]);
+    
+    $testNumber = '09366303145'; // Hardcoded number for testing
+    $formattedNumber = preg_replace('/^0/', '+63', $testNumber); // Convert "0936..." to "+63936..."
+    
+    $response = $smsService->sendSms($formattedNumber, $data['message']);
+
+    // Log the response
+    \Log::info('SMS Test Response:', $response);
+
+    if (isset($response['error']) && $response['error']) {
+        FilamentForm::notification('Failed to send SMS: ' . $response['message']);
+    } else {
+        FilamentForm::notification('SMS sent successfully to ' . $formattedNumber . ' Response: ' . json_encode($response));
+    }
 
                     })
                     ->tooltip('SEND MESSAGE TO USER')

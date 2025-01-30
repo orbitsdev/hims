@@ -292,38 +292,22 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
     //                     //     ]);
     //                     // }
 
-    //                     $smsService = new SmsService();
-    
-    // $testNumber = '09366303145'; // Hardcoded number for testing
-    // $formattedNumber = preg_replace('/^0/', '+63', $testNumber); // Convert "0936..." to "+63936..."
-    
-    // $response = $smsService->sendSms($formattedNumber, $data['message']);
-
-    // // Log the response
-    // \Log::info('SMS Test Response:', $response);
-
-    // if (isset($response['error']) && $response['error']) {
-    //     FilamentForm::notification('Failed to send SMS: ' . $response['message']);
-    // } else {
-    //     FilamentForm::notification('SMS sent successfully to ' . $formattedNumber . ' Response: ' . json_encode($response));
-    // }
-
     $smsService = new SmsService();
 
-    // Directly use the correctly formatted number
-    $testNumber = '09366303145'; // Already in correct format
+    $number = preg_replace('/^0/', '+63', $record->phone); // Convert local number to international format
+    $message = $data['message'];
 
     // Send the SMS
-    $response = $smsService->sendSms($testNumber, $data['message']);
+    $response = $smsService->sendSms($number, $message);
 
-    // Log the response for debugging
-    \Log::info('SMS Test Response:', $response);
+    // Log the response
+    \Log::info('SMS Response:', $response);
 
     // Handle response
     if (isset($response['error']) && $response['error']) {
         FilamentForm::notification('Failed to send SMS: ' . $response['message']);
     } else {
-        FilamentForm::notification('SMS sent successfully to ' . $testNumber . ' Response: ' . json_encode($response));
+        FilamentForm::notification('SMS sent successfully to ' . $number);
     }
 
                     })

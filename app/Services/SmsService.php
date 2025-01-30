@@ -27,26 +27,26 @@ class SmsService
     {
         try {
             $payload = [
-                'apikey' => $this->apiKey,
+                'apikey' => $this->apiKey,  // Include the API key
                 'number' => $number,
                 'message' => $message,
-                'sendername' => '',
+                // 'sendername' => $this->senderName, // Optional sender name
             ];
-    
-            // Log the request
-            \Log::info('Semaphore SMS Request:', $payload);
-    
-            $response = Http::withHeaders([
-                'Content-type' => 'application/x-www-form-urlencoded',
-                
-            ])->post('https://api.semaphore.co/api/v4/messages', $payload);
-    
+
+            // Log the request payload
+            Log::info('Semaphore SMS Request:', $payload);
+
+            $response = Http::asForm() // Automatically sets 'Content-Type' to 'application/x-www-form-urlencoded'
+                ->post('https://api.semaphore.co/api/v4/messages', $payload);
+
+            $responseData = $response->json(); // Parse JSON response
+
             // Log the response
-            \Log::info('Semaphore SMS Response:', $response->json());
-    
-            return $response->json();
+            Log::info('Semaphore SMS Response:', $responseData);
+
+            return $responseData;
         } catch (\Exception $e) {
-            \Log::error('Semaphore SMS Failed: ' . $e->getMessage());
+            Log::error('Semaphore SMS Failed: ' . $e->getMessage());
             return [
                 'error' => true,
                 'message' => $e->getMessage(),

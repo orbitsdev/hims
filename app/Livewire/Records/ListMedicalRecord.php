@@ -294,21 +294,23 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
 
     $smsService = new SmsService();
 
-    $number = preg_replace('/^0/', '+63', $record->phone); // Convert local number to international format
-    $message = $data['message'];
-
+    // Hardcoded number for testing
+    $number = '+639366303145'; // Already formatted correctly for Semaphore
+    $message = $data['message']; // Message entered in the form
+    
     // Send the SMS
     $response = $smsService->sendSms($number, $message);
-
+    
     // Log the response
     \Log::info('SMS Response:', $response);
-
+    
     // Handle response
     if (isset($response['error']) && $response['error']) {
         FilamentForm::notification('Failed to send SMS: ' . $response['message']);
     } else {
         FilamentForm::notification('SMS sent successfully to ' . $number);
     }
+    
 
                     })
                     ->tooltip('SEND MESSAGE TO USER')

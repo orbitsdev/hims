@@ -26,24 +26,27 @@ class SmsService
     public function sendSms(string $number, string $message): array
     {
         try {
-            $response = Http::post('https://semaphore.co/api/v4/messages', [
+            $payload = [
                 'apikey' => $this->apiKey,
                 'number' => $number,
                 'message' => $message,
                 'sendername' => $this->senderName,
-            ]);
+            ];
     
-            $responseData = $response->json();
+            // Log the request
+            \Log::info('Semaphore SMS Request:', $payload);
+    
+            $response = Http::post('https://semaphore.co/api/v4/messages', $payload);
     
             // Log the response
-            Log::info("Semaphore SMS Response: ", $responseData);
+            \Log::info('Semaphore SMS Response:', $response->json());
     
-            return $responseData;
+            return $response->json();
         } catch (\Exception $e) {
-            Log::error("Semaphore SMS Failed: " . $e->getMessage());
+            \Log::error('Semaphore SMS Failed: ' . $e->getMessage());
             return [
                 'error' => true,
-                'message' => 'Failed to send SMS: ' . $e->getMessage(),
+                'message' => $e->getMessage(),
             ];
         }
     }

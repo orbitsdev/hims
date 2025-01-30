@@ -310,25 +310,20 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
 
     $smsService = new SmsService();
 
-    // Hardcoded test number (ensure it's in valid format)
-    $testNumber = '09366303145'; // Original format
-    $formattedNumber = preg_replace('/^0/', '+63', $testNumber); // Convert "0936..." to "+63936..."
+    // Directly use the correctly formatted number
+    $testNumber = '+639366303145'; // Already in correct format
 
     // Send the SMS
-    $response = $smsService->sendSms($formattedNumber, $data['message']);
+    $response = $smsService->sendSms($testNumber, $data['message']);
 
-    // Log the API response for debugging
-    \Log::info('SMS Test Request: ', [
-        'number' => $formattedNumber,
-        'message' => $data['message'],
-        'response' => $response,
-    ]);
+    // Log the response for debugging
+    \Log::info('SMS Test Response:', $response);
 
     // Handle response
     if (isset($response['error']) && $response['error']) {
         FilamentForm::notification('Failed to send SMS: ' . $response['message']);
     } else {
-        FilamentForm::notification('SMS sent successfully to ' . $formattedNumber . ' Response: ' . json_encode($response));
+        FilamentForm::notification('SMS sent successfully to ' . $testNumber . ' Response: ' . json_encode($response));
     }
 
                     })

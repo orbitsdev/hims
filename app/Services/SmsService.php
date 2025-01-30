@@ -32,8 +32,13 @@ class SmsService
                 'message' => $message,
                 'sendername' => $this->senderName,
             ]);
-
-            return $response->json();
+    
+            $responseData = $response->json();
+    
+            // Log the response
+            Log::info("Semaphore SMS Response: ", $responseData);
+    
+            return $responseData;
         } catch (\Exception $e) {
             Log::error("Semaphore SMS Failed: " . $e->getMessage());
             return [

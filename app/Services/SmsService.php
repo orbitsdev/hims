@@ -36,7 +36,10 @@ class SmsService
             // Log the request
             \Log::info('Semaphore SMS Request:', $payload);
     
-            $response = Http::post('https://api.semaphore.co/api/v4/messages', $payload);
+            $response = Http::withHeaders([
+                'Content-type' => 'application/x-www-form-urlencoded',
+                
+            ])->post('https://api.semaphore.co/api/v4/messages', $payload);
     
             // Log the response
             \Log::info('Semaphore SMS Response:', $response->json());

@@ -23,7 +23,6 @@ class SendingEmailController extends Controller
 
                 FilamentForm::notification('Email was sent successfully.');
             } catch (\Exception $e) {
-                dd($e->getMessage());
                 FilamentForm::error('Failed to send email. Please try again later.');
             }
 

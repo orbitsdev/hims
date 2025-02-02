@@ -26,10 +26,10 @@
                         class="bg-white flex items-center space-x-4 border border-gray-200 rounded-lg hover:bg-[#f2f4f1] hover:shadow-sm transition-transform duration-200 ease-in-out p-6">
 
                         <!-- Condition Image Placeholder -->
-                        {{-- <div class="w-20 h-20 flex-shrink-0 ">
+                        <div class="w-20 h-20 flex-shrink-0 ">
                             <img src="{{ $condition->getImage() }}" alt="{{ $condition->name??'' }}"
                                 class="w-full h-full object-cover rounded-md">
-                        </div> --}}
+                        </div>
 
                         <!-- Condition Details -->
                         <div class="flex-1">

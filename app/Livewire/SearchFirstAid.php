@@ -18,6 +18,8 @@ class SearchFirstAid extends Component
     public function render()
     {
         $conditions = Condition::query()
+        ->whereHas(['treatments', 'firstAidGuides']
+        )
             ->where('name', 'like', '%' . $this->searchTerm . '%')
             ->orWhereHas('treatments', function ($query) {
                 $query->where('name', 'like', '%' . $this->searchTerm . '%');

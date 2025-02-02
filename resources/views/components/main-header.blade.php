@@ -18,7 +18,7 @@
         <!-- Right side: User Dropdown, Notifications -->
         <div class="flex items-center space-x-6">
             <!-- Notification Icon with Badge -->
-            <div class="relative">
+            {{-- <div class="relative">
                 <button type="button" class="relative flex rounded-full focus:outline-none">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-white" viewBox="0 0 20 20" fill="currentColor">
                         <path d="M10 2a6 6 0 016 6v3.586l.707.707A1 1 0 0117 14H3a1 1 0 01-.707-1.707L3 11.586V8a6 6 0 016-6zM5 14h10v1a2 2 0 11-4 0H9a2 2 0 11-4 0v-1z"/>
@@ -26,7 +26,7 @@
                     <!-- Badge -->
                     <span class="absolute -top-1 -right-1 bg-red-600 text-white rounded-full h-5 w-5 text-xs flex items-center justify-center z-20">3</span>
                 </button>
-            </div>
+            </div> --}}
             <div>
                 <p class="text-white">
                     {{Auth::user()->name}}

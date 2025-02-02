@@ -49,27 +49,31 @@
           <div class="border-l border-r">
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Name</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->first_name }} {{ $record->middle_name }} {{ $record->last_name }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->first_name??'' }} {{ $record->middle_name??'' }} {{ $record->last_name??'' }}</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Email</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->email }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->email??'' }}</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Age</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->age }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->age??'' }}</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Date of Birth</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->birthDateFormat() }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->birthDateFormat() ??'' }}</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Address</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->address }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->address ??'' }}</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Civil Status</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->civil_status }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->civil_status??'' }}</span>
+            </p>
+            <p class="font-normal grid grid-cols-12 px-2 border-b">
+              <span class="text-gray-400 col-span-2 inline-block border-r py-2">Phone</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->phone??'' }}</span>
             </p>
           </div>
         </div>
@@ -80,35 +84,35 @@
           <div class="border-l border-r">
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Past Illness:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->past_illness }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->past_illness??'' }}</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Allergies:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->allergies }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->allergies??'' }}</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Temperature:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->temperature }} °C</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->temperature??'' }} °C</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Blood Pressure:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->systolic_pressure }} mmHg</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->systolic_pressure??'' }} mmHg</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">BP Risk Level:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->getBloodPressureStatus() }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->getBloodPressureStatus()??'' }}</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Heart Rate:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->heart_rate }} bpm</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->heart_rate??'' }} bpm</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Diagnoses:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->condition?->name }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->condition?->name??'' }}</span>
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Remarks:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->remarks }}</span>
+              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->remarks??'' }}</span>
             </p>
           </div>
         </div>
@@ -119,9 +123,9 @@
           <h2 class="text-xl font-semibold text-green-700 bg-gray-200 p-2 rounded">TREATMENTS</h2>
           @foreach ($record->condition->treatments as $treatment)
           <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
-            <p class="col-span-2 py-2 border-r">{{ $treatment->name }}</p>
+            <p class="col-span-2 py-2 border-r">{{ $treatment->name??'' }}</p>
             <div class="col-span-9 py-2 ml-4">
-              @markdown($treatment->description)
+              @markdown($treatment->description ??'')
             </div>
           </div>
           @endforeach
@@ -132,9 +136,9 @@
           <h2 class="text-xl font-semibold text-green-700 bg-gray-200 p-2 rounded">First Aid and Guide</h2>
           @foreach ($record->condition->firstAidGuides as $firstAidAndGuide)
           <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
-            <p class="col-span-2 py-2 border-r">{{ $firstAidAndGuide->title }}</p>
+            <p class="col-span-2 py-2 border-r">{{ $firstAidAndGuide->title??'' }}</p>
             <div class="col-span-9 py-2 ml-4">
-              @markdown($firstAidAndGuide->content)
+              @markdown($firstAidAndGuide->content ??'')
             </div>
           </div>
           @endforeach
@@ -144,8 +148,8 @@
     </div>
 
     <div class="text-center text-gray-600 mt-8">
-      <p>Report Generated by {{ $record->physician_name }}</p>
-      <p>Release By: {{ $record->release_by }}</p>
+      <p>Report Generated by {{ $record->physician_name??'' }}</p>
+      <p>Release By: {{ $record->release_by??'' }}</p>
     </div>
   </div>
 </body>

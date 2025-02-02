@@ -315,37 +315,37 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     })
                     ->tooltip('SEND MESSAGE TO USER')
                     ,
-                    Action::make('send-email')
-                    ->tooltip('SEND EMAIL TO USER')
-                    ->label('SEND EMAIL')
-                    ->icon('heroicon-s-envelope')
-                    ->color('info')
-                    ->size('lg')
+                    // Action::make('send-email')
+                    // ->tooltip('SEND EMAIL TO USER')
+                    // ->label('SEND EMAIL')
+                    // ->icon('heroicon-s-envelope')
+                    // ->color('info')
+                    // ->size('lg')
 
-                    ->fillForm(function (Model $record) {
+                    // ->fillForm(function (Model $record) {
 
-                        return [
-                            'to' => $record->user->email,
-                        ];
-                    })
-                    ->form([
-                        TextInput::make('to')->required()->disabled()->label('To'),
-                        Textarea::make('message')->required(),
+                    //     return [
+                    //         'to' => $record->user->email,
+                    //     ];
+                    // })
+                    // ->form([
+                    //     TextInput::make('to')->required()->disabled()->label('To'),
+                    //     Textarea::make('message')->required(),
 
 
-                    ])
-                    ->action(function (Model $record, array $data) {
+                    // ])
+                    // ->action(function (Model $record, array $data) {
 
-                        $owner= $record->user;
-                        if($owner){
-                            FilamentForm::notification('SEND EMAIL TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
-                            $record->record->notificationRequests()->create([
-                                'message' => $data['message'],
-                                'email' => $owner->email
-                            ]);
-                        }
+                    //     $owner= $record->user;
+                    //     if($owner){
+                    //         FilamentForm::notification('SEND EMAIL TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
+                    //         $record->record->notificationRequests()->create([
+                    //             'message' => $data['message'],
+                    //             'email' => $owner->email
+                    //         ]);
+                    //     }
 
-                    }),
+                    // }),
 
                 //     Action::make('send-blood-sms-alert')
                 //     ->tooltip('NOTIFY USER BP STATUS BY SENDING SMS')

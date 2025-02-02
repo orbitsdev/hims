@@ -1839,6 +1839,13 @@ class FilamentForm extends Controller
                             TextInput::make('birth_place')
                                 ->required()
                                 ->columnSpan(3),
+                                TextInput::make('phone')
+                                ->label('Phone')
+                                ->mask(99999999999)
+                                ->columnSpan(3)
+                                    ->required()
+                                ->tel()
+                                ->maxLength(191),
 
                             TextInput::make('address')
                                 ->required()

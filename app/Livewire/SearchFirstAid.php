@@ -35,7 +35,7 @@ class SearchFirstAid extends Component
     ->with(['treatments', 'firstAidGuides'])
     ->get();
 
-    dd($conditions);
+    // dd($conditions);
 
 return view('livewire.search-first-aid', [
     'conditions' => $conditions,

@@ -27,13 +27,13 @@
 
                         <!-- Condition Image Placeholder -->
                         <div class="w-20 h-20 flex-shrink-0 ">
-                            <img src="{{ $condition->getImage() }}" alt="{{ $condition->name }}"
+                            <img src="{{ $condition->getImage() }}" alt="{{ $condition->name??'' }}"
                                 class="w-full h-full object-cover rounded-md">
                         </div>
 
                         <!-- Condition Details -->
                         <div class="flex-1">
-                            <h3 class="text-xl font-semibold text-kaitoke-green-800">{{ $condition->name }}</h3>
+                            <h3 class="text-xl font-semibold text-kaitoke-green-800">{{ $condition->name??'' }}</h3>
                             <p class="text-gray-600 mt-2">@markdown($condition->description ?? '')</p>
 
                             @if ($condition->symptoms->isNotEmpty())
@@ -41,7 +41,7 @@
                                     <h4 class="text-md font-semibold">Symptoms</h4>
                                     @foreach ($condition->symptoms as $symptom)
                                         <div class="mt-2 border-l-4 border-green-600 pl-4">
-                                            <h5 class="font-semibold">{{ $symptom->name }}</h5>
+                                            <h5 class="font-semibold">{{ $symptom->name??'' }}</h5>
                                             <p class="text-gray-600 mt-1">@markdown($symptom->description ??'')</p>
                                         </div>
                                     @endforeach
@@ -52,7 +52,7 @@
                                     <h4 class="text-md font-semibold">Treatments</h4>
                                     @foreach ($condition->treatments as $treatment)
                                         <div class="mt-2 border-l-4 border-green-600 pl-4">
-                                            <h5 class="font-semibold">{{ $treatment->name }}</h5>
+                                            <h5 class="font-semibold">{{ $treatment->name??'' }}</h5>
                                             <p class="text-gray-600 mt-1">@markdown($treatment->description ??'')</p>
                                         </div>
                                     @endforeach

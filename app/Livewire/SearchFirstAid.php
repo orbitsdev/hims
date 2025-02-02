@@ -18,20 +18,25 @@ class SearchFirstAid extends Component
     public function render()
     {
         $conditions = Condition::query()
-        ->whereHas(['treatments', 'firstAidGuides']
-        )
-            ->where('name', 'like', '%' . $this->searchTerm . '%')
-            ->orWhereHas('treatments', function ($query) {
-                $query->where('name', 'like', '%' . $this->searchTerm . '%');
-            })
-            ->orWhereHas('firstAidGuides', function ($query) {
-                $query->where('title', 'like', '%' . $this->searchTerm . '%');
-            })
-            ->with(['treatments', 'firstAidGuides'])
-            ->get();
+   
+    ->whereHas('treatments')
+    ->whereHas('firstAidGuides')
+    
+    ->where('name', 'like', '%' . $this->searchTerm . '%')
+   
+    ->orWhereHas('treatments', function ($query) {
+        $query->where('name', 'like', '%' . $this->searchTerm . '%');
+    })
+   
+    ->orWhereHas('firstAidGuides', function ($query) {
+        $query->where('title', 'like', '%' . $this->searchTerm . '%');
+    })
 
-        return view('livewire.search-first-aid', [
-            'conditions' => $conditions,
-        ]);
+    ->with(['treatments', 'firstAidGuides'])
+    ->get();
+
+return view('livewire.search-first-aid', [
+    'conditions' => $conditions,
+]);
     }
 }

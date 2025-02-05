@@ -1237,14 +1237,19 @@ class FilamentForm extends Controller
 
                     Select::make('department_id')
                         ->required()
-                        ->relationship('department','name')
+                       
                         ->label('BUILDING/DEPARTMENT')
                         ->options(Department::studentDepartment()->get()->map(function ($d) {
                             return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
                         })->pluck('name', 'id'))
                         ->searchable()
                         ->columnSpan(3)
-                        ->createOptionForm(FilamentForm::departmentForm()),
+                        ->createOptionForm(FilamentForm::departmentForm())
+                        ->createOptionUsing(function (array $data) {
+                            return Department::create($data)->name;
+                          })
+                        ,
+                        
 
 
 

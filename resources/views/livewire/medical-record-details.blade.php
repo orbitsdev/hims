@@ -24,45 +24,45 @@
     <div class="border-l border-r">
       <p class="font-normal grid grid-cols-12 px-2 border-b">
         <span class="text-gray-400 col-span-2 inline-block border-r py-2">Past Illness:</span>
-        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->past_illness ?? '' }}</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $medicalRecord->past_illness ?? '' }}</span>
       </p>
       <p class="font-normal grid grid-cols-12 px-2 border-b">
         <span class="text-gray-400 col-span-2 inline-block border-r py-2">Allergies:</span>
-        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->allergies ?? '' }}</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $medicalRecord->allergies ?? '' }}</span>
       </p>
       <p class="font-normal grid grid-cols-12 px-2 border-b">
         <span class="text-gray-400 col-span-2 inline-block border-r py-2">Temperature:</span>
-        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->temperature ?? '' }} °C</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $medicalRecord->temperature ?? '' }} °C</span>
       </p>
       <p class="font-normal grid grid-cols-12 px-2 border-b">
         <span class="text-gray-400 col-span-2 inline-block border-r py-2">Blood Pressure:</span>
-        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->systolic_pressure ?? '' }} / {{ $record->diastolic_pressure ?? '' }} mmHg</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $medicalRecord->systolic_pressure ?? '' }} / {{ $medicalRecord->diastolic_pressure ?? '' }} mmHg</span>
       </p>
       <p class="font-normal grid grid-cols-12 px-2 border-b">
         <span class="text-gray-400 col-span-2 inline-block border-r py-2">BP Risk Level:</span>
-        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->getBloodPressureStatus() ?? '' }}</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $medicalRecord->getBloodPressureStatus() ?? '' }}</span>
       </p>
       <p class="font-normal grid grid-cols-12 px-2 border-b">
         <span class="text-gray-400 col-span-2 inline-block border-r py-2">Heart Rate:</span>
-        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->heart_rate ?? '' }} bpm</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $medicalRecord->heart_rate ?? '' }} bpm</span>
       </p>
       
       <!-- Diagnoses Section -->
       <p class="font-normal grid grid-cols-12 px-2 border-b">
         <span class="text-gray-400 col-span-2 inline-block border-r py-2">Diagnoses:</span>
         <span class="ml-4 py-2 inline-block col-span-9">
-          {{ $record->condition?->name ?? '' }}
-          @if($record->condition?->description)
-            <p class="text-gray-600 mt-2">@markdown($record->condition->description)</p>
+          {{ $medicalRecord->condition?->name ?? '' }}
+          @if($medicalRecord->condition?->description)
+            <p class="text-gray-600 mt-2">@markdown($medicalRecord->condition->description)</p>
           @endif
         </span>
       </p>
   
       <!-- Symptoms Section -->
-      @if($record->condition?->symptoms->isNotEmpty())
+      @if($medicalRecord->condition?->symptoms->isNotEmpty())
       <div class="mb-2 break-inside-avoid py-2">
         <h2 class="text-md font-semibold text-green-700 bg-gray-200 p-2 rounded">Symptoms</h2>
-        @foreach ($record->condition->symptoms as $symptom)
+        @foreach ($medicalRecord->condition->symptoms as $symptom)
         <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
           <p class="col-span-2 py-2 border-r">{{ $symptom->name ?? '' }}</p>
           <div class="col-span-9 py-2 ml-4">
@@ -74,10 +74,10 @@
       @endif
   
       <!-- Treatments Section -->
-      @if($record->condition?->treatments->isNotEmpty())
+      @if($medicalRecord->condition?->treatments->isNotEmpty())
       <div class="mb-2 break-inside-avoid py-2">
         <h2 class="text-md font-semibold text-green-700 bg-gray-200 p-2 rounded">Treatments</h2>
-        @foreach ($record->condition->treatments as $treatment)
+        @foreach ($medicalRecord->condition->treatments as $treatment)
         <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
           <p class="col-span-2 py-2 border-r">{{ $treatment->name ?? '' }}</p>
           <div class="col-span-9 py-2 ml-4">
@@ -89,10 +89,10 @@
       @endif
   
       <!-- First Aid and Guide Section -->
-      @if($record->condition?->firstAidGuides->isNotEmpty())
+      @if($medicalRecord->condition?->firstAidGuides->isNotEmpty())
       <div class="mb-2 break-inside-avoid py-2">
         <h2 class="text-md font-semibold text-green-700 bg-gray-200 p-2 rounded">First Aid and Guide</h2>
-        @foreach ($record->condition->firstAidGuides as $firstAidGuide)
+        @foreach ($medicalRecord->condition->firstAidGuides as $firstAidGuide)
         <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
           <p class="col-span-2 py-2 border-r">{{ $firstAidGuide->title ?? '' }}</p>
           <div class="col-span-9 py-2 ml-4">
@@ -105,7 +105,7 @@
   
       <p class="font-normal grid grid-cols-12 px-2 border-b">
         <span class="text-gray-400 col-span-2 inline-block border-r py-2">Remarks:</span>
-        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->remarks ?? '' }}</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $medicalRecord->remarks ?? '' }}</span>
       </p>
     </div>
   </div>

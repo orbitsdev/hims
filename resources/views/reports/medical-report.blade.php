@@ -111,7 +111,7 @@
               <span class="ml-4 py-2 inline-block col-span-9">
                   {{ $record->condition?->name ?? '' }}
                   @if($record->condition?->description)
-                      <p class="text-gray-600 mt-2">@markdown($record->condition->description)</p>
+                    <p class="text-gray-600 mt-2">@markdown($record->condition->description)</p>
                   @endif
               </span>
           </p>

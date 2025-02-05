@@ -18,62 +18,97 @@
 
     <!-- Medical Record Details (Wrap in a div to target print) -->
 
-    <div class="flex items-center justify-between mb-4 mt-2">
-        <div>
-            <h2 class="text-xl font-bold">Medical Record: {{ $medicalRecord->record_title ?? 'N/A' }}</h2>
-            <p class="text-gray-500">Date of Examination: {{ $medicalRecord->medicalCreated() ?? 'N/A' }}</p>
+        <!-- Medical Details Section -->
+<div class="mb-2 break-inside-avoid py-2">
+    <h2 class="text-xl font-semibold text-green-700 bg-gray-200 p-2 rounded">Medical Details</h2>
+    <div class="border-l border-r">
+      <p class="font-normal grid grid-cols-12 px-2 border-b">
+        <span class="text-gray-400 col-span-2 inline-block border-r py-2">Past Illness:</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->past_illness ?? '' }}</span>
+      </p>
+      <p class="font-normal grid grid-cols-12 px-2 border-b">
+        <span class="text-gray-400 col-span-2 inline-block border-r py-2">Allergies:</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->allergies ?? '' }}</span>
+      </p>
+      <p class="font-normal grid grid-cols-12 px-2 border-b">
+        <span class="text-gray-400 col-span-2 inline-block border-r py-2">Temperature:</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->temperature ?? '' }} °C</span>
+      </p>
+      <p class="font-normal grid grid-cols-12 px-2 border-b">
+        <span class="text-gray-400 col-span-2 inline-block border-r py-2">Blood Pressure:</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->systolic_pressure ?? '' }} / {{ $record->diastolic_pressure ?? '' }} mmHg</span>
+      </p>
+      <p class="font-normal grid grid-cols-12 px-2 border-b">
+        <span class="text-gray-400 col-span-2 inline-block border-r py-2">BP Risk Level:</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->getBloodPressureStatus() ?? '' }}</span>
+      </p>
+      <p class="font-normal grid grid-cols-12 px-2 border-b">
+        <span class="text-gray-400 col-span-2 inline-block border-r py-2">Heart Rate:</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->heart_rate ?? '' }} bpm</span>
+      </p>
+      
+      <!-- Diagnoses Section -->
+      <p class="font-normal grid grid-cols-12 px-2 border-b">
+        <span class="text-gray-400 col-span-2 inline-block border-r py-2">Diagnoses:</span>
+        <span class="ml-4 py-2 inline-block col-span-9">
+          {{ $record->condition?->name ?? '' }}
+          @if($record->condition?->description)
+            <p class="text-gray-600 mt-2">@markdown($record->condition->description)</p>
+          @endif
+        </span>
+      </p>
+  
+      <!-- Symptoms Section -->
+      @if($record->condition?->symptoms->isNotEmpty())
+      <div class="mb-2 break-inside-avoid py-2">
+        <h2 class="text-md font-semibold text-green-700 bg-gray-200 p-2 rounded">Symptoms</h2>
+        @foreach ($record->condition->symptoms as $symptom)
+        <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
+          <p class="col-span-2 py-2 border-r">{{ $symptom->name ?? '' }}</p>
+          <div class="col-span-9 py-2 ml-4">
+            @markdown($symptom->description ?? '')
+          </div>
         </div>
-        <div class="flex space-x-4">
-            <!-- Download PDF Button -->
-            <a href="{{ route('reports.medical-record', ['record' => $medicalRecord]) }}" class="block px-4 py-2 bg-kaitoke-green-600 text-white rounded hover:bg-green-600" target="_blank">
-                <i class="fa-solid fa-file-pdf mr-2"></i> Download PDF
-            </a>
-
-            <!-- Print Button -->
-            <button onclick="printDiv('printableArea')" class="block px-4 py-2 bg-blue-500 text-white rounded hover:bg-kaitoke-green-600">
-                <i class="fa-solid fa-print mr-2"></i> Print
-            </button>
+        @endforeach
+      </div>
+      @endif
+  
+      <!-- Treatments Section -->
+      @if($record->condition?->treatments->isNotEmpty())
+      <div class="mb-2 break-inside-avoid py-2">
+        <h2 class="text-md font-semibold text-green-700 bg-gray-200 p-2 rounded">Treatments</h2>
+        @foreach ($record->condition->treatments as $treatment)
+        <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
+          <p class="col-span-2 py-2 border-r">{{ $treatment->name ?? '' }}</p>
+          <div class="col-span-9 py-2 ml-4">
+            @markdown($treatment->description ?? '')
+          </div>
         </div>
+        @endforeach
+      </div>
+      @endif
+  
+      <!-- First Aid and Guide Section -->
+      @if($record->condition?->firstAidGuides->isNotEmpty())
+      <div class="mb-2 break-inside-avoid py-2">
+        <h2 class="text-md font-semibold text-green-700 bg-gray-200 p-2 rounded">First Aid and Guide</h2>
+        @foreach ($record->condition->firstAidGuides as $firstAidGuide)
+        <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
+          <p class="col-span-2 py-2 border-r">{{ $firstAidGuide->title ?? '' }}</p>
+          <div class="col-span-9 py-2 ml-4">
+            @markdown($firstAidGuide->content ?? '')
+          </div>
+        </div>
+        @endforeach
+      </div>
+      @endif
+  
+      <p class="font-normal grid grid-cols-12 px-2 border-b">
+        <span class="text-gray-400 col-span-2 inline-block border-r py-2">Remarks:</span>
+        <span class="ml-4 py-2 inline-block col-span-9">{{ $record->remarks ?? '' }}</span>
+      </p>
     </div>
-    <div id="printableArea" class="bg-white mt-4">
-
-        <!-- Record Header -->
-
-
-        <!-- Personal Information -->
-        <div class="mb-6">
-            <h3 class="text-lg font-bold text-gray-700">Personal Information</h3>
-            <ul class="space-y-2 mt-2">
-                <li><strong>Name:</strong> {{ $medicalRecord->first_name }} {{ $medicalRecord->last_name }}</li>
-                <li><strong>Email:</strong> {{ $medicalRecord->email ?? 'N/A' }}</li>
-                <li><strong>Age:</strong> {{ $medicalRecord->age ?? 'N/A' }}</li>
-                <li><strong>Weight:</strong> {{ $medicalRecord->weight }} kg</li>
-                <li><strong>Height:</strong> {{ $medicalRecord->height }} cm</li>
-                <li><strong>Civil Status:</strong> {{ $medicalRecord->civil_status ?? 'N/A' }}</li>
-            </ul>
-        </div>
-
-        <!-- Medical Information -->
-        <div class="mb-6">
-            <h3 class="text-lg font-bold text-gray-700">Medical Information</h3>
-            <ul class="space-y-2 mt-2">
-                <li><strong>Temperature:</strong> {{ $medicalRecord->temperature }} °C</li>
-                <li><strong>Blood Pressure:</strong> {{ $medicalRecord->systolic_pressure }}/{{ $medicalRecord->diastolic_pressure }} mmHg</li>
-                <li><strong>Heart Rate:</strong> {{ $medicalRecord->heart_rate }} bpm</li>
-                <li><strong>Diagnoses:</strong> {{ $medicalRecord->diagnoses ?? 'N/A' }}</li>
-                <li><strong>Remarks:</strong> {{ $medicalRecord->remarks ?? 'N/A' }}</li>
-            </ul>
-        </div>
-
-        <!-- Physician Information -->
-        <div>
-            <h3 class="text-lg font-bold text-gray-700">Physician Information</h3>
-            <ul class="space-y-2 mt-2">
-                <li><strong>Physician:</strong> {{ $medicalRecord->physician_name ?? 'N/A' }}</li>
-                <li><strong>Release By:</strong> {{ $medicalRecord->release_by ?? 'N/A' }}</li>
-            </ul>
-        </div>
-
-    </div>
+  </div>
+  
 </div>
 </x-student-layout>

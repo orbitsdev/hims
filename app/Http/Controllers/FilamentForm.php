@@ -1098,7 +1098,10 @@ class FilamentForm extends Controller
     {
         return [
 
-
+            TextInput::make('name')
+            ->columnSpanFull()
+            ->required()
+            ->maxLength(191),
 
             RichEditor::make('description')->toolbarButtons([
                 'attachFiles',

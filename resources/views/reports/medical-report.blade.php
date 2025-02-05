@@ -108,8 +108,14 @@
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Diagnoses:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $record->condition?->name??'' }}</span>
-            </p>
+              <span class="ml-4 py-2 inline-block col-span-9">
+                  {{ $record->condition?->name ?? '' }}
+                  @if($record->condition?->description)
+                      <p class="text-gray-600 mt-2">@markdown($record->condition->description)</p>
+                  @endif
+              </span>
+          </p>
+          
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Remarks:</span>
               <span class="ml-4 py-2 inline-block col-span-9">{{ $record->remarks??'' }}</span>

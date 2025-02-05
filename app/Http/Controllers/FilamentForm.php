@@ -1246,7 +1246,7 @@ class FilamentForm extends Controller
                         ->columnSpan(3)
                         ->createOptionForm(FilamentForm::departmentForm())
                         ->createOptionUsing(function (array $data) {
-                            return Department::create($data)->name;
+                            return Department::create($data)->id;
                           })
                         ,
                         

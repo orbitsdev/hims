@@ -12,7 +12,7 @@ class FirstAidDetailsPage extends Component
     public function mount($id)
     {
         // Fetch the condition with treatments and first aid guides
-        $this->condition = Condition::with(['treatments', 'firstAidGuides'])->findOrFail($id);
+        $this->condition = Condition::with(['treatments', 'firstAidGuides', 'file'])->findOrFail($id);
     }
 
     public function render()

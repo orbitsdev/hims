@@ -10,9 +10,9 @@
         <!-- Condition Details Section -->
         <div class="flex items-start space-x-10 mt-4">
             <!-- Condition Image -->
-            {{-- <div class="w-1/3 bg-white p-4 border border-gray-200  rounded-lg">
+            <div class="w-1/3 bg-white p-4 border border-gray-200  rounded-lg">
                 <img src="{{ $condition->getImage() }}" alt="{{ $condition->name }}" class="w-full h-full object-cover rounded-md">
-            </div> --}}
+            </div>
 
             <!-- Condition Details -->
             <div class="flex-1 bg-white p-6 border border-gray-200  rounded-lg">

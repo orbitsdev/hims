@@ -143,10 +143,10 @@ Route::middleware([
     Route::get('/admin-dashboard', AdminDashboard::class)->name('admin-dashboard');
     Route::get('/student-dashboard', StudentDashboard::class)->name('student-dashboard');
     Route::get('/staff-dashboard', StaffDashboard::class)->name('staff-dashboard');
-
+    Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
     Route::middleware('can:admin-and-staff')->group(function () {
         Route::get('/users', ListUser::class)->name('users');
-        Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
+      
         // Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
         Route::get('/user-create', CreateUser::class)->name('user-create');
         Route::get('/user-edit/{record}', EditUser::class)->name('user-edit');

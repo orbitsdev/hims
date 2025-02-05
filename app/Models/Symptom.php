@@ -27,17 +27,18 @@ class Symptom extends Model
 
     public function getImage()
     {
-        // Retrieve the related file
+        // Retrieve the related file using the morphOne relationship
         $file = $this->file;
     
-        // Check if the file exists and has a valid path
+        // Ensure the file exists and its 'file' attribute is valid
         if ($file && !empty($file->file) && is_string($file->file) && Storage::disk('public')->exists($file->file)) {
-            return Storage::url($file->file); // Get the public URL for the file
+            return Storage::url($file->file); // Return the public URL for the file
         }
     
-        // Return a placeholder image if the file doesn't exist or is invalid
+        // Fallback to a placeholder image if no valid file is found
         return asset('images/placeholder-image.jpg');
     }
+    
     
 
     public function files(): MorphMany

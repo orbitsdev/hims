@@ -715,7 +715,12 @@ class FilamentForm extends Controller
                                         })->pluck('name', 'id'))
                                         ->searchable()
                                         ->columnSpan(2)
-                                        ->createOptionForm(FilamentForm::departmentForm()),
+                                        ->createOptionForm(FilamentForm::departmentForm())
+                                        ->createOptionUsing(function (array $data) {
+                                            return Department::create($data)->id;
+              
+                                          })
+                                        ,
 
 
                                 ]),
@@ -1243,12 +1248,12 @@ class FilamentForm extends Controller
                             return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
                         })->pluck('name', 'id'))
                         ->searchable()
-                        ->columnSpan(3),
-                        // ->createOptionForm(FilamentForm::departmentForm())
-                        // ->createOptionUsing(function (array $data) {
-                        //     return Department::create($data)->id;
-                        //   })
-                        // ,
+                        ->columnSpan(3)
+                        ->createOptionForm(FilamentForm::departmentForm())
+                        ->createOptionUsing(function (array $data) {
+                            return Department::create($data)->id;
+                        })
+                        ,
                         
 
 

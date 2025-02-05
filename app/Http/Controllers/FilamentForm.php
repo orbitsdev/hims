@@ -330,7 +330,8 @@ class FilamentForm extends Controller
                                         })
                                         ->searchable()
                                         ->columnSpan(3)
-                                        ->createOptionForm(FilamentForm::departmentForm()),
+                                        // ->createOptionForm(FilamentForm::departmentForm())
+                                        ,
 
 
 
@@ -449,7 +450,8 @@ class FilamentForm extends Controller
                                         })
                                         ->searchable()
                                         ->columnSpanFull()
-                                        ->createOptionForm(FilamentForm::departmentForm()),
+                                        // ->createOptionForm(FilamentForm::departmentForm())
+                                        ,
 
 
 
@@ -585,7 +587,8 @@ class FilamentForm extends Controller
                                 })->pluck('name', 'id'))
                                 ->searchable()
                                 ->columnSpan(4)
-                                ->createOptionForm(FilamentForm::departmentForm()),
+                                // ->createOptionForm(FilamentForm::departmentForm())
+                                ,
                             FileUpload::make('image')
                                 ->disk('public')
 
@@ -623,7 +626,8 @@ class FilamentForm extends Controller
                                 })->pluck('name', 'id'))
                                 ->searchable()
                                 ->columnSpanFull()
-                                ->createOptionForm(FilamentForm::departmentForm()),
+                                // ->createOptionForm(FilamentForm::departmentForm())
+                                ,
                             FileUpload::make('image')
                                 ->disk('public')
 
@@ -1249,7 +1253,7 @@ class FilamentForm extends Controller
                         })->pluck('name', 'id'))
                         ->searchable()
                         ->columnSpan(3)
-                        ->createOptionForm(FilamentForm::departmentForm())
+                        // ->createOptionForm(FilamentForm::departmentForm())
                         ->createOptionUsing(function (array $data) {
                             return Department::create($data)->id;
                         })

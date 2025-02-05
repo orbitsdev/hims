@@ -28,17 +28,17 @@ class Condition extends Model
     }
     public function getImage()
     {
+        // Retrieve the related file
         $file = $this->file;
-    
-        // Check if the file object exists and the file path is valid
+
+        // Check if the file exists in storage
         if ($file && !empty($file->file) && Storage::disk('public')->exists($file->file)) {
-            return Storage::disk('public')->url($file->file);
+            return Storage::url($file->file);
         }
-    
-        // Return the placeholder image if the file doesn't exist
+
+        // Return a placeholder image if no valid file is found
         return asset('images/placeholder-image.jpg');
     }
-    
 
     public function treatments(){
         return $this->hasMany(Treatment::class, 'condition_id');

@@ -27,7 +27,7 @@
 
                         <!-- Condition Image Placeholder -->
                         <div class="w-20 h-20 flex-shrink-0 ">
-                            <img src="{{ $condition->getImage() }}" alt="{{ $condition->name??'' }}"
+                        <img src="{{ $condition->getImage() }}" alt="{{ $condition->name??'' }}"
                                 class="w-full h-full object-cover rounded-md">
                         </div>
 

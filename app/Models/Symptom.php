@@ -25,6 +25,20 @@ class Symptom extends Model
         return $this->hasMany(ConditionSymptom::class);
     }
 
+    
+    
+
+    public function files(): MorphMany
+    {
+        return $this->morphMany(File::class, 'fileable');
+    }
+    public function file(): MorphOne
+    {
+        return $this->morphOne(File::class, 'fileable');
+    }
+
+
+    
     public function getImage()
     {
         // Retrieve the related file using the morphOne relationship
@@ -38,17 +52,5 @@ class Symptom extends Model
         // Fallback to a placeholder image if no valid file is found
         return asset('images/placeholder-image.jpg');
     }
-    
-    
-
-    public function files(): MorphMany
-    {
-        return $this->morphMany(File::class, 'fileable');
-    }
-    public function file(): MorphOne
-    {
-        return $this->morphOne(File::class, 'fileable');
-    }
-
 
 }

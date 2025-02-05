@@ -70,6 +70,18 @@
                 </div>
             @endif
         </div>
+        <!-- First Aid and Guide Section -->
+    @if ($condition->firstAidGuides->isNotEmpty())
+    <div class="mt-4">
+        <h4 class="text-md font-semibold">First Aid and Guide</h4>
+        @foreach ($condition->firstAidGuides as $firstAidGuide)
+            <div class="mt-2 border-l-4 border-blue-600 pl-4">
+                <h5 class="font-semibold">{{ $firstAidGuide->title ?? '' }}</h5>
+                <p class="text-gray-600 mt-1">@markdown($firstAidGuide->content ?? '')</p>
+            </div>
+        @endforeach
+    </div>
+@endif
         <div class="mt-6">
             {{ $conditions->links() }}
         </div>

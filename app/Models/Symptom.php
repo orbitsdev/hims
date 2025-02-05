@@ -27,15 +27,18 @@ class Symptom extends Model
 
     public function getImage()
     {
-
+        // Retrieve the related file
         $file = $this->file;
-        if ($file && Storage::disk('public')->exists($file->file)) {
-            return Storage::disk('public')->url($file->file);
-        } else {
-
-            return asset('images/placeholder-image.jpg');
+    
+        // Check if the file exists and has a valid path
+        if ($file && !empty($file->file) && is_string($file->file) && Storage::disk('public')->exists($file->file)) {
+            return Storage::url($file->file); // Get the public URL for the file
         }
+    
+        // Return a placeholder image if the file doesn't exist or is invalid
+        return asset('images/placeholder-image.jpg');
     }
+    
 
     public function files(): MorphMany
     {

@@ -30,15 +30,16 @@ class Condition extends Model
     {
         // Retrieve the related file
         $file = $this->file;
-
-        // Check if the file exists in storage
-        if ($file && !empty($file->file) && Storage::disk('public')->exists($file->file)) {
+    
+        // Check if the file exists and the path is not null
+        if ($file && !empty($file->file) && is_string($file->file) && Storage::disk('public')->exists($file->file)) {
             return Storage::url($file->file);
         }
-
+    
         // Return a placeholder image if no valid file is found
         return asset('images/placeholder-image.jpg');
     }
+    
 
     public function treatments(){
         return $this->hasMany(Treatment::class, 'condition_id');

@@ -1203,7 +1203,6 @@ class FilamentForm extends Controller
                 ->required()
                 ->label('GROUP')
                 ->options(User::ROLES)
-
                 ->searchable()
                 ->live(),
 
@@ -1238,6 +1237,7 @@ class FilamentForm extends Controller
 
                     Select::make('department_id')
                         ->required()
+                        ->relationship('department','name')
                         ->label('BUILDING/DEPARTMENT')
                         ->options(Department::studentDepartment()->get()->map(function ($d) {
                             return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];

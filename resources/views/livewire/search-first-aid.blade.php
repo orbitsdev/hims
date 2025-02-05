@@ -70,7 +70,9 @@
                 </div>
             @endif
         </div>
-
+        <div class="mt-6">
+            {{ $conditions->links() }}
+        </div>
     </div>
 
 </x-student-layout>

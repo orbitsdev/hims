@@ -19,8 +19,8 @@ class SearchFirstAid extends Component
     {
         $conditions = Condition::query()
    
-    ->whereHas('treatments')
-    ->whereHas('firstAidGuides')
+    // ->whereHas('treatments')
+    // ->whereHas('firstAidGuides')
     
     ->where('name', 'like', '%' . $this->searchTerm . '%')
    

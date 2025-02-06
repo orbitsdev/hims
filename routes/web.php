@@ -252,7 +252,7 @@ Route::middleware([
     Route::get('/personnels/export', [ReportController::class, 'exportPersonnels'])->name('personnels.export');
     Route::get('/emergency-contacts/export', [ReportController::class, 'exportEmergencyContacts'])->name('emergency-contacts.export');
 
-    Route::get('first-aid-guide/{guide}', [ReportController::class, 'generateFirstAidPdf'])->name('first-aid-guide.pdf');
+    Route::get('first-aid-guide/{record}', [ReportController::class, 'generateFirstAidPdf'])->name('first-aid-guide.pdf');
 
 
     Route::middleware(['can:student-and-personnel'])->group(function () {

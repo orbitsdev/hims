@@ -91,7 +91,7 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                         'class' => 'border: none !imporant',
                     ])
                     ->modalContent(function (Model $record) {
-                        return view('livewire.first-aid-fuides.view-first-aid-guide', ['record' => $record]);
+                        return view('livewire.first-aid-fuides.view-first-aid-guide', ['guide' => $record]);
                     })
                     ->modalSubmitAction(false)
                     ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))

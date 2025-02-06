@@ -88,14 +88,6 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                      ->closeModalByClickingAway(true)
 
                     ->modalWidth(MaxWidth::Full),
-                        Tables\Actions\EditAction::make()->form(FilamentForm::firstAidGuideForm()) ->modalWidth(MaxWidth::SevenExtraLarge),
-                        Tables\Actions\DeleteAction::make(),
-                ]),
-
-
-                ])
-                ->bulkActions([
-
                     Action::make('download')
                     ->color('primary')
                     ->icon('heroicon-s-arrow-down-tray')
@@ -108,6 +100,16 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                     })
                     ->openUrlInNewTab()
                     ,
+
+                        Tables\Actions\EditAction::make()->form(FilamentForm::firstAidGuideForm()) ->modalWidth(MaxWidth::SevenExtraLarge),
+                        Tables\Actions\DeleteAction::make(),
+                ]),
+
+
+                ])
+                ->bulkActions([
+
+                  
 
                     Tables\Actions\BulkActionGroup::make([
                         BulkAction::make('delete')

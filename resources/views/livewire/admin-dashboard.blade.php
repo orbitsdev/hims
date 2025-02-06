@@ -68,7 +68,6 @@
             </div>
             @if ($total_students > 0)
                 <div>
-                    <!-- Export Button (Only if students exist) -->
                     <a href="{{ route('students.export') }}" 
                        class="flex items-center gap-2 bg-[#106c3b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -85,16 +84,30 @@
     
 
     <!-- Personnels -->
-    <div class="bg-[#F9F9F9] border border-[#F2F2F2] p-6 rounded-lg">
-        <div class="flex justify-between items-center">
-            <div>
-                <h3 class="text-sm font-semibold text-gray-500">Personnels</h3>
-                <p class="text-3xl font-bold text-gray-900">{{$total_personnel}}</p>
-                {{-- <p class="text-sm text-red-500">↓ 71% of total personnel targets</p> --}}
-                <p class="text-xs text-gray-500">Total personnel involved</p>
-            </div>
+  <!-- Personnels -->
+<div class="bg-[#F9F9F9] border border-[#F2F2F2] p-6 rounded-lg">
+    <div class="flex justify-between items-center">
+        <div>
+            <h3 class="text-sm font-semibold text-gray-500">Personnels</h3>
+            <p class="text-3xl font-bold text-gray-900">{{$total_personnel}}</p>
+            <p class="text-xs text-gray-500">Total personnel involved</p>
         </div>
+        @if ($total_personnel > 0)
+            <div>
+                <a href="{{ route('personnels.export') }}" 
+                   class="flex items-center gap-2 bg-[#106c3b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                        <polyline points="7 10 12 15 17 10"/>
+                        <line x1="12" y1="15" x2="12" y2="3"/>
+                    </svg>
+                    Export
+                </a>
+            </div>
+        @endif
     </div>
+</div>
+
 
     <!-- Staff -->
     <div class="bg-[#F9F9F9] border border-[#F2F2F2] p-6 rounded-lg">
@@ -102,9 +115,21 @@
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">Staff</h3>
                 <p class="text-3xl font-bold text-gray-900">{{$total_staff}}</p>
-                <p class="text-sm text-green-500"> Active staff members</p>
-                {{-- <p class="text-xs text-gray-500">Active staff members</p> --}}
+                <p class="text-xs text-gray-500">Active staff members</p>
             </div>
+            @if ($total_staff > 0)
+                <div>
+                    <a href="{{ route('staff.export') }}" 
+                       class="flex items-center gap-2 bg-[#106c3b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Export
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
 
@@ -147,9 +172,19 @@
                 <p class="text-3xl font-bold text-gray-900">{{$total_events}}</p>
                 <p class="text-xs text-gray-500">Events created this semester</p>
             </div>
-            <div class="text-gray-500">
-                <i class="fa-solid fa-calendar text-2xl"></i>
-            </div>
+            @if ($total_events > 0)
+                <div>
+                    <a href="{{ route('events.export') }}" 
+                       class="flex items-center gap-2 bg-[#106c3b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Export
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
     @endcan

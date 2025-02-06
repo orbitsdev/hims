@@ -247,6 +247,12 @@ Route::middleware([
     });
 
     Route::get('/students/export', [ReportController::class, 'exportStudents'])->name('students.export');
+    Route::get('/staff/export', [ReportController::class, 'exportStaff'])->name('staff.export');
+    Route::get('/events/export', [ReportController::class, 'exportEvents'])->name('events.export');
+    Route::get('/personnels/export', [ReportController::class, 'exportPersonnels'])->name('personnels.export');
+    Route::get('/emergency-contacts/export', [ReportController::class, 'exportEmergencyContacts'])->name('emergency-contacts.export');
+
+    Route::get('first-aid-guide/{guide}', [ReportController::class, 'generateFirstAidPdf'])->name('first-aid-guide.pdf');
 
     Route::middleware(['can:student-and-personnel'])->group(function () {
         Route::get('/public/events', EventList::class)->name('events.index');

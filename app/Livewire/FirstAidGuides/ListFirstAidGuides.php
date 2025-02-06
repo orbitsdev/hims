@@ -96,6 +96,19 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                 ])
                 ->bulkActions([
 
+                    Action::make('download')
+                    ->color('primary')
+                    ->icon('heroicon-s-arrow-down-tray')
+                    ->tooltip('DONNLOAD')
+                    
+                    ->label('DOWNLOAD PDF') // Consistent casing
+                    ->size('lg')
+                    ->url(function(Model $record){
+                        return route('first-aid-guide.pdf',['record'=> $record]);
+                    })
+                    ->openUrlInNewTab()
+                    ,
+
                     Tables\Actions\BulkActionGroup::make([
                         BulkAction::make('delete')
                             ->requiresConfirmation()

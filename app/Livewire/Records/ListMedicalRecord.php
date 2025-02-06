@@ -250,9 +250,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->color('primary')
                     ->icon('heroicon-s-arrow-down-tray')
                     ->tooltip('DONNLOAD REPORT')
-                    ->action(function(){
-                        FilamentForm::notification('DOWNLOAD REPORT COMING SOON');
-                    })
+                   
                     ->label('DOWNLOAD PDF') // Consistent casing
                     ->size('lg')
                     ->url(function(Model $record){

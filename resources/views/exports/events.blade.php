@@ -26,7 +26,7 @@
                     <td align="left" width="40">{{ $event->description ?? 'N/A' }}</td>
                     <td align="left" width="40">{{ $event->event_date ?? 'N/A' }}</td>
                     <td align="left" width="40">{{ $event->academicYear->name ?? 'N/A' }}</td>
-                    <td align="left" width="40">{{ $event->semester->name ?? 'N/A' }}</td>
+                    <td align="left" width="40">{{ $event->semester->name_in_text ?? 'N/A' }}</td>
                     <td align="left" width="40">{{ $event->user->name ?? 'N/A' }}</td>
                     <td align="left" width="40">{{ $event->is_published ? 'Yes' : 'No' }}</td>
                 </tr>

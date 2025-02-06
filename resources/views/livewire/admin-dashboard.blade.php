@@ -64,11 +64,25 @@
             <div>
                 <h3 class="text-sm font-semibold text-gray-500">Students</h3>
                 <p class="text-3xl font-bold text-gray-900">{{$total_students}}</p>
-                {{-- <p class="text-sm text-red-500">↓ 5% from last month</p> --}}
                 <p class="text-xs text-gray-500">Active students</p>
             </div>
+            @if ($total_students > 0)
+                <div>
+                    <!-- Export Button (Only if students exist) -->
+                    <a href="{{ route('students.export') }}" 
+                       class="flex items-center gap-2 bg-[#106c3b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Export
+                    </a>
+                </div>
+            @endif
         </div>
     </div>
+    
 
     <!-- Personnels -->
     <div class="bg-[#F9F9F9] border border-[#F2F2F2] p-6 rounded-lg">

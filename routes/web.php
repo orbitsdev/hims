@@ -246,6 +246,8 @@ Route::middleware([
         Route::get('medical-report/{record}', [ReportController::class, 'generatePdf'])->name('medical-record');
     });
 
+    Route::get('/students/export', [ReportController::class, 'exportStudents'])->name('students.export');
+
     Route::middleware(['can:student-and-personnel'])->group(function () {
         Route::get('/public/events', EventList::class)->name('events.index');
         Route::get('/public/first-aid-search', SearchFirstAid::class)->name('first-aid.search');

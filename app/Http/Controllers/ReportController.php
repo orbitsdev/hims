@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 
 use App\Models\MedicalRecord;
 
+use App\Exports\StudentsExport;
 use Spatie\LaravelPdf\Facades\Pdf;
+use Maatwebsite\Excel\Facades\Excel;
 use Illuminate\Support\Facades\Storage;
 use function Spatie\LaravelPdf\Support\pdf;
 
@@ -33,5 +35,11 @@ class ReportController extends Controller
     return response()->download($public_path)->deleteFileAfterSend(true);
     
 }
+
+public function exportStudents()
+    {
+        $filename = 'Students_' . now()->format('Y-m-d') . '.xlsx';
+        return Excel::download(new StudentsExport(), $filename);
+    }
 
 }

@@ -74,7 +74,7 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                 ->label('DOWNLOAD PDF') // Consistent casing
                 ->size('lg')
                 ->url(function(Model $record){
-                    return route('first-aid-guide.pdf',['record'=> $record]);
+                    return route('first-aid-guide.pdf',['guide'=> $record]);
                 })
                 ->openUrlInNewTab()
                 ,
@@ -91,7 +91,7 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                         'class' => 'border: none !imporant',
                     ])
                     ->modalContent(function (Model $record) {
-                        return view('livewire.first-aid-fuides.view-first-aid-guide', ['guide' => $record]);
+                        return view('livewire.first-aid-fuides.view-first-aid-guide', ['record' => $record]);
                     })
                     ->modalSubmitAction(false)
                     ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))

@@ -70,8 +70,8 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                 ->color('primary')
                 ->icon('heroicon-s-arrow-down-tray')
                 ->tooltip('DONNLOAD')
-                
-                ->label('DOWNLOAD PDF') // Consistent casing
+                ->button()
+                ->label('DOWNLOAD') // Consistent casing
                 ->size('lg')
                 ->url(function(Model $record){
                     return route('first-aid-guide.pdf',['guide'=> $record]);

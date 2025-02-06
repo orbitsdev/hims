@@ -31,25 +31,24 @@ class ReportController extends Controller
     }
 
     public function generateFirstAidPdf(FirstAidGuide $guide)
-{
-    // Load related condition and treatments
-    $guide = FirstAidGuide::with(['condition.treatments'])->find($guide->id);
-
-    if (!$guide) {
-        return redirect()->back()->with('error', 'First Aid Guide not found.');
-    }
-
-    \Log::info('Guide Data:', $guide->toArray());
-
-    $filename = str_replace(' ', '_', $guide->title) . '-FIRST-AID-GUIDE.pdf';
-    $public_path = public_path($filename);
-
-    Pdf::view('reports.first-aid-guide', ['guide' => $guide])->save($public_path);
-
-    return response()->download($public_path)->deleteFileAfterSend(true);
-}
-
+    {
+        if (!$guide) {
+            return redirect()->back()->with('error', 'First Aid Guide not found.');
+        }
     
+        // Load related condition and treatments
+        $guide->load(['condition.treatments']);
+    
+        // Generate the filename dynamically
+        $filename = str_replace(' ', '_', $guide->title) . '-FIRST-AID-GUIDE.pdf';
+        $public_path = public_path($filename);
+    
+        // Generate and save the PDF
+        Pdf::view('reports.first-aid-guide', ['guide' => $guide])->save($public_path);
+    
+        // Return the file as a response and delete after sending
+        return response()->download($public_path)->deleteFileAfterSend(true);
+    }
 
     public function generatePdf(MedicalRecord $record)
 {       

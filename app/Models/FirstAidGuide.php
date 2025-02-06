@@ -30,15 +30,17 @@ class FirstAidGuide extends Model
 
     public function getImage()
     {
-
         $file = $this->file;
-        if ($file && Storage::disk('public')->exists($file->file)) {
+    
+        // Check if a file exists and if the file path is valid
+        if ($file && !empty($file->file) && Storage::disk('public')->exists($file->file)) {
             return Storage::disk('public')->url($file->file);
-        } else {
-
-            return asset('images/placeholder-image.jpg');
         }
+    
+       
+        return asset('images/placeholder-image.jpg');
     }
+    
     public function condition(){
         return $this->belongsTo(Condition::class);
     }

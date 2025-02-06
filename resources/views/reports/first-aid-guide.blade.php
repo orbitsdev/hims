@@ -48,7 +48,7 @@
         <div class="mb-2 break-inside-avoid py-2">
           <h2 class="text-xl font-semibold text-red-700 bg-gray-200 p-2 rounded">Description</h2>
           <div class="border-l border-r">
-            <p class="text-gray-800 px-2 py-2">{{ $guide->content ?? 'No details available' }}</p>
+            <div class="text-gray-800 px-2 py-2">@markdown($guide->content ?? 'No details available')</div>
           </div>
         </div>
 
@@ -63,7 +63,9 @@
             </p>
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Description:</span>
-              <span class="ml-4 py-2 inline-block col-span-9">{{ $guide->condition->description ?? 'N/A' }}</span>
+              <div class="ml-4 py-2 inline-block col-span-9">
+                @markdown($guide->condition->description ?? 'No description available')
+              </div>
             </p>
           </div>
         </div>
@@ -77,7 +79,7 @@
           <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
             <p class="col-span-2 py-2 border-r">{{ $treatment->name ?? 'N/A' }}</p>
             <div class="col-span-9 py-2 ml-4">
-              {{ $treatment->description ?? 'No Treatment Description' }}
+              @markdown($treatment->description ?? 'No Treatment Description')
             </div>
           </div>
           @endforeach

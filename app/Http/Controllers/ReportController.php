@@ -76,7 +76,7 @@ public function exportStudents()
         $filename = $guide->title . '-FIRST-AID-GUIDE.pdf';
         $public_path = public_path($filename);
 
-        Pdf::loadView('reports.first-aid-guide', compact('guide'))->save($public_path);
+        Pdf::view('reports.first-aid-guide', compact('guide'))->save($public_path);
 
         return response()->download($public_path)->deleteFileAfterSend(true);
     }

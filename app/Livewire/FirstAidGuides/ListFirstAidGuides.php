@@ -66,6 +66,18 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                 // }),
             ])
             ->actions([
+                Action::make('download')
+                ->color('primary')
+                ->icon('heroicon-s-arrow-down-tray')
+                ->tooltip('DONNLOAD')
+                
+                ->label('DOWNLOAD PDF') // Consistent casing
+                ->size('lg')
+                ->url(function(Model $record){
+                    return route('first-aid-guide.pdf',['record'=> $record]);
+                })
+                ->openUrlInNewTab()
+                ,
                 ActionGroup::make([
                     Action::make('view')
                     ->color('success')
@@ -88,18 +100,7 @@ class ListFirstAidGuides extends Component implements HasForms, HasTable
                      ->closeModalByClickingAway(true)
 
                     ->modalWidth(MaxWidth::Full),
-                    Action::make('download')
-                    ->color('primary')
-                    ->icon('heroicon-s-arrow-down-tray')
-                    ->tooltip('DONNLOAD')
-                    
-                    ->label('DOWNLOAD PDF') // Consistent casing
-                    ->size('lg')
-                    ->url(function(Model $record){
-                        return route('first-aid-guide.pdf',['record'=> $record]);
-                    })
-                    ->openUrlInNewTab()
-                    ,
+                  
 
                         Tables\Actions\EditAction::make()->form(FilamentForm::firstAidGuideForm()) ->modalWidth(MaxWidth::SevenExtraLarge),
                         Tables\Actions\DeleteAction::make(),

@@ -53,14 +53,13 @@ return [
         'sender_name' => env('SEMAPHORE_SENDER_NAME', 'HIMS'),
     ],
 
-    'teamssprogram' => [
+   'teamssprogram' => [
     'secret' => env('TEAMSSPROGRAM_SECRET'),
     'device_id' => env('TEAMSSPROGRAM_DEVICE_ID'),
     'sim' => env('TEAMSSPROGRAM_SIM', 1),
     'priority' => env('TEAMSSPROGRAM_PRIORITY', 1),
-
-
 ],
+
 
 
 ];

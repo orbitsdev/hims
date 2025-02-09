@@ -12,6 +12,8 @@ class TeamSSProgramSmsService
     protected int $sim;
     protected int $priority;
     protected string $singleSmsUrl;
+    protected string $pendingLogsUrl;
+    protected string $sentLogsUrl;
 
     public function __construct()
     {
@@ -19,7 +21,10 @@ class TeamSSProgramSmsService
         $this->deviceId = config('services.teamssprogram.device_id');
         $this->sim = config('services.teamssprogram.sim', 1);
         $this->priority = config('services.teamssprogram.priority', 1);
+
         $this->singleSmsUrl = "https://sms.teamssprogram.com/api/send/sms";
+        $this->pendingLogsUrl = "https://sms.teamssprogram.com/api/get/sms.pending";
+        $this->sentLogsUrl = "https://sms.teamssprogram.com/api/get/sms.sent";
     }
 
     /**
@@ -27,15 +32,17 @@ class TeamSSProgramSmsService
      */
     public function formatPhoneNumber(string $phone): string
     {
-        $phone = preg_replace('/\D/', '', $phone); 
+        $phone = preg_replace('/\D/', '', $phone);
+
         if (substr($phone, 0, 1) === '9') {
             return '+63' . $phone;
         } elseif (substr($phone, 0, 2) === '09') {
             return '+63' . substr($phone, 1);
         } elseif (substr($phone, 0, 3) !== '+63') {
-            return '+63' . $phone; 
+            return '+63' . $phone;
         }
-        return $phone; 
+
+        return $phone;
     }
 
     /**
@@ -44,10 +51,8 @@ class TeamSSProgramSmsService
     public function sendSms(string $number, string $message): array
     {
         try {
-            // Format phone number
             $formattedNumber = $this->formatPhoneNumber($number);
 
-            // Prepare payload
             $payload = [
                 "secret" => $this->apiSecret,
                 "mode" => "devices",
@@ -60,10 +65,8 @@ class TeamSSProgramSmsService
 
             Log::info('Sending SMS with payload:', $payload);
 
-            // Send request
             $response = Http::asForm()->post($this->singleSmsUrl, $payload);
 
-            // Parse response
             $responseData = $response->json();
 
             Log::info('SMS Response:', $responseData);
@@ -81,7 +84,7 @@ class TeamSSProgramSmsService
     /**
      * Send Bulk SMS
      */
-    public function sendBulkSms(array $numbers, string $message, string $campaign = "bulk_sms", array $groups = [])
+    public function sendBulkSms(array $numbers, string $message, string $campaign = "bulk_sms", array $groups = []): array
     {
         try {
             $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
@@ -118,43 +121,49 @@ class TeamSSProgramSmsService
         }
     }
 
-
+    /**
+     * Fetch Pending Logs
+     */
     public function getPendingLogs(): array
-{
-    try {
-        $url = "https://sms.teamssprogram.com/api/get/sms.pending?secret={$this->apiSecret}";
-        $response = Http::get($url);
-        $responseData = $response->json();
+    {
+        try {
+            $url = "{$this->pendingLogsUrl}?secret={$this->apiSecret}";
+            $response = Http::get($url);
 
-        Log::info('TeamSSProgram Pending Logs Response:', $responseData);
+            $responseData = $response->json();
 
-        return $responseData;
-    } catch (\Exception $e) {
-        Log::error('Fetching Pending Logs Failed: ' . $e->getMessage());
-        return [
-            'error' => true,
-            'message' => $e->getMessage(),
-        ];
+            Log::info('TeamSSProgram Pending Logs Response:', $responseData);
+
+            return $responseData;
+        } catch (\Exception $e) {
+            Log::error('Fetching Pending Logs Failed: ' . $e->getMessage());
+            return [
+                'error' => true,
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
+
+    /**
+     * Fetch Sent Logs
+     */
+    public function getSentLogs(): array
+    {
+        try {
+            $url = "{$this->sentLogsUrl}?secret={$this->apiSecret}";
+            $response = Http::get($url);
+
+            $responseData = $response->json();
+
+            Log::info('TeamSSProgram Sent Logs Response:', $responseData);
+
+            return $responseData;
+        } catch (\Exception $e) {
+            Log::error('Fetching Sent Logs Failed: ' . $e->getMessage());
+            return [
+                'error' => true,
+                'message' => $e->getMessage(),
+            ];
+        }
     }
 }
-
-public function getSentLogs(): array
-{
-    try {
-        $url = "https://sms.teamssprogram.com/api/get/sms.sent?secret={$this->apiSecret}";
-        $response = Http::get($url);
-        $responseData = $response->json();
-
-        Log::info('TeamSSProgram Sent Logs Response:', $responseData);
-
-        return $responseData;
-    } catch (\Exception $e) {
-        Log::error('Fetching Sent Logs Failed: ' . $e->getMessage());
-        return [
-            'error' => true,
-            'message' => $e->getMessage(),
-        ];
-    }
-}
-}
-

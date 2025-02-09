@@ -263,65 +263,55 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ,
 
                     Action::make('sms')
-                        ->label('SEND SMS')
-                        ->icon('heroicon-s-chat-bubble-left-ellipsis')
-                        ->color('info')
-                        ->size('lg')
-                        ->requiresConfirmation()
-                        ->fillForm(function (Model $record) {
-                            return [
-                                'to' => $record->phone, // Prefill with the user's phone number
-                            ];
-                        })
-                        ->form([
-                            TextInput::make('to')
-                                ->required()
-                                ->disabled() // The recipient's number is not editable
-                                ->label('To'),
-                            Textarea::make('message')
-                                ->required()
-                                ->maxLength(153) // Limit message length to 153 characters
-                                ->label('Message'),
-                        ])
-                        ->action(function (Model $record, array $data) {
-                            $smsService = new TeamSSProgramSmsService();
-
-                            // Use a static phone number for testing
-                            $number = '+639366303145'; // Hardcoded test number
-                            $message = $data['message']; // Get the message from the form
-                    
-                            try {
-                                // Send SMS
-                                $response = $smsService->sendSms($number, $message);
-                    
-                                // Log the response
-                                Log::info('TeamSSProgram SMS Response:', $response);
-                    
-                                // Handle success or failure
-                                if (isset($response['error']) && $response['error']) {
-                                    Notification::make()
-                                        ->title('SMS Failed')
-                                        ->danger()
-                                        ->body('Failed to send SMS: ' . $response['message'])
-                                        ->send();
-                                } else {
-                                    Notification::make()
-                                        ->title('SMS Sent')
-                                        ->success()
-                                        ->body('SMS sent successfully to ' . $number)
-                                        ->send();
-                                }
-                            } catch (\Exception $e) {
-                                // Handle unexpected exceptions
-                                Log::error('Error Sending SMS: ' . $e->getMessage());
+                    ->label('SEND SMS')
+                    ->icon('heroicon-s-chat-bubble-left-ellipsis')
+                    ->color('info')
+                    ->size('lg')
+                    ->requiresConfirmation()
+                    ->form([
+                        Textarea::make('message')
+                            ->required()
+                            ->maxLength(153) // Limit message length to 153 characters
+                            ->label('Message'),
+                    ])
+                    ->action(function (Model $record, array $data) {
+                        $smsService = new TeamSSProgramSmsService();
+                
+                        $number = '+639366303145'; // Hardcoded phone number for testing
+                        $message = $data['message']; // Get the message from the form
+                
+                        try {
+                            // Send SMS
+                            $response = $smsService->sendSms($number, $message);
+                
+                            // Log the response
+                            Log::info('TeamSSProgram SMS Response:', $response);
+                
+                            // Handle success or failure
+                            if (isset($response['error']) && $response['error']) {
                                 Notification::make()
                                     ->title('SMS Failed')
                                     ->danger()
-                                    ->body('An error occurred: ' . $e->getMessage())
+                                    ->body('Failed to send SMS: ' . $response['message'])
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->title('SMS Sent')
+                                    ->success()
+                                    ->body('SMS sent successfully to ' . $number)
                                     ->send();
                             }
-                        })
-                        ->tooltip('SEND MESSAGE TO USER'),
+                        } catch (\Exception $e) {
+                            // Handle unexpected exceptions
+                            Log::error('Error Sending SMS: ' . $e->getMessage());
+                            Notification::make()
+                                ->title('SMS Failed')
+                                ->danger()
+                                ->body('An error occurred: ' . $e->getMessage())
+                                ->send();
+                        }
+                    })
+                    ->tooltip('SEND MESSAGE TO USER'),
                     
                     Action::make('send-blood-email-alert')
                     ->tooltip('NOTIFY USER BP STATUS BY SENDING EMAIL')

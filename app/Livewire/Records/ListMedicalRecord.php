@@ -277,7 +277,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->action(function (Model $record, array $data) {
                         $smsService = new TeamSSProgramSmsService();
                 
-                        $number = '+639366303145'; // Hardcoded phone number for testing
+                        $number = '09366303145'; // Hardcoded phone number for testing
                         $message = $data['message']; // Get the message from the form
                 
                         try {

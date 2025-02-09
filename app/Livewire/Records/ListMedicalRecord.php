@@ -21,10 +21,12 @@ use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ColumnGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Enums\FiltersLayout;
+use App\Services\TeamSSProgramSmsService;
 use Filament\Tables\Filters\SelectFilter;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -280,34 +282,61 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ])
                     ->action(function (Model $record, array $data) {
 
-    //                     // $owner= $record->user;
-    //                     // if($owner){
-    //                     //     $contact = $record->phone;
-    //                     //     FilamentForm::notification('SEND SMS TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
-    //                     //     $record->record->notificationRequests()->create([
-    //                     //         'message' => $data['message'],
-    //                     //         'email' => $owner->email
-    //                     //     ]);
-    //                     // }
 
-    $smsService = new SmsService();
+                        $smsService = new TeamSSProgramSmsService();
 
-    // Hardcoded number for testing
-    $number = '+639366303145'; // Already formatted correctly for Semaphore
-    $message = $data['message']; // Message entered in the form
+        $number = '+639366303145'; // Get the recipient's phone number
+        $message = $data['message']; // Message from the form
+
+        // Send the SMS using TeamSSProgram
+        $response = $smsService->sendSms($number, $message);
+
+        // Log the response
+        \Log::info('TeamSSProgram SMS Response:', $response);
+
+        // Handle response
+        if (isset($response['error']) && $response['error']) {
+            Notification::make()
+                ->title('SMS Failed')
+                ->danger()
+                ->body('Failed to send SMS: ' . $response['message'])
+                ->send();
+        } else {
+            Notification::make()
+                ->title('SMS Sent')
+                ->success()
+                ->body('SMS sent successfully to ' . $number)
+                ->send();
+        }
+
+    // //                     // $owner= $record->user;
+    // //                     // if($owner){
+    // //                     //     $contact = $record->phone;
+    // //                     //     FilamentForm::notification('SEND SMS TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
+    // //                     //     $record->record->notificationRequests()->create([
+    // //                     //         'message' => $data['message'],
+    // //                     //         'email' => $owner->email
+    // //                     //     ]);
+    // //                     // }
+
+    // $smsService = new SmsService();
+
+    // // Hardcoded number for testing
+    // $number = '+639366303145'; // Already formatted correctly for Semaphore
+    // $message = $data['message']; // Message entered in the form
     
-    // Send the SMS
-    $response = $smsService->sendSms($number, $message);
+    // // Send the SMS
+    // $response = $smsService->sendSms($number, $message);
     
-    // Log the response
-    \Log::info('SMS Response:', $response);
+    // // Log the response
+    // \Log::info('SMS Response:', $response);
     
-    // Handle response
-    if (isset($response['error']) && $response['error']) {
-        FilamentForm::notification('Failed to send SMS: ' . $response['message']);
-    } else {
-        FilamentForm::notification('SMS sent successfully to ' . $number);
-    }
+    // // Handle response
+    // if (isset($response['error']) && $response['error']) {
+    //     FilamentForm::notification('Failed to send SMS: ' . $response['message']);
+    // } else {
+    //     FilamentForm::notification('SMS sent successfully to ' . $number);
+    // }
     
 
                     })

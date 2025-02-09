@@ -114,3 +114,87 @@ class TeamSSProgramSmsService
         }
     }
 }
+
+
+// <!-- <?php
+
+//   $message = [
+//       "secret" => "API_SECRET", // your API secret from (Tools -> API Keys) page
+//       "mode" => "devices",
+//       "device" => "00000000-0000-0000-d57d-f30cb6a89289",
+//       "sim" => 1,
+//       "priority" => 1,
+//       "phone" => "+639051234567",
+//       "message" => "Hello World!"
+//   ];
+
+//   $cURL = curl_init("https://sms.teamssprogram.com/api/send/sms");
+//   curl_setopt($cURL, CURLOPT_RETURNTRANSFER, true);
+//   curl_setopt($cURL, CURLOPT_POSTFIELDS, $message);
+//   $response = curl_exec($cURL);
+//   curl_close($cURL);
+
+//   $result = json_decode($response, true);
+
+//   // do something with response
+//   print_r($result);
+// Success Response
+// {
+//   "status": 200,
+//   "message": "Message has been queued for sending!",
+//   "data": false
+// }
+// Error Response
+// {
+//   "status": 400,
+//   "message": "Invalid Parameters!",
+//   "data": false
+// }
+// sms.teamssprogram.com
+// Charlz
+// Lamera D Charlz
+// ari if bulk 
+// Charlz
+// Lamera D Charlz
+// <?php
+
+//   $message = [
+//       "secret" => "API_SECRET", // your API secret from (Tools -> API Keys) page
+//       "mode" => "devices",
+//       "campaign" => "bulk test",
+//       "numbers" => "+639051234567,+639123456789,+639123456789",
+//       "groups" => "1,2,3,4",
+//       "device" => "00000000-0000-0000-d57d-f30cb6a89289",
+//       "sim" => 1,
+//       "priority" => 1,
+//       "message" => "Hello World!"
+//   ];
+
+//   $cURL = curl_init("https://sms.teamssprogram.com/api/send/sms.bulk");
+//   curl_setopt($cURL, CURLOPT_RETURNTRANSFER, true);
+//   curl_setopt($cURL, CURLOPT_POSTFIELDS, $message);
+//   $response = curl_exec($cURL);
+//   curl_close($cURL);
+
+//   $result = json_decode($response, true);
+
+//   // do something with response
+//   print_r($result);
+// Success Response
+// {
+//   "status": 200,
+//   "message": "Message has been queued for sending!",
+//   "data": false
+// }
+// Error Response
+// {
+//   "status": 400,
+//   "message": "Invalid Parameters!",
+//   "data": false
+// }
+// sms.teamssprogram.com
+// Charlz replied to you
+// amo na abeh sa api code nya 
+// Charlz
+// Lamera D Charlz
+// no need na sa api nana nga value  -->

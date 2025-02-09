@@ -12,6 +12,7 @@ use App\Models\EmergencyContact;
 use App\Mail\BloodPressureStatus;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
@@ -285,106 +286,33 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
 
                         $smsService = new TeamSSProgramSmsService();
 
-        $number = '+639366303145'; // Get the recipient's phone number
-        $message = $data['message']; // Message from the form
+$number = '+639366303145'; // Hardcoded phone number
+$message = $data['message']; // Message from the form
 
-        // Send the SMS using TeamSSProgram
-        $response = $smsService->sendSms($number, $message);
+$response = $smsService->sendSms($number, $message);
 
-        // Log the response
-        \Log::info('TeamSSProgram SMS Response:', $response);
+Log::info('TeamSSProgram SMS Response:', $response);
 
-        // Handle response
-        if (isset($response['error']) && $response['error']) {
-            Notification::make()
-                ->title('SMS Failed')
-                ->danger()
-                ->body('Failed to send SMS: ' . $response['message'])
-                ->send();
-        } else {
-            Notification::make()
-                ->title('SMS Sent')
-                ->success()
-                ->body('SMS sent successfully to ' . $number)
-                ->send();
-        }
+if (isset($response['error']) && $response['error']) {
+    Notification::make()
+        ->title('SMS Failed')
+        ->danger()
+        ->body('Failed to send SMS: ' . $response['message'])
+        ->send();
+} else {
+    Notification::make()
+        ->title('SMS Sent')
+        ->success()
+        ->body('SMS sent successfully to ' . $number)
+        ->send();
+}
 
-    // //                     // $owner= $record->user;
-    // //                     // if($owner){
-    // //                     //     $contact = $record->phone;
-    // //                     //     FilamentForm::notification('SEND SMS TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
-    // //                     //     $record->record->notificationRequests()->create([
-    // //                     //         'message' => $data['message'],
-    // //                     //         'email' => $owner->email
-    // //                     //     ]);
-    // //                     // }
-
-    // $smsService = new SmsService();
-
-    // // Hardcoded number for testing
-    // $number = '+639366303145'; // Already formatted correctly for Semaphore
-    // $message = $data['message']; // Message entered in the form
-    
-    // // Send the SMS
-    // $response = $smsService->sendSms($number, $message);
-    
-    // // Log the response
-    // \Log::info('SMS Response:', $response);
-    
-    // // Handle response
-    // if (isset($response['error']) && $response['error']) {
-    //     FilamentForm::notification('Failed to send SMS: ' . $response['message']);
-    // } else {
-    //     FilamentForm::notification('SMS sent successfully to ' . $number);
-    // }
     
 
                     })
                     ->tooltip('SEND MESSAGE TO USER')
                     ,
-                    // Action::make('send-email')
-                    // ->tooltip('SEND EMAIL TO USER')
-                    // ->label('SEND EMAIL')
-                    // ->icon('heroicon-s-envelope')
-                    // ->color('info')
-                    // ->size('lg')
-
-                    // ->fillForm(function (Model $record) {
-
-                    //     return [
-                    //         'to' => $record->user->email,
-                    //     ];
-                    // })
-                    // ->form([
-                    //     TextInput::make('to')->required()->disabled()->label('To'),
-                    //     Textarea::make('message')->required(),
-
-
-                    // ])
-                    // ->action(function (Model $record, array $data) {
-
-                    //     $owner= $record->user;
-                    //     if($owner){
-                    //         FilamentForm::notification('SEND EMAIL TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
-                    //         $record->record->notificationRequests()->create([
-                    //             'message' => $data['message'],
-                    //             'email' => $owner->email
-                    //         ]);
-                    //     }
-
-                    // }),
-
-                //     Action::make('send-blood-sms-alert')
-                //     ->tooltip('NOTIFY USER BP STATUS BY SENDING SMS')
-                //     ->label('SEND BP SMS ALERT')
-                //     ->icon('heroicon-s-exclamation-circle')
-                //     ->color('danger')
-                //     ->size('lg')
-                //    ->action(function (Model $record) {
-                //     $suggestion = $record->getBloodPressureSuggestion();
-                //     dd($suggestion);
-
-                //     }),
+                   
 
                     Action::make('send-blood-email-alert')
                     ->tooltip('NOTIFY USER BP STATUS BY SENDING EMAIL')

@@ -11,7 +11,8 @@ class TeamSSProgramSmsService
     protected string $deviceId;
     protected int $sim;
     protected int $priority;
-    protected string $apiUrl;
+    protected string $singleSmsUrl;
+    protected string $bulkSmsUrl;
 
     public function __construct()
     {
@@ -19,7 +20,8 @@ class TeamSSProgramSmsService
         $this->deviceId = config('services.teamssprogram.device_id');
         $this->sim = config('services.teamssprogram.sim', 1);
         $this->priority = config('services.teamssprogram.priority', 1);
-        $this->apiUrl = "https://sms.teamssprogram.com/api/send/sms";
+        $this->singleSmsUrl = "https://sms.teamssprogram.com/api/send/sms";
+        $this->bulkSmsUrl = "https://sms.teamssprogram.com/api/send/sms.bulk";
     }
 
     /**
@@ -39,7 +41,7 @@ class TeamSSProgramSmsService
     }
 
     /**
-     * Send SMS using TeamSSProgram API
+     * Send Single SMS
      */
     public function sendSms(string $number, string $message): array
     {
@@ -56,16 +58,55 @@ class TeamSSProgramSmsService
                 "message" => $message,
             ];
 
-            Log::info('TeamSSProgram SMS Request:', $payload);
+            Log::info('TeamSSProgram Single SMS Request:', $payload);
 
-            $response = Http::post($this->apiUrl, $payload);
+            $response = Http::post($this->singleSmsUrl, $payload);
             $responseData = $response->json();
 
-            Log::info('TeamSSProgram SMS Response:', $responseData);
+            Log::info('TeamSSProgram Single SMS Response:', $responseData);
 
             return $responseData;
         } catch (\Exception $e) {
             Log::error('TeamSSProgram SMS Failed: ' . $e->getMessage());
+            return [
+                'error' => true,
+                'message' => $e->getMessage(),
+            ];
+        }
+    }
+
+    /**
+     * Send Bulk SMS
+     */
+    public function sendBulkSms(array $numbers, string $message, string $campaign = "bulk_sms", array $groups = [])
+    {
+        try {
+            $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
+            $numberString = implode(',', $formattedNumbers);
+            $groupString = implode(',', $groups);
+
+            $payload = [
+                "secret" => $this->apiSecret,
+                "mode" => "devices",
+                "campaign" => $campaign,
+                "numbers" => $numberString,
+                "groups" => $groupString,
+                "device" => $this->deviceId,
+                "sim" => $this->sim,
+                "priority" => $this->priority,
+                "message" => $message,
+            ];
+
+            Log::info('TeamSSProgram Bulk SMS Request:', $payload);
+
+            $response = Http::post($this->bulkSmsUrl, $payload);
+            $responseData = $response->json();
+
+            Log::info('TeamSSProgram Bulk SMS Response:', $responseData);
+
+            return $responseData;
+        } catch (\Exception $e) {
+            Log::error('TeamSSProgram Bulk SMS Failed: ' . $e->getMessage());
             return [
                 'error' => true,
                 'message' => $e->getMessage(),

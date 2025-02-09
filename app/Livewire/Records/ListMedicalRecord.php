@@ -268,7 +268,16 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->color('info')
                     ->size('lg')
                     ->requiresConfirmation()
+                    ->fillForm(function (Model $record) {
+                        return [
+                            'to' => $record->phone, // Prefill with the user's phone number
+                        ];
+                    })
                     ->form([
+                        TextInput::make('to')
+                            ->required()
+                            ->disabled() // The recipient's number is not editable
+                            ->label('To'),
                         Textarea::make('message')
                             ->required()
                             ->maxLength(153) // Limit message length to 153 characters
@@ -277,7 +286,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->action(function (Model $record, array $data) {
                         $smsService = new TeamSSProgramSmsService();
                 
-                        $number = '09366303145'; // Hardcoded phone number for testing
+                        $number = $data['phone'];
                         $message = $data['message']; // Get the message from the form
                 
                         try {

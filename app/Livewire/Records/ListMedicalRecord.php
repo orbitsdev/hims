@@ -285,18 +285,27 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ])
                     ->action(function (Model $record, array $data) {
                         $smsService = new TeamSSProgramSmsService();
-                
+
                         $number = $record->phone;
-                        $message = $data['message']; 
-                
+                        $message = $data['message'];
+
+
+                        if (!$number) {
+                            Notification::make()
+                                ->title('SMS Failed')
+                                ->danger()
+                                ->body('The phone number is missing or invalid.')
+                                ->send();
+
+                            Log::error('Phone number is missing or invalid. SMS not sent.');
+                            return;
+                        }
+
                         try {
-                           
                             $response = $smsService->sendSms($number, $message);
-                
-                    
+
                             Log::info('TeamSSProgram SMS Response:', $response);
-                
-                           
+
                             if (isset($response['error']) && $response['error']) {
                                 Notification::make()
                                     ->title('SMS Failed')
@@ -311,7 +320,6 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                                     ->send();
                             }
                         } catch (\Exception $e) {
-                        
                             Log::error('Error Sending SMS: ' . $e->getMessage());
                             Notification::make()
                                 ->title('SMS Failed')

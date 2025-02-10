@@ -128,7 +128,7 @@ class ListBatches extends Component implements HasForms, HasTable
                                                     $q->whereNotNull('phone')->where('phone', '!=', '');
                                                 });
                                             })
-                                            ->orWhereNotNull('phone'); // Include users with phone numbers in the users table
+                                            ; // Include users with phone numbers in the users table
                                         })
                                         ->get()
                                         ->map(function ($item) {

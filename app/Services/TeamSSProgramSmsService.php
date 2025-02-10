@@ -12,6 +12,7 @@ class TeamSSProgramSmsService
     protected int $sim;
     protected int $priority;
     protected string $singleSmsUrl;
+    protected string $bulkSmsUrl;
     protected string $pendingLogsUrl;
     protected string $sentLogsUrl;
 
@@ -23,6 +24,7 @@ class TeamSSProgramSmsService
         $this->priority = config('services.teamssprogram.priority', 1);
 
         $this->singleSmsUrl = "https://sms.teamssprogram.com/api/send/sms";
+        $this->bulkSmsUrl = "https://sms.teamssprogram.com/api/send/sms.bulk";
         $this->pendingLogsUrl = "https://sms.teamssprogram.com/api/get/sms.pending";
         $this->sentLogsUrl = "https://sms.teamssprogram.com/api/get/sms.sent";
     }
@@ -99,9 +101,9 @@ class TeamSSProgramSmsService
     {
         try {
             $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
-            $numberString = implode(',', $formattedNumbers);
-            $groupString = implode(',', $groups);
-
+            $numberString = implode(',', $formattedNumbers); // Comma-separated string
+            $groupString = implode(',', $groups); // Optional groups
+    
             $payload = [
                 "secret" => $this->apiSecret,
                 "mode" => "devices",
@@ -113,24 +115,27 @@ class TeamSSProgramSmsService
                 "priority" => $this->priority,
                 "message" => $message,
             ];
-
-            Log::info('TeamSSProgram Bulk SMS Request:', $payload);
-
-            $response = Http::asForm()->post($this->singleSmsUrl, $payload);
-
+    
+            Log::info('Bulk SMS Payload:', $payload);
+    
+            // Use bulk SMS URL here
+            $response = Http::asForm()->post($this->bulkSmsUrl, $payload);
+    
             $responseData = $response->json();
-
-            Log::info('TeamSSProgram Bulk SMS Response:', $responseData);
-
+    
+            Log::info('Bulk SMS Response:', $responseData);
+    
             return $responseData;
         } catch (\Exception $e) {
-            Log::error('TeamSSProgram Bulk SMS Failed: ' . $e->getMessage());
+            Log::error('Bulk SMS Failed: ' . $e->getMessage());
             return [
                 'error' => true,
                 'message' => $e->getMessage(),
             ];
         }
     }
+    
+
 
     /**
      * Fetch Pending Logs

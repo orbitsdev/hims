@@ -102,93 +102,95 @@ class ListEvents extends Component implements HasForms, HasTable
                     }),
             ])
             ->actions([
-                Action::make('sendEmail')
-                    ->label('SEND SMS ')
-                    ->icon('heroicon-m-bell-alert')
-                    ->size('lg')
-                    ->modalWidth(MaxWidth::SevenExtraLarge)
-                    ->form([
-                        // TextInput::make('title')->required(),
-                        Textarea::make('message')->required()->maxLength(153)->hint('SMS MESSAGE'),
-                        CheckboxList::make('departments')
-                            ->required()
-                            ->options(Department::where('name', '!=', 'All')->pluck('name', 'id'))
-                            ->columns(2)
-                            ->searchable()
-                            ->gridDirection('row')
-                            ->label('SELECT DEPARTMENT/BUILDING THAT YOU WANT TO BE NOTIFIED'),
-
-
-                    ])
-                    ->button()
-                    ->action(function (array $data) {
-
-                        $smsService = new TeamSSProgramSmsService();
-                        $message = $data['message'];
-
-                        // Retrieve users who belong to the selected departments AND have a phone number
-                        $users = User::departmentBelong($data['departments'])->get();
-
-
-
-                        if ($users->isEmpty()) {
-                            Notification::make()
-                                ->title('No Recipients')
-                                ->danger()
-                                ->body('No users found with a valid phone number in the selected departments.')
-                                ->send();
-                            return;
+                Action::make('sendSMS')
+                ->label('SEND SMS')
+                ->icon('heroicon-m-bell-alert')
+                ->size('lg')
+                ->modalWidth(MaxWidth::SevenExtraLarge)
+                ->form([
+                    Textarea::make('message')
+                        ->required()
+                        ->maxLength(153)
+                        ->hint('SMS MESSAGE'),
+                    CheckboxList::make('departments')
+                        ->required()
+                        ->options(Department::where('name', '!=', 'All')->pluck('name', 'id'))
+                        ->columns(2)
+                        ->searchable()
+                        ->gridDirection('row')
+                        ->label('SELECT DEPARTMENT/BUILDING THAT YOU WANT TO BE NOTIFIED'),
+                ])
+                ->button()
+                ->action(function (array $data) {
+                    $smsService = new TeamSSProgramSmsService();
+                    $message = $data['message'];
+            
+                    // Retrieve users by selected departments
+                    $users = User::departmentBelong($data['departments'])->get();
+            
+                    if ($users->isEmpty()) {
+                        Notification::make()
+                            ->title('No Recipients')
+                            ->danger()
+                            ->body('No users found with a valid phone number in the selected departments.')
+                            ->send();
+                        return;
+                    }
+            
+                    // Extract valid phone numbers
+                    $phoneNumbers = $users->map(function ($user) {
+                        if ($user->student && $user->student->personalDetail) {
+                            return $user->student->personalDetail->phone;
                         }
-
-                        $phoneNumbers = [];
-
-                        foreach ($users as $user) {
-                            if ($user->student && $user->student->personalDetail) {
-                                $phoneNumbers[] = $user->student->personalDetail->phone;
-                            }
-                            if ($user->staff && $user->staff->personalDetail) {
-                                $phoneNumbers[] = $user->staff->personalDetail->phone;
-                            }
-                            if ($user->personnel && $user->personnel->personalDetail) {
-                                $phoneNumbers[] = $user->personnel->personalDetail->phone;
-                            }
+                        if ($user->staff && $user->staff->personalDetail) {
+                            return $user->staff->personalDetail->phone;
                         }
-
-                        $phoneNumbers = array_filter($phoneNumbers); // Remove nulls
-                        $formattedNumbers = array_map([$smsService, 'formatPhoneNumber'], $phoneNumbers);
-
-                         dd($formattedNumbers);
-                         return ;
-                     
-                        try {
-                            // Send bulk SMS
-                            $response = $smsService->sendBulkSms($formattedNumbers, $message);
-
-                            Log::info('Bulk SMS Response:', $response);
-
-                            if (isset($response['error']) && $response['error']) {
-                                Notification::make()
-                                    ->title('SMS Failed')
-                                    ->danger()
-                                    ->body('Failed to send SMS: ' . $response['message'])
-                                    ->send();
-                            } else {
-                                Notification::make()
-                                    ->title('SMS Sent')
-                                    ->success()
-                                    ->body('SMS successfully sent to ' . count($formattedNumbers) . ' users.')
-                                    ->send();
-                            }
-                        } catch (\Exception $e) {
-                            Log::error('Error Sending Bulk SMS: ' . $e->getMessage());
-
+                        if ($user->personnel && $user->personnel->personalDetail) {
+                            return $user->personnel->personalDetail->phone;
+                        }
+                        return null;
+                    })->filter()->toArray();
+            
+                    if (empty($phoneNumbers)) {
+                        Notification::make()
+                            ->title('No Recipients')
+                            ->danger()
+                            ->body('No valid phone numbers found in the selected departments.')
+                            ->send();
+                        return;
+                    }
+            
+                    Log::info('Phone Numbers:', $phoneNumbers);
+            
+                    try {
+                        // Send bulk SMS
+                        $response = $smsService->sendBulkSms($phoneNumbers, $message);
+            
+                        Log::info('Bulk SMS Response:', $response);
+            
+                        if (isset($response['error']) && $response['error']) {
                             Notification::make()
                                 ->title('SMS Failed')
                                 ->danger()
-                                ->body('An error occurred: ' . $e->getMessage())
+                                ->body('Failed to send SMS: ' . $response['message'])
+                                ->send();
+                        } else {
+                            Notification::make()
+                                ->title('SMS Sent')
+                                ->success()
+                                ->body('SMS successfully sent to ' . count($phoneNumbers) . ' users.')
                                 ->send();
                         }
-                    }),
+                    } catch (\Exception $e) {
+                        Log::error('Error Sending Bulk SMS: ' . $e->getMessage());
+                        Notification::make()
+                            ->title('SMS Failed')
+                            ->danger()
+                            ->body('An error occurred: ' . $e->getMessage())
+                            ->send();
+                    }
+                }),
+            
                 ActionGroup::make([
                     Action::make('view')
                         ->color('success')

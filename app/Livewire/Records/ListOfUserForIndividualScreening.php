@@ -217,22 +217,22 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                             }
                         }),
 
-                    Action::make('view')
-                        ->icon('heroicon-o-eye')
-                        ->label('VIEW SENT SMS')
+                    // Action::make('view')
+                    //     ->icon('heroicon-o-eye')
+                    //     ->label('VIEW SENT SMS')
 
 
 
 
-                        ->outlined()
-                        ->modalSubmitAction(false)
-                        ->modalCancelAction(fn(StaticAction $action) => $action->label('Close'))
-                        ->disabledForm()
-                        ->modalContent(fn(Model $record): View => view(
-                            'livewire.view-send-notification',
-                            ['record' => $record],
-                        ))
-                        ->modalWidth(MaxWidth::SevenExtraLarge),
+                    //     ->outlined()
+                    //     ->modalSubmitAction(false)
+                    //     ->modalCancelAction(fn(StaticAction $action) => $action->label('Close'))
+                    //     ->disabledForm()
+                    //     ->modalContent(fn(Model $record): View => view(
+                    //         'livewire.view-send-notification',
+                    //         ['record' => $record],
+                    //     ))
+                    //     ->modalWidth(MaxWidth::SevenExtraLarge),
                 ]),
 
 

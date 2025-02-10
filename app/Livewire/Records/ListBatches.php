@@ -12,7 +12,6 @@ use App\Jobs\SendNotificationJob;
 use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
-use Illuminate\Support\Facades\Log;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
 use App\Http\Controllers\FilamentForm;
@@ -22,9 +21,7 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
-use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
-use App\Services\TeamSSProgramSmsService;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\CheckboxList;
@@ -95,121 +92,120 @@ class ListBatches extends Component implements HasForms, HasTable
                    
                     ActionGroup::make([
                         Action::make('notify')
-                            ->label('SEND SMS')
-                            ->icon('heroicon-o-bell')
-                            ->size('lg')
-                            ->form([
-                                Textarea::make('message')
-                                    ->required()
-                                    ->maxLength(153),
-                                CheckboxList::make('users')
-                                    ->label('Select Users')
-                                    ->required()
-                                    ->searchable()
-                                    ->bulkToggleable()
-                                    ->options(function (Model $record) {
-                                        return User::notAdmin()
-                                            ->notStaff()
-                                            ->hasPersonalDetails()
-                                            ->noRecordAcademicYearWithBatchDepartment($record)
-                                            ->where(function ($query) {
-                                                $query->whereHas('student', function ($q) {
-                                                    $q->whereHas('personalDetail', function ($q) {
-                                                        $q->whereNotNull('phone')->where('phone', '!=', '');
-                                                    });
-                                                })
-                                                ->orWhereHas('staff', function ($q) {
-                                                    $q->whereHas('personalDetail', function ($q) {
-                                                        $q->whereNotNull('phone')->where('phone', '!=', '');
-                                                    });
-                                                })
-                                                ->orWhereHas('personnel', function ($q) {
-                                                    $q->whereHas('personalDetail', function ($q) {
-                                                        $q->whereNotNull('phone')->where('phone', '!=', '');
-                                                    });
-                                                })
-                                                ->orWhereNotNull('phone'); // Include users with phone numbers in the users table
+                        ->label('SEND SMS')
+                        ->icon('heroicon-o-bell')
+                        ->size('lg')
+                        ->form([
+                            Textarea::make('message')
+                                ->required()
+                                ->maxLength(153),
+                            CheckboxList::make('users')
+                                ->label('Select Users')
+                                ->required()
+                                ->searchable()
+                                ->bulkToggleable()
+                                ->options(function (Model $record) {
+                                    return User::notAdmin()
+                                        ->notStaff()
+                                        ->hasPersonalDetails()
+                                        ->noRecordAcademicYearWithBatchDepartment($record)
+                                        ->where(function ($query) {
+                                            $query->whereHas('student', function ($q) {
+                                                $q->whereHas('personalDetail', function ($q) {
+                                                    $q->whereNotNull('phone')->where('phone', '!=', '');
+                                                });
                                             })
-                                            ->get()
-                                            ->map(function ($item) {
-                                                return [
-                                                    'name' => $item->fullNameWithEmail(),
-                                                    'id' => $item->id
-                                                ];
+                                            ->orWhereHas('staff', function ($q) {
+                                                $q->whereHas('personalDetail', function ($q) {
+                                                    $q->whereNotNull('phone')->where('phone', '!=', '');
+                                                });
                                             })
-                                            ->pluck('name', 'id');
-                                    }),
-                            ])
-                            ->action(function (Model $record, array $data) {
-                                $smsService = new TeamSSProgramSmsService();
-                                $message = $data['message'];
-                                $validUsers = [];
-                    
-                                foreach ($data['users'] as $userId) {
-                                    $user = User::find($userId);
-                    
-                                    // Ensure user exists and has a valid phone number
-                                    $phoneNumber = $user->student?->personalDetail?->phone
-                                        ?? $user->staff?->personalDetail?->phone
-                                        ?? $user->personnel?->personalDetail?->phone
-                                        ?? $user->phone; // Fallback to user's `phone` field
-                    
-                                    if ($phoneNumber) {
-                                        $validUsers[] = [
-                                            'user' => $user,
-                                            'phone' => $phoneNumber,
-                                        ];
-                                    }
+                                            ->orWhereHas('personnel', function ($q) {
+                                                $q->whereHas('personalDetail', function ($q) {
+                                                    $q->whereNotNull('phone')->where('phone', '!=', '');
+                                                });
+                                            })
+                                            ->orWhereNotNull('phone'); // Include users with phone numbers in the users table
+                                        })
+                                        ->get()
+                                        ->map(function ($item) {
+                                            return [
+                                                'name' => $item->fullNameWithEmail(),
+                                                'id' => $item->id
+                                            ];
+                                        })
+                                        ->pluck('name', 'id');
+                                }),
+                        ])
+                        ->action(function (Model $record, array $data) {
+                            $smsService = new TeamSSProgramSmsService();
+                            $message = $data['message'];
+                            $validUsers = [];
+                
+                            foreach ($data['users'] as $userId) {
+                                $user = User::find($userId);
+                
+                                // Ensure user exists and has a valid phone number
+                                $phoneNumber = $user->student?->personalDetail?->phone
+                                    ?? $user->staff?->personalDetail?->phone
+                                    ?? $user->personnel?->personalDetail?->phone
+                                    ?? $user->phone; // Fallback to user's `phone` field
+                
+                                if ($phoneNumber) {
+                                    $validUsers[] = [
+                                        'user' => $user,
+                                        'phone' => $phoneNumber,
+                                    ];
                                 }
-                    
-                                // If no valid users, notify and return
-                                if (empty($validUsers)) {
-                                    Notification::make()
-                                        ->title('No Recipients')
-                                        ->danger()
-                                        ->body('No users with a valid phone number were found.')
-                                        ->send();
-                                    return;
-                                }
-                    
-                                // Extract only phone numbers for bulk SMS
-                                $phoneNumbers = array_map(fn($validUser) => $validUser['phone'], $validUsers);
-                    
-                                Log::info('Sending Bulk SMS to:', $phoneNumbers);
-                    
-                                try {
-                                    // Send Bulk SMS
-                                    $response = $smsService->sendBulkSms($phoneNumbers, $message);
-                    
-                                    Log::info('Bulk SMS Response:', $response);
-                    
-                                    if (isset($response['error']) && $response['error']) {
-                                        Notification::make()
-                                            ->title('SMS Failed')
-                                            ->danger()
-                                            ->body('Failed to send SMS: ' . $response['message'])
-                                            ->send();
-                                    } else {
-                                        Notification::make()
-                                            ->title('SMS Sent')
-                                            ->success()
-                                            ->body('SMS successfully sent to ' . count($phoneNumbers) . ' users.')
-                                            ->send();
-                                    }
-                                } catch (\Exception $e) {
-                                    Log::error('Error Sending Bulk SMS: ' . $e->getMessage());
+                            }
+                
+                            // If no valid users, notify and return
+                            if (empty($validUsers)) {
+                                Notification::make()
+                                    ->title('No Recipients')
+                                    ->danger()
+                                    ->body('No users with a valid phone number were found.')
+                                    ->send();
+                                return;
+                            }
+                
+                            // Extract only phone numbers for bulk SMS
+                            $phoneNumbers = array_map(fn($validUser) => $validUser['phone'], $validUsers);
+                
+                            Log::info('Sending Bulk SMS to:', $phoneNumbers);
+                
+                            try {
+                                // Send Bulk SMS
+                                $response = $smsService->sendBulkSms($phoneNumbers, $message);
+                
+                                Log::info('Bulk SMS Response:', $response);
+                
+                                if (isset($response['error']) && $response['error']) {
                                     Notification::make()
                                         ->title('SMS Failed')
                                         ->danger()
-                                        ->body('An error occurred: ' . $e->getMessage())
+                                        ->body('Failed to send SMS: ' . $response['message'])
+                                        ->send();
+                                } else {
+                                    Notification::make()
+                                        ->title('SMS Sent')
+                                        ->success()
+                                        ->body('SMS successfully sent to ' . count($phoneNumbers) . ' users.')
                                         ->send();
                                 }
-                            })
-                            ->hidden(function (Model $record) {
-                                return $record->totalUserOfThisBatch() == 0;
-                            }),
-                        ]),
-                    
+                            } catch (\Exception $e) {
+                                Log::error('Error Sending Bulk SMS: ' . $e->getMessage());
+                                Notification::make()
+                                    ->title('SMS Failed')
+                                    ->danger()
+                                    ->body('An error occurred: ' . $e->getMessage())
+                                    ->send();
+                            }
+                        })
+                        ->hidden(function (Model $record) {
+                            return $record->totalUserOfThisBatch() == 0;
+                        }),
+                    ]),
 
                         Action::make('view')
                         ->icon('heroicon-o-eye')
@@ -227,8 +223,8 @@ class ListBatches extends Component implements HasForms, HasTable
                         ['record' => $record],
                     ))
                     ->modalWidth(MaxWidth::SevenExtraLarge)
-                    
-                
+                    ,
+                    ]),
                 
 
 

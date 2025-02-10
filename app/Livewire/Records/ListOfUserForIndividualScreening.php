@@ -130,7 +130,16 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                         ->size('lg')
                         ->requiresConfirmation()
                         ->fillForm(function (Model $record) {
-                            dd($record);
+                           if ($record->student && $record->student->personalDetail) {
+                            return $record->student->personalDetail->phone;
+                        }
+                        if ($record->staff && $record->staff->personalDetail) {
+                            return $record->staff->personalDetail->phone;
+                        }
+                        if ($record->personnel && $record->personnel->personalDetail) {
+                            return $record->personnel->personalDetail->phone;
+                        }
+                    
 
                             return [
                                 'to' => $record->phone,

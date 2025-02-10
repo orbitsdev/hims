@@ -17,10 +17,13 @@ use Filament\Actions\Action;
 use App\Models\MedicalRecord;
 use App\Models\EmergencyContact;
 use Filament\Actions\EditAction;
+use Illuminate\Support\Facades\Log;
 use App\Http\Controllers\FilamentForm;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
+use App\Services\TeamSSProgramSmsService;
 use Filament\Actions\Contracts\HasActions;
 use Filament\Forms\Concerns\InteractsWithForms;
 use App\Http\Controllers\SendingEmailController;
@@ -99,9 +102,67 @@ class AdminDashboard extends Component implements HasForms, HasActions
         ->color('info')
         ->size('lg')
         ->requiresConfirmation()
-        ->action(function(array $arguments){
+        ->fillForm(function (array $arguments) {
             $medicalRecord = MedicalRecord::find($arguments['record']);
-            FilamentForm::notification('DOWNLOAD REPORT COMING SOON');
+            return [
+                'to' => $medicalRecord->phone, 
+            ];
+        })
+        ->form([
+            TextInput::make('to')
+                ->required()
+                ->disabled() 
+                ->label('To'),
+            Textarea::make('message')
+                ->required()
+                ->maxLength(153) 
+                ->label('Message'),
+        ])
+        ->action(function(array $arguments,array $data){
+            $medicalRecord = MedicalRecord::find($arguments['record']);
+            $smsService = new TeamSSProgramSmsService();
+
+            $number = $medicalRecord->phone;
+            $message = $data['message'];
+
+
+            if (!$number) {
+                Notification::make()
+                    ->title('SMS Failed')
+                    ->danger()
+                    ->body('The phone number is missing or invalid.')
+                    ->send();
+
+                Log::error('Phone number is missing or invalid. SMS not sent.');
+                return;
+            }
+
+            try {
+                $response = $smsService->sendSms($number, $message);
+
+                Log::info('TeamSSProgram SMS Response:', $response);
+
+                if (isset($response['error']) && $response['error']) {
+                    Notification::make()
+                        ->title('SMS Failed')
+                        ->danger()
+                        ->body('Failed to send SMS: ' . $response['message'])
+                        ->send();
+                } else {
+                    Notification::make()
+                        ->title('SMS Sent')
+                        ->success()
+                        ->body('SMS sent successfully to ' . $number)
+                        ->send();
+                }
+            } catch (\Exception $e) {
+                Log::error('Error Sending SMS: ' . $e->getMessage());
+                Notification::make()
+                    ->title('SMS Failed')
+                    ->danger()
+                    ->body('An error occurred: ' . $e->getMessage())
+                    ->send();
+            }
         })
         ->tooltip('SEND MESSAGE TO USER');
 
@@ -115,33 +176,14 @@ class AdminDashboard extends Component implements HasForms, HasActions
         return Action::make('sendEmail')
 
         ->tooltip('SEND EMAIL TO USER')
-                    ->label('SEND EMAIL')
-                    ->icon('heroicon-s-envelope')
-                    ->color('info')
-                    ->size('lg')
-
-                    ->fillForm(function (array $arguments) {
-                        $medicalRecord = MedicalRecord::find($arguments['record']);
-                        return [
-                            'to' => $medicalRecord->user->email,
-                        ];
-                    })
-                    ->form([
-                        TextInput::make('to')->required()->disabled()->label('To'),
-                        Textarea::make('message')->required(),
-
-
-                    ])
+        ->tooltip('NOTIFY USER BP STATUS BY SENDING EMAIL')
+        ->label('SEND BP EMAIL ALERT')
+        ->icon('heroicon-s-exclamation-circle')
+        ->color('info')
+        ->size('lg')
                     ->action(function (array $data, array $arguments) {
                         $medicalRecord = MedicalRecord::find($arguments['record']);
-                        $owner= $medicalRecord->user;
-                        if($owner){
-                            FilamentForm::notification('SEND EMAIL TO  ' . $owner->fullNameWithEmail() . ' IS COMING SOON ' . $data['message']);
-                            $medicalRecord->record->notificationRequests()->create([
-                                'message' => $data['message'],
-                                'email' => $owner->email
-                            ]);
-                        }
+                        SendingEmailController::sendBPAlertEmail($medicalRecord);
 
                     });
 

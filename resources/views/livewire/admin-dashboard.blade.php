@@ -280,7 +280,7 @@
                                 <x-filament-actions::group :actions="[
                                     ($this->manageAction)(['record' => $medicalRecord->id]),
                                     ($this->sendSmsAction)(['record' => $medicalRecord->id]),
-                                    ($this->sendEmailAction)(['record' => $medicalRecord->id]),
+                                  
                                     ($this->sendBloodEmailAlertAction)(['record' => $medicalRecord->id])
                                 ]" />
 

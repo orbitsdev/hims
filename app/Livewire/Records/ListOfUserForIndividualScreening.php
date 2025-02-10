@@ -129,6 +129,16 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
 
                         ->size('lg')
                         ->requiresConfirmation()
+                        ->form([
+                            TextInput::make('to')
+                                ->required()
+                                ->disabled() 
+                                ->label('To'),
+                            Textarea::make('message')
+                                ->required()
+                                ->maxLength(153) 
+                                ->label('Message'),
+                        ])
                         ->fillForm(function (Model $record) {
                             // Determine the phone number from associated relationships
                             $phone = null;

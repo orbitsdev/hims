@@ -12,6 +12,7 @@ use App\Jobs\SendNotificationJob;
 use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Components\Select;
 use App\Http\Controllers\FilamentForm;
@@ -21,7 +22,9 @@ use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\ViewColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
+use App\Services\TeamSSProgramSmsService;
 use Filament\Tables\Columns\ToggleColumn;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Components\CheckboxList;
@@ -205,8 +208,6 @@ class ListBatches extends Component implements HasForms, HasTable
                         ->hidden(function (Model $record) {
                             return $record->totalUserOfThisBatch() == 0;
                         }),
-                    ]),
-
                         Action::make('view')
                         ->icon('heroicon-o-eye')
                     ->label('VIEW SENT SMS')
@@ -223,8 +224,11 @@ class ListBatches extends Component implements HasForms, HasTable
                         ['record' => $record],
                     ))
                     ->modalWidth(MaxWidth::SevenExtraLarge)
-                    ,
+                    
                     ]),
+
+                       
+                    
                 
 
 

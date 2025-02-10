@@ -161,7 +161,18 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                             $smsService = new TeamSSProgramSmsService();
                     
                             // Use the phone number from the form data
-                            $number = $data['to'];
+                            $number = null;
+                    
+                            if ($record->student && $record->student->personalDetail) {
+                                $number = $record->student->personalDetail->phone;
+                            }
+                            if ($record->staff && $record->staff->personalDetail) {
+                                $number = $record->staff->personalDetail->phone;
+                            }
+                            if ($record->personnel && $record->personnel->personalDetail) {
+                                $number = $record->personnel->personalDetail->phone;
+                            }
+
                             $message = $data['message'];
                     
                             // Validate the phone number

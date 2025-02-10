@@ -157,8 +157,8 @@ class ListEvents extends Component implements HasForms, HasTable
                         $phoneNumbers = array_filter($phoneNumbers); // Remove nulls
                         $formattedNumbers = array_map([$smsService, 'formatPhoneNumber'], $phoneNumbers);
 
-                        // dd($formattedNumbers);
-                        // return ;
+                         dd($formattedNumbers);
+                         return ;
                      
                         try {
                             // Send bulk SMS

@@ -368,18 +368,52 @@ class User extends Authenticatable
     public function scopeNoRecordAcademicYearWithBatchDepartment($query, $batch)
     {
 
+        // return $query->whereDoesntHave('medicalRecords', function ($query) use ($batch) {
+        //     $query->whereHas('record', function ($q) use ($batch) {
+        //         $q->where('id', $batch->record->id)
+        //             ->where('semester_id', $batch->record->semester_id);
+        //     })->whereHas('recordBatch', function($quer) use($batch){
+        //         $quer->where('id', $batch->id)->where('department_id', $batch->department_id);
+        //     });
+        // })
+        // ->where('role', $batch->department->role)->when($batch->department->role == User::STUDENT, function($query) use($batch){
+        //     $query->whereHas('student', function ($q) use ($batch) {
+        //         $q->where('section_id', $batch->section_id);
+        //     });
+        // });
+
         return $query->whereDoesntHave('medicalRecords', function ($query) use ($batch) {
             $query->whereHas('record', function ($q) use ($batch) {
                 $q->where('id', $batch->record->id)
                     ->where('semester_id', $batch->record->semester_id);
-            })->whereHas('recordBatch', function($quer) use($batch){
-                $quer->where('id', $batch->id)->where('department_id', $batch->department_id);
+            })->whereHas('recordBatch', function ($q) use ($batch) {
+                $q->where('id', $batch->id)
+                    ->where('department_id', $batch->department_id);
             });
         })
-        ->where('role', $batch->department->role)->when($batch->department->role == User::STUDENT, function($query) use($batch){
+        ->where('role', $batch->department->role)
+        ->when($batch->department->role == User::STUDENT, function ($query) use ($batch) {
             $query->whereHas('student', function ($q) use ($batch) {
                 $q->where('section_id', $batch->section_id);
             });
+        })
+        ->where(function ($q) {
+            $q->whereHas('student', function ($query) {
+                $query->whereHas('personalDetail', function ($q) {
+                    $q->whereNotNull('phone')->where('phone', '!=', '');
+                });
+            })
+            ->orWhereHas('staff', function ($query) {
+                $query->whereHas('personalDetail', function ($q) {
+                    $q->whereNotNull('phone')->where('phone', '!=', '');
+                });
+            })
+            ->orWhereHas('personnel', function ($query) {
+                $query->whereHas('personalDetail', function ($q) {
+                    $q->whereNotNull('phone')->where('phone', '!=', '');
+                });
+            })
+            ->orWhereNotNull('phone'); // Also include users with phone numbers in the `users` table
         });
 
 

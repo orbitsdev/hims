@@ -309,20 +309,48 @@ class User extends Authenticatable
         });
     }
 
+    // public function scopeDepartmentBelong($query, $departments)
+    // {
+    //     $query->where(function ($q) use ($departments) {
+    //         $q->whereHas('student.department', function ($query) use ($departments) {
+    //             $query->whereIn('id', $departments);
+    //         })
+    //             ->orWhereHas('staff.department', function ($query) use ($departments) {
+    //                 $query->whereIn('id', $departments);
+    //             })
+    //             ->orWhereHas('personnel.department', function ($query) use ($departments) {
+    //                 $query->whereIn('id', $departments);
+    //             });
+    //     });
+    // }
+
     public function scopeDepartmentBelong($query, $departments)
-    {
-        $query->where(function ($q) use ($departments) {
-            $q->whereHas('student.department', function ($query) use ($departments) {
-                $query->whereIn('id', $departments);
-            })
-                ->orWhereHas('staff.department', function ($query) use ($departments) {
-                    $query->whereIn('id', $departments);
-                })
-                ->orWhereHas('personnel.department', function ($query) use ($departments) {
-                    $query->whereIn('id', $departments);
-                });
+{
+    $query->where(function ($q) use ($departments) {
+        $q->whereHas('student', function ($query) use ($departments) {
+            $query->whereHas('department', function ($q) use ($departments) {
+                $q->whereIn('id', $departments);
+            })->whereHas('personalDetail', function ($q) {
+                $q->whereNotNull('phone')->where('phone', '!=', '');
+            });
+        })
+        ->orWhereHas('staff', function ($query) use ($departments) {
+            $query->whereHas('department', function ($q) use ($departments) {
+                $q->whereIn('id', $departments);
+            })->whereHas('personalDetail', function ($q) {
+                $q->whereNotNull('phone')->where('phone', '!=', '');
+            });
+        })
+        ->orWhereHas('personnel', function ($query) use ($departments) {
+            $query->whereHas('department', function ($q) use ($departments) {
+                $q->whereIn('id', $departments);
+            })->whereHas('personalDetail', function ($q) {
+                $q->whereNotNull('phone')->where('phone', '!=', '');
+            });
         });
-    }
+    });
+}
+
 
     public function scopeNoRecordInThisAcademicYearAndSemesterOnSpecificBatchDepartment($query, $record)
     {

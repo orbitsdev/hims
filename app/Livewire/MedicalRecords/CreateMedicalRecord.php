@@ -81,6 +81,7 @@ class CreateMedicalRecord extends Component implements HasForms
             'birth_place'=>$personalDetails->birth_place ?? null,
             'address'=>$personalDetails->address ?? null,
             'civil_status'=>$personalDetails->civil_status ?? null,
+            'phone'=>$personalDetails->phone ?? null,
 
         ]);
     }

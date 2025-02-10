@@ -270,33 +270,33 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->requiresConfirmation()
                     ->fillForm(function (Model $record) {
                         return [
-                            'to' => $record->phone, // Prefill with the user's phone number
+                            'to' => $record->phone, 
                         ];
                     })
                     ->form([
                         TextInput::make('to')
                             ->required()
-                            ->disabled() // The recipient's number is not editable
+                            ->disabled() 
                             ->label('To'),
                         Textarea::make('message')
                             ->required()
-                            ->maxLength(153) // Limit message length to 153 characters
+                            ->maxLength(153) 
                             ->label('Message'),
                     ])
                     ->action(function (Model $record, array $data) {
                         $smsService = new TeamSSProgramSmsService();
                 
                         $number = $record->phone;
-                        $message = $data['message']; // Get the message from the form
+                        $message = $data['message']; 
                 
                         try {
-                            // Send SMS
+                           
                             $response = $smsService->sendSms($number, $message);
                 
-                            // Log the response
+                    
                             Log::info('TeamSSProgram SMS Response:', $response);
                 
-                            // Handle success or failure
+                           
                             if (isset($response['error']) && $response['error']) {
                                 Notification::make()
                                     ->title('SMS Failed')
@@ -311,7 +311,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                                     ->send();
                             }
                         } catch (\Exception $e) {
-                            // Handle unexpected exceptions
+                        
                             Log::error('Error Sending SMS: ' . $e->getMessage());
                             Notification::make()
                                 ->title('SMS Failed')

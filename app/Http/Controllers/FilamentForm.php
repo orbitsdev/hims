@@ -164,93 +164,107 @@ class FilamentForm extends Controller
     public static function personalDetailForm()
     {
         return [
-
             Group::make()
                 ->relationship('personalDetail')
                 ->schema([
-
-
-                            Section::make('')
-                                ->columns([
-                                    'sm' => 3,
-                                    'xl' => 6,
-                                    '2xl' => 9,
-                                ])
-                                ->schema([
-                                    TextInput::make('first_name')
-                                        ->label('FIRST NAME')
-                                        ->columnSpan(3)
-                                        ->required()
-                                        ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()']),
-                                    TextInput::make('middle_name')
-                                        ->label('MIDDLE NAME')
-                                        ->required()
-
-                                        ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()'])
-
-                                        ->columnSpan(3),
-                                    TextInput::make('last_name')
-                                        ->label('LAST NAME')
-                                        ->required()
-
-                                        ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()'])
-
-                                        ->columnSpan(3),
-
-                                ]),
-                            Section::make('')
-                                ->columns([
-                                    'sm' => 3,
-                                    'xl' => 6,
-                                    '2xl' => 8,
-                                ])
-                                ->schema([
-                                    TextInput::make('age')
-                                        ->label('AGE')
-                                        ->numeric()
-                                        ->required()
-
-                                        ->default(18)
-                                        ->mask(999)
-
-                                        ->columnSpan(1),
-
-                                    Select::make('civil_status')
-                                        ->label('CIVIL STATUS')
-                                        ->options(FilamentForm::CIVIL_STATUS_OPTIONS)
-                                        ->default('Single')
-                                        ->columnSpan(4)
-                                        ->searchable(),
-
-                                    DatePicker::make('birth_date')
-                                        ->native(false)
-                                        ->required()
-                                        ->label('BIRTH DATE')
-                                        ->columnSpan(3),
-                                    TextInput::make('birth_place')
-                                        ->label('BIRTH PLACE')
-                                        ->label('BIRTH_PLACE')
-                                        ->columnSpan(4),
-                                    TextInput::make('address')
-                                        ->label('ADDRESS')
-                                        ->required()
-                                        ->columnSpan(4),
-                                ]),
-
+                    
+                    // Personal Details Section
+                    Section::make('Personal Details')
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 9,
+                        ])
+                        ->schema([
+                            TextInput::make('first_name')
+                                ->label('First Name')
+                                ->columnSpan(3)
+                                ->required()
+                                ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()']),
+    
+                            TextInput::make('middle_name')
+                                ->label('Middle Name')
+                                ->columnSpan(3)
+                                ->required()
+                                ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()']),
+    
+                            TextInput::make('last_name')
+                                ->label('Last Name')
+                                ->columnSpan(3)
+                                ->required()
+                                ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()']),
+    
+                            DatePicker::make('birth_date')
+                                ->label('Birth Date')
+                                ->native(false)
+                                ->required()
+                                ->columnSpan(3),
+    
+                            TextInput::make('age')
+                                ->label('Age')
+                                ->numeric()
+                                ->required()
+                                ->default(18)
+                                ->mask(999)
+                                ->columnSpan(2),
+    
+                            Select::make('civil_status')
+                                ->label('Civil Status')
+                                ->options(FilamentForm::CIVIL_STATUS_OPTIONS)
+                                ->default('Single')
+                                ->columnSpan(3)
+                                ->searchable(),
+    
+                            TextInput::make('birth_place')
+                                ->label('Birth Place')
+                                ->columnSpan(6),
+                        ]),
+    
+                    // Address & Location Section
+                    Section::make('Address & Location')
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 8,
+                        ])
+                        ->schema([
+                            TextInput::make('address')
+                                ->label('Address')
+                                ->required()
+                                ->columnSpan(6),
+                        ]),
+    
+                    // Contact Information Section
+                    Section::make('Contact Information')
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 8,
+                        ])
+                        ->schema([
+                            TextInput::make('phone')
+                                ->label('Phone')
+                                ->mask(99999999999)
+                                ->tel()
+                                ->maxLength(15)
+                                ->columnSpan(3),
+                        ]),
+    
+                    // Profile Image Upload Section
+                    Section::make('Profile Image')
+                        ->schema([
                             FileUpload::make('image')
                                 ->disk('public')
                                 ->directory('persondetails')
                                 ->image()
                                 ->imageEditor()
-                                // ->required()
                                 ->columnSpanFull()
-                                ->label('IMAGE ')
-
-
-
+                                ->label('Upload Image'),
+                        ]),
                 ]),
         ];
     }
+    
 
     public static function studentForm(): array
     {
@@ -258,145 +272,117 @@ class FilamentForm extends Controller
 
 
             Wizard::make([
-                Wizard\Step::make('UNIVERSITY DETAILS ')
+                Wizard\Step::make('University Details')
                     ->schema([
-                        Section::make()
+
+
+                        Section::make('University Information')
                         ->columns([
                             'sm' => 3,
                             'xl' => 6,
                             '2xl' => 9,
                         ])
                         ->schema([
+                            Select::make('user_id')
+                            ->required()
+                            ->label('Account')
+                            ->options(User::notRegisteredStudents()->pluck('name', 'id'))->searchable()
+
+                            ->columnSpan(4)
+                            ->searchable(),
+                       
+                        TextInput::make('id_number')->label('ID Number')
+                            ->required()
+
+                            ->unique(ignoreRecord: true)
+                            ->columnSpan(4),
+                        ]),
+
+                        Section::make('Department & Course Selection')
+                        ->columns([
+                            'sm' => 3,
+                            'xl' => 6,
+                            '2xl' => 9,
+                        ])
+                        ->schema([
+                            Select::make('department_id')
+                            ->required()
+                            ->label('BUILDING/DEPARTMENT')
+                            ->options(Department::studentDepartment()->get()->map(function ($d) {
+                                return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
+                            })->pluck('name', 'id'))
+                            ->live(debounce: 500)
+                            ->afterStateUpdated(function ($state, Get $get, Set $set) {
 
 
-                            Section::make('')
-                                ->columns([
-                                    'sm' => 3,
-                                    'xl' => 6,
-                                    '2xl' => 8,
-                                ])
-                                ->schema([
-                                    Select::make('user_id')
-                                        ->required()
-                                        ->label('ACCOUNT')
-                                        ->options(User::notRegisteredStudents()->pluck('name', 'id'))->searchable()
+                                $set('course_id', null);
 
-                                        ->columnSpan(4)
-                                        ->searchable(),
-                                    //TextInput::make('unique_id')
-                                    // ->required()
-                                    //     //     ->maxLength(191),
-                                    TextInput::make('id_number')->label('ID NUMBER')
-                                        ->required()
-
-                                        ->unique(ignoreRecord: true)
-                                        ->columnSpan(4),
-
-
-                                    //  TextInput::make('department_id')
-                                    //     ->required()
-                                    //     ->label('COLLEGE DEPARTMENT')
-                                    //     ->columnSpan(3)
-                                    //     ->numeric(),
-
-
-                                    //TextInput::make('department')
-                                    // ->required()
-                                    // ->maxLength(191),
-
-
-                                ]),
-                            Section::make('')
-                                ->columns([
-                                    'sm' => 3,
-                                    'xl' => 6,
-                                    '2xl' => 9,
-                                ])
-                                ->schema([
-
-                                    Select::make('department_id')
-                                        ->required()
-                                        ->label('BUILDING/DEPARTMENT')
-                                        ->options(Department::studentDepartment()->get()->map(function ($d) {
-                                            return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
-                                        })->pluck('name', 'id'))
-                                        ->live(debounce: 500)
-                                        ->afterStateUpdated(function ($state, Get $get, Set $set) {
-
-
-                                            $set('course_id', null);
-
-                                            $set('section_id', null);
-                                        })
-                                        ->searchable()
-                                        ->columnSpan(3)
-                                        // ->createOptionForm(FilamentForm::departmentForm())
-                                        ,
+                                $set('section_id', null);
+                            })
+                            ->searchable()
+                            ->columnSpan(3)
+                            // ->createOptionForm(FilamentForm::departmentForm())
+                            ,
 
 
 
-                                    Select::make('course_id')
-                                        ->live(debounce: 500)
-                                        ->afterStateUpdated(function ($state, Get $get, Set $set) {
+                        Select::make('course_id')
+                            ->live(debounce: 500)
+                            ->afterStateUpdated(function ($state, Get $get, Set $set) {
 
-                                            $set('section_id', null);
-                                        })
-                                        ->required()
-                                        ->label('COURSE')
+                                $set('section_id', null);
+                            })
+                            ->required()
+                            ->label('COURSE')
 
-                                        ->options(function (Get $get) {
-                                            if (!empty($get('department_id'))) {
-                                                return Course::where('department_id', $get('department_id'))->get()->map(function ($a) {
-                                                    return [
-                                                        'name' => $a->getNameWithAbbreviation(),
-                                                        'id' => $a->id,
-                                                    ];
-                                                })->pluck('name', 'id');
-                                            } else {
-                                                return [];
-                                            }
-                                        })
-                                        ->preload()
-                                        ->columnSpan(3)
-                                        ->searchable(),
-
-
-                                    Select::make('section_id')->options(function (Get $get) {
-                                        if (!empty($get('course_id'))) {
-                                            return MSection::where('course_id', $get('course_id'))->get()->map(function ($a) {
-                                                return [
-                                                    'name' => $a->name,
-                                                    'id' => $a->id,
-                                                ];
-                                            })->pluck('name', 'id');
-                                        } else {
-                                            return [];
-                                        }
-                                    })
-                                    ->helperText('If no section is available, go to Course & Section page to manage it')
-                                        ->required()
-                                        ->preload()
-                                        ->searchable()
-                                        ->native(false)
-                                        ->label('SECTION')
-                                        ->columnSpan(3)
-                                        ->hidden(function (Get $get) {
-
-                                            if ($get('department_id') != null) {
-                                                $department = Department::findOrFail($get('department_id'));
-                                                return $department->role != User::STUDENT;
-                                            }
-                                            return false;
-                                        }),
+                            ->options(function (Get $get) {
+                                if (!empty($get('department_id'))) {
+                                    return Course::where('department_id', $get('department_id'))->get()->map(function ($a) {
+                                        return [
+                                            'name' => $a->getNameWithAbbreviation(),
+                                            'id' => $a->id,
+                                        ];
+                                    })->pluck('name', 'id');
+                                } else {
+                                    return [];
+                                }
+                            })
+                            ->preload()
+                            ->columnSpan(3)
+                            ->searchable(),
 
 
-                                    //TextInput::make('department')
-                                    // ->required()
-                                    // ->maxLength(191),
+                        Select::make('section_id')->options(function (Get $get) {
+                            if (!empty($get('course_id'))) {
+                                return MSection::where('course_id', $get('course_id'))->get()->map(function ($a) {
+                                    return [
+                                        'name' => $a->name,
+                                        'id' => $a->id,
+                                    ];
+                                })->pluck('name', 'id');
+                            } else {
+                                return [];
+                            }
+                        })
+                        ->helperText('If no section is available, go to Course & Section page to manage it')
+                            ->required()
+                            ->preload()
+                            ->searchable()
+                            ->native(false)
+                            ->label('SECTION')
+                            ->columnSpan(3)
+                            ->hidden(function (Get $get) {
 
+                                if ($get('department_id') != null) {
+                                    $department = Department::findOrFail($get('department_id'));
+                                    return $department->role != User::STUDENT;
+                                }
+                                return false;
+                            }),
+                        ]),
 
-                                ]),
-                            FileUpload::make('image')
+                        
+                        FileUpload::make('image')
                                 ->disk('public')
                                 ->directory('students')
                                 ->image()
@@ -404,7 +390,6 @@ class FilamentForm extends Controller
                                 // ->required()
                                 ->columnSpanFull()
                                 ->label('STUDENT IMAGE')
-                        ]),
                     ]),
                 Wizard\Step::make('Personal Details')
                     ->schema([

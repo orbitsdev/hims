@@ -14,6 +14,7 @@ use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
 use Filament\Tables\Grouping\Group;
 use Illuminate\Contracts\View\View;
+use Illuminate\Support\Facades\Log;
 use Filament\Support\Enums\MaxWidth;
 use Illuminate\Support\Facades\Mail;
 use Filament\Forms\Components\Select;
@@ -25,8 +26,10 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Enums\FiltersLayout;
+use App\Services\TeamSSProgramSmsService;
 use Filament\Forms\Components\RichEditor;
 use Filament\Tables\Columns\ToggleColumn;
 use Filament\Tables\Filters\SelectFilter;
@@ -76,7 +79,7 @@ class ListEvents extends Component implements HasForms, HasTable
 
                 SelectFilter::make('ACADEMIC YEAR')
                     ->label('ACADEMIC YEAR')
-                    ->relationship('academicYear', 'name',fn (Builder $query) => $query->hasEvents())
+                    ->relationship('academicYear', 'name', fn(Builder $query) => $query->hasEvents())
                     ->searchable()
                     ->preload(),
 
@@ -114,30 +117,76 @@ class ListEvents extends Component implements HasForms, HasTable
                             ->searchable()
                             ->gridDirection('row')
                             ->label('SELECT DEPARTMENT/BUILDING THAT YOU WANT TO BE NOTIFIED'),
-                       
+
 
                     ])
                     ->button()
                     ->action(function (array $data) {
 
-                        $newdata = [
-                            
-                            'message' => $data['message'],
-                            'departments' =>  json_encode($data['departments'])
-                        ];
+                        $smsService = new TeamSSProgramSmsService();
+                        $message = $data['message'];
 
+                        // Retrieve users who belong to the selected departments AND have a phone number
                         $users = User::departmentBelong($data['departments'])->get();
 
-                        // SendNotificationJob::dispatch($users, $newdata);
 
-                        SendNotificationJob::dispatch($users, $newdata)->delay(now()->addMinutes(2));
 
-                        // return redirect()->route('monitor-sms');
+                        if ($users->isEmpty()) {
+                            Notification::make()
+                                ->title('No Recipients')
+                                ->danger()
+                                ->body('No users found with a valid phone number in the selected departments.')
+                                ->send();
+                            return;
+                        }
 
-                        //   dd($users);
-                       
-                        //return redirect()->route('event-announcement', $newdata);
+                        $phoneNumbers = [];
 
+                        foreach ($users as $user) {
+                            if ($user->student && $user->student->personalDetail) {
+                                $phoneNumbers[] = $user->student->personalDetail->phone;
+                            }
+                            if ($user->staff && $user->staff->personalDetail) {
+                                $phoneNumbers[] = $user->staff->personalDetail->phone;
+                            }
+                            if ($user->personnel && $user->personnel->personalDetail) {
+                                $phoneNumbers[] = $user->personnel->personalDetail->phone;
+                            }
+                        }
+
+                        $phoneNumbers = array_filter($phoneNumbers); // Remove nulls
+                        $formattedNumbers = array_map([$smsService, 'formatPhoneNumber'], $phoneNumbers);
+
+
+                     
+                        try {
+                            // Send bulk SMS
+                            $response = $smsService->sendBulkSms($formattedNumbers, $message);
+
+                            Log::info('Bulk SMS Response:', $response);
+
+                            if (isset($response['error']) && $response['error']) {
+                                Notification::make()
+                                    ->title('SMS Failed')
+                                    ->danger()
+                                    ->body('Failed to send SMS: ' . $response['message'])
+                                    ->send();
+                            } else {
+                                Notification::make()
+                                    ->title('SMS Sent')
+                                    ->success()
+                                    ->body('SMS successfully sent to ' . count($formattedNumbers) . ' users.')
+                                    ->send();
+                            }
+                        } catch (\Exception $e) {
+                            Log::error('Error Sending Bulk SMS: ' . $e->getMessage());
+
+                            Notification::make()
+                                ->title('SMS Failed')
+                                ->danger()
+                                ->body('An error occurred: ' . $e->getMessage())
+                                ->send();
+                        }
                     }),
                 ActionGroup::make([
                     Action::make('view')
@@ -174,13 +223,13 @@ class ListEvents extends Component implements HasForms, HasTable
             ])
             ->groups([
                 Group::make('academicYear.name')
-                ->label('Academic Year'),
-              
+                    ->label('Academic Year'),
+
                 Group::make('semester.name_in_number')
-                ->label('Semester'),
-              
+                    ->label('Semester'),
+
             ])->defaultGroup('academicYear.name')
-            ;
+        ;
     }
 
     public function render(): View

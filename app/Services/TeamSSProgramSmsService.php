@@ -32,25 +32,25 @@ class TeamSSProgramSmsService
      */
     public function formatPhoneNumber(string $phone): string
 {
-    // Remove non-numeric characters
+    
     $phone = preg_replace('/\D/', '', $phone);
 
-    // If the number starts with '09', remove the leading '0' and add '+63'
+ 
     if (substr($phone, 0, 2) === '09') {
         return '+63' . substr($phone, 1);
     }
 
-    // If the number starts with '9' (and no '0'), add '+63'
+  
     if (substr($phone, 0, 1) === '9') {
         return '+63' . $phone;
     }
 
-    // If it already starts with '+63', return as-is
+    
     if (substr($phone, 0, 3) === '+63') {
         return $phone;
     }
 
-    // Fallback: assume it's invalid and log an error
+   
     Log::error('Invalid phone number format: ' . $phone);
     return $phone;
 }

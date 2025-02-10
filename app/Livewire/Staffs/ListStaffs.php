@@ -54,6 +54,8 @@ class ListStaffs extends Component implements HasForms, HasTable
                 //     ->searchable(),
                 Tables\Columns\TextColumn::make('phone')
                     ->searchable(),
+                Tables\Columns\TextColumn::make('department.name')
+                    ->searchable(),
                 // Tables\Columns\TextColumn::make('email')
                 //     ->searchable(),
                 Tables\Columns\TextColumn::make('employment_type')

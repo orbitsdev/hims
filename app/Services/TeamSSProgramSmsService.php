@@ -2,9 +2,8 @@
 
 namespace App\Services;
 
-use App\Jobs\SendSmsJob;
-use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 
 class TeamSSProgramSmsService
 {
@@ -136,18 +135,56 @@ class TeamSSProgramSmsService
         }
     }
 
+
     public function sendBulkSmsWithDelay(array $numbers, string $message, int $delaySeconds = 3): array
 {
-    $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
+    $responses = [];
 
-    Log::info('Queueing SMS for numbers:', ['numbers' => $formattedNumbers]);
+    try {
+        // ✅ Format phone numbers correctly
+        $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
 
-    foreach ($formattedNumbers as $index => $number) {
-        // Dispatch each SMS job with a delay
-        SendSmsJob::dispatch($number, $message)->delay(now()->addSeconds($index * $delaySeconds));
+        foreach ($formattedNumbers as $index => $number) {
+            $payload = [
+                "secret" => $this->apiSecret,
+                "mode" => "devices",
+                "device" => $this->deviceId,
+                "sim" => $this->sim,
+                "priority" => 1,
+                "numbers" => $number, // ✅ Correct field (single number per request)
+                "message" => $message
+            ];
+
+            Log::info("Sending SMS to: {$number}", ['payload' => $payload]);
+
+            // ✅ Send request using cURL like in your example
+            $cURL = curl_init($this->bulkSmsUrl);
+            curl_setopt($cURL, CURLOPT_RETURNTRANSFER, true);
+            curl_setopt($cURL, CURLOPT_POST, true);
+            curl_setopt($cURL, CURLOPT_POSTFIELDS, $payload);
+
+            $response = curl_exec($cURL);
+            curl_close($cURL);
+
+            $responseData = json_decode($response, true);
+            $responses[$number] = $responseData;
+
+            Log::info("SMS Response for {$number}", ['response' => $responseData]);
+
+            // ✅ Add delay between requests (only if not the last number)
+            if ($index < count($formattedNumbers) - 1) {
+                sleep($delaySeconds);
+            }
+        }
+    } catch (\Exception $e) {
+        Log::error('Bulk SMS Failed: ' . $e->getMessage());
+        return [
+            'error' => true,
+            'message' => $e->getMessage(),
+        ];
     }
 
-    return ['success' => true, 'message' => 'SMS has been queued for sending.'];
+    return $responses;
 }
 
 

@@ -138,7 +138,9 @@ class TeamSSProgramSmsService
     public function sendBulkSmsWithDelay(array $numbers, string $message, int $delaySeconds = 3): array
 {
     $responses = [];
-    foreach ($numbers as $index => $number) {
+    $formattedNumbers = implode(',', array_map([$this, 'formatPhoneNumber'], $numbers)); // Format numbers properly
+
+    foreach (explode(',', $formattedNumbers) as $index => $number) {
         try {
             $payload = [
                 "secret" => $this->apiSecret,
@@ -146,7 +148,7 @@ class TeamSSProgramSmsService
                 "device" => $this->deviceId,
                 "sim" => $this->sim,
                 "priority" => 1,
-                "numbers" => $number,
+                "numbers" => $number, // Now correctly formatted
                 "message" => $message
             ];
 
@@ -171,6 +173,7 @@ class TeamSSProgramSmsService
 
     return $responses;
 }
+
 
 
 

@@ -143,7 +143,7 @@ class TeamSSProgramSmsService
     $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
 
     // ✅ Debugging: Ensure all numbers are in "+63XXXXXXXXXX" format
-    Log::info('Formatted Phone Numbers:', $formattedNumbers);
+    Log::info('Formatted Phone Numbers', ['numbers' => $formattedNumbers]);
 
     foreach ($formattedNumbers as $index => $number) {
         try {
@@ -157,7 +157,7 @@ class TeamSSProgramSmsService
                 "message" => $message
             ];
 
-            Log::info("Sending SMS to: {$number} | Payload: ", $payload);
+            Log::info("Sending SMS to: {$number}", ['payload' => $payload]);
 
             // ✅ Send each message to single SMS URL
             $response = Http::asForm()->post($this->singleSmsUrl, $payload);
@@ -165,20 +165,21 @@ class TeamSSProgramSmsService
 
             $responses[$number] = $responseData;
 
-            Log::info("SMS Response for {$number}: ", $responseData);
+            Log::info("SMS Response for {$number}", ['response' => $responseData]);
 
             // ✅ Add delay only if there are more numbers left
             if ($index < count($formattedNumbers) - 1) {
                 sleep($delaySeconds);
             }
         } catch (\Exception $e) {
-            Log::error("Failed to send SMS to {$number}: " . $e->getMessage());
+            Log::error("Failed to send SMS to {$number}", ['error' => $e->getMessage()]);
             $responses[$number] = ['error' => true, 'message' => $e->getMessage()];
         }
     }
 
     return $responses;
 }
+
 
 
 

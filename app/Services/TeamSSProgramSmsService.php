@@ -136,7 +136,7 @@ class TeamSSProgramSmsService
     }
 
 
-    public function sendBulkSmsWithDelay(array $numbers, string $message, int $delaySeconds = 3): array
+    public function sendBulkSmsWithDelay(array $numbers, string $message, int $delaySeconds = 5): array
 {
     $responses = [];
 

@@ -152,33 +152,33 @@
         @endif
 <!-- Staff Contacts Section -->
 @if($staffMembers->isNotEmpty())
-<div class="mb-2 break-inside-avoid py-2">
+<div class="mb-2 break-inside-avoid py-2 text-xs">
     <h2 class="text-xl font-semibold text-green-700 bg-gray-200 p-2 rounded">STAFF CONTACTS</h2>
     <div class="border-l border-r">
       <table class="w-full table-fixed">
         <thead class="bg-gray-100 text-left">
           <tr>
-            <th class="py-2 px-4 border-b text-gray-500 w-1/6">Photo</th>
-            <th class="py-2 px-4 border-b text-gray-500">Name</th>
-            <th class="py-2 px-4 border-b text-gray-500">Position</th>
-            <th class="py-2 px-4 border-b text-gray-500">Phone</th>
-            <th class="py-2 px-4 border-b text-gray-500">Emergency Contact</th>
-            <th class="py-2 px-4 border-b text-gray-500">Email</th>
-            <th class="py-2 px-4 border-b text-gray-500">Department</th>
+            <th class="px-0.5 border-b text-gray-500 w-1/6">Photo</th>
+            <th class="px-0.5 border-b text-gray-500">Name</th>
+            <th class="px-0.5 border-b text-gray-500">Position</th>
+            <th class="px-0.5 border-b text-gray-500">Phone</th>
+            <th class="px-0.5 border-b text-gray-500">Emergency Contact</th>
+            <th class="px-0.5 border-b text-gray-500">Email</th>
+            <th class="px-0.5 border-b text-gray-500">Department</th>
           </tr>
         </thead>
         <tbody>
           @foreach ($staffMembers as $staff)
           <tr class="border-b">
-            <td class="py-2 px-4">
+            <td class="px-0.5">
               <img src="{{ $staff->getImage() }}" alt="{{ $staff?->personalDetail->getFullName() ?? 'Staff' }}" class="w-16 h-16 object-cover rounded-full border border-gray-300">
             </td>
-            <td class="py-2 px-4">{{ $staff?->personalDetail->getFullName() ?? 'N/A' }}</td>
-            <td class="py-2 px-4">{{ $staff->position ?? 'N/A' }}</td>
-            <td class="py-2 px-4">{{ $staff->phone ?? 'N/A' }}</td>
-            <td class="py-2 px-4">{{ $staff->emergency_contact ?? 'N/A' }}</td>
-            <td class="py-2 px-4">{{ $staff->email ?? 'N/A' }}</td>
-            <td class="py-2 px-4">{{ $staff?->department?->name ?? 'N/A' }}</td>
+            <td class="px-0.5">{{ $staff?->personalDetail->getFullName() ?? 'N/A' }}</td>
+            <td class="px-0.5">{{ $staff->position ?? 'N/A' }}</td>
+            <td class="px-0.5">{{ $staff->phone ?? 'N/A' }}</td>
+            <td class="px-0.5">{{ $staff->emergency_contact ?? 'N/A' }}</td>
+            <td class="px-0.5">{{ $staff->email ?? 'N/A' }}</td>
+            <td class="px-0.5">{{ $staff?->department?->name ?? 'N/A' }}</td>
           </tr>
           @endforeach
         </tbody>

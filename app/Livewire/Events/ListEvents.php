@@ -164,7 +164,7 @@ class ListEvents extends Component implements HasForms, HasTable
 
                     try {
                         // Send bulk SMS
-                        $response = $smsService->sendBulkSms($phoneNumbers, $message);
+                        $response = $smsService->sendBulkSmsWithDelay($phoneNumbers, $message);
 
                         Log::info('Bulk SMS Response:', $response);
 

@@ -179,7 +179,7 @@ class ListBatches extends Component implements HasForms, HasTable
 
                             try {
                                 // Send Bulk SMS
-                                $response = $smsService->sendBulkSms($phoneNumbers, $message);
+                                $response = $smsService->sendBulkSmsWithDelay($phoneNumbers, $message);
 
                                 Log::info('Bulk SMS Response:', $response);
 

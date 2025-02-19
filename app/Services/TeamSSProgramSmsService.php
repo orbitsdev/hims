@@ -34,25 +34,25 @@ class TeamSSProgramSmsService
      */
     public function formatPhoneNumber(string $phone): string
 {
-    
+
     $phone = preg_replace('/\D/', '', $phone);
 
- 
+
     if (substr($phone, 0, 2) === '09') {
         return '+63' . substr($phone, 1);
     }
 
-  
+
     if (substr($phone, 0, 1) === '9') {
         return '+63' . $phone;
     }
 
-    
+
     if (substr($phone, 0, 3) === '+63') {
         return $phone;
     }
 
-   
+
     Log::error('Invalid phone number format: ' . $phone);
     return $phone;
 }
@@ -103,7 +103,7 @@ class TeamSSProgramSmsService
             $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
             $numberString = implode(',', $formattedNumbers); // Comma-separated string
             $groupString = implode(',', $groups); // Optional groups
-    
+
             $payload = [
                 "secret" => $this->apiSecret,
                 "mode" => "devices",
@@ -115,16 +115,16 @@ class TeamSSProgramSmsService
                 "priority" => $this->priority,
                 "message" => $message,
             ];
-    
+
             Log::info('Bulk SMS Payload:', $payload);
-    
-            // Use bulk SMS URL here
+
+
             $response = Http::asForm()->post($this->bulkSmsUrl, $payload);
-    
+
             $responseData = $response->json();
-    
+
             Log::info('Bulk SMS Response:', $responseData);
-    
+
             return $responseData;
         } catch (\Exception $e) {
             Log::error('Bulk SMS Failed: ' . $e->getMessage());
@@ -134,7 +134,45 @@ class TeamSSProgramSmsService
             ];
         }
     }
-    
+
+    public function sendBulkSmsWithDelay(array $numbers, string $message, int $delaySeconds = 3): array
+{
+    $responses = [];
+    foreach ($numbers as $index => $number) {
+        try {
+            $payload = [
+                "secret" => $this->apiSecret,
+                "mode" => "devices",
+                "device" => $this->deviceId,
+                "sim" => $this->sim,
+                "priority" => 1,
+                "numbers" => $number,
+                "message" => $message
+            ];
+
+            Log::info("Sending SMS to: {$number} | Payload: ", $payload);
+
+            $response = Http::asForm()->post($this->bulkSmsUrl, $payload);
+            $responseData = $response->json();
+
+            $responses[$number] = $responseData;
+
+            Log::info("SMS Response for {$number}: ", $responseData);
+
+            // Add delay before sending the next message
+            if ($index < count($numbers) - 1) {
+                sleep($delaySeconds); // Wait for X seconds before next SMS
+            }
+        } catch (\Exception $e) {
+            Log::error("Failed to send SMS to {$number}: " . $e->getMessage());
+            $responses[$number] = ['error' => true, 'message' => $e->getMessage()];
+        }
+    }
+
+    return $responses;
+}
+
+
 
 
     /**

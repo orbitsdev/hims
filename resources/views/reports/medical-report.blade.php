@@ -163,14 +163,14 @@
             <th class="px-0.5 border-b text-gray-500">Position</th>
             <th class="px-0.5 border-b text-gray-500">Phone</th>
             <th class="px-0.5 border-b text-gray-500">Emergency Contact</th>
-            <th class="px-0.5 border-b text-gray-500">Email</th>
-            <th class="px-0.5 border-b text-gray-500">Department</th>
+            {{-- <th class="px-0.5 border-b text-gray-500">Email</th> --}}
+            {{-- <th class="px-0.5 border-b text-gray-500">Department</th> --}}
           </tr>
         </thead>
         <tbody>
           @foreach ($staffMembers as $staff)
           <tr class="border-b">
-           
+
             <td class="px-0.5">
               <img src="{{ $staff->getImage()  }}" alt="{{ $staff?->personalDetail->getFullName() ?? 'Staff' }}" class="w-16 h-16 object-cover rounded-full border border-gray-300">
             </td>
@@ -178,7 +178,7 @@
             <td class="px-0.5">{{ $staff->position ?? 'N/A' }}</td>
             <td class="px-0.5">{{ $staff->phone ?? 'N/A' }}</td>
             <td class="px-0.5">{{ $staff->emergency_contact ?? 'N/A' }}</td>
-            <td class="px-0.5">{{ $staff->email ?? 'N/A' }}</td>
+            {{-- <td class="px-0.5">{{ $staff->email ?? 'N/A' }}</td> --}}
             <td class="px-0.5">{{ $staff?->department?->name ?? 'N/A' }}</td>
           </tr>
           @endforeach

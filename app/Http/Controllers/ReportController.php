@@ -41,7 +41,8 @@ class ReportController extends Controller
     $staffMembers = Staff::whereHas('department', function($query){
             $query->where('role', 'staff');
     })
-    ->where('status', true) // Only active staff
+    ->where('status', true)
+    ->with(['dapartment']) // Only active staff
     ->get();
 
     Pdf::view('reports.medical-report',['record'=> $record, 'staffMembers' =>$staffMembers])->save($public_path);

@@ -28,7 +28,7 @@ class Staff extends Model
         if (!empty($this->photo) && Storage::disk('public')->exists($this->photo)) {
             return Storage::disk('public')->url($this->photo);
         } else {
-            return asset('images/placeholder-image.jpg'); // Return default image URL
+            return url('images/placeholder-image.jpg'); // Return default image URL
         }
     }
 

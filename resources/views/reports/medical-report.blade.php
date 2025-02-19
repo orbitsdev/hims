@@ -179,7 +179,7 @@
             <td class="px-0.5">{{ $staff->phone ?? 'N/A' }}</td>
             <td class="px-0.5">{{ $staff->emergency_contact ?? 'N/A' }}</td>
             {{-- <td class="px-0.5">{{ $staff->email ?? 'N/A' }}</td> --}}
-            <td class="px-0.5">{{ $staff?->department?->name ?? 'N/A' }}</td>
+            {{-- <td class="px-0.5">{{ $staff?->department?->name ?? 'N/A' }}</td> --}}
           </tr>
           @endforeach
         </tbody>

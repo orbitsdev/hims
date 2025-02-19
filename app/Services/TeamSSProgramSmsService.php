@@ -138,8 +138,12 @@ class TeamSSProgramSmsService
     public function sendBulkSmsWithDelay(array $numbers, string $message, int $delaySeconds = 3): array
 {
     $responses = [];
-    $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers); // Format numbers
-    dd($formattedNumbers);
+
+    // ✅ Ensure all phone numbers are correctly formatted
+    $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
+
+    // ✅ Debugging: Ensure all numbers are in "+63XXXXXXXXXX" format
+    Log::info('Formatted Phone Numbers:', $formattedNumbers);
 
     foreach ($formattedNumbers as $index => $number) {
         try {
@@ -149,20 +153,21 @@ class TeamSSProgramSmsService
                 "device" => $this->deviceId,
                 "sim" => $this->sim,
                 "priority" => 1,
-                "numbers" => $number, // Correct field name
+                "phone" => $number, // ✅ Use correctly formatted number
                 "message" => $message
             ];
 
             Log::info("Sending SMS to: {$number} | Payload: ", $payload);
 
-            $response = Http::asForm()->post($this->bulkSmsUrl, $payload);
+            // ✅ Send each message to single SMS URL
+            $response = Http::asForm()->post($this->singleSmsUrl, $payload);
             $responseData = $response->json();
 
             $responses[$number] = $responseData;
 
             Log::info("SMS Response for {$number}: ", $responseData);
 
-            // Add delay only if there are more numbers left
+            // ✅ Add delay only if there are more numbers left
             if ($index < count($formattedNumbers) - 1) {
                 sleep($delaySeconds);
             }
@@ -174,6 +179,7 @@ class TeamSSProgramSmsService
 
     return $responses;
 }
+
 
 
 // <?php

@@ -138,9 +138,9 @@ class TeamSSProgramSmsService
     public function sendBulkSmsWithDelay(array $numbers, string $message, int $delaySeconds = 3): array
 {
     $responses = [];
-    $formattedNumbers = implode(',', array_map([$this, 'formatPhoneNumber'], $numbers)); // Format numbers properly
+    $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers); // Format numbers
 
-    foreach (explode(',', $formattedNumbers) as $index => $number) {
+    foreach ($formattedNumbers as $index => $number) {
         try {
             $payload = [
                 "secret" => $this->apiSecret,
@@ -148,7 +148,7 @@ class TeamSSProgramSmsService
                 "device" => $this->deviceId,
                 "sim" => $this->sim,
                 "priority" => 1,
-                "numbers" => $number, // Now correctly formatted
+                "numbers" => $number, // Correct field name
                 "message" => $message
             ];
 
@@ -161,9 +161,9 @@ class TeamSSProgramSmsService
 
             Log::info("SMS Response for {$number}: ", $responseData);
 
-            // Add delay before sending the next message
-            if ($index < count($numbers) - 1) {
-                sleep($delaySeconds); // Wait for X seconds before next SMS
+            // Add delay only if there are more numbers left
+            if ($index < count($formattedNumbers) - 1) {
+                sleep($delaySeconds);
             }
         } catch (\Exception $e) {
             Log::error("Failed to send SMS to {$number}: " . $e->getMessage());
@@ -173,6 +173,7 @@ class TeamSSProgramSmsService
 
     return $responses;
 }
+
 
 
 
@@ -224,3 +225,5 @@ class TeamSSProgramSmsService
         }
     }
 }
+
+

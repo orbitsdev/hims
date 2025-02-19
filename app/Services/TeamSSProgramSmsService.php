@@ -141,7 +141,7 @@ class TeamSSProgramSmsService
 
     // ✅ Ensure all phone numbers are correctly formatted
     $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
-    dd($formattedNumbers);
+    // dd($formattedNumbers);
 
     // ✅ Debugging: Ensure all numbers are in "+63XXXXXXXXXX" format
     Log::info('Formatted Phone Numbers', ['numbers' => $formattedNumbers]);

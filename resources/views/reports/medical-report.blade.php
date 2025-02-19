@@ -150,55 +150,59 @@
           @endforeach
         </div>
         @endif
+
+        <div class="mb-2 break-inside-avoid  py-2">
+            <h2 class="text-xl font-semibold text-green-700 bg-gray-200 p-2 rounded">STAFF CONTACTS</h2>
+            <div class="mb-2 break-inside-avoid py-2">
+                <h2 class="text-xl font-semibold text-green-700 bg-gray-200 p-2 rounded">STAFF CONTACTS</h2>
+                <div class="border-l border-r">
+                  @foreach ($staffMembers as $staff)
+                  <p class="font-normal grid grid-cols-12 px-2 border-b">
+                    <!-- Label for Name -->
+                    <span class="text-gray-400 col-span-2 inline-block border-r py-2">Name</span>
+                    <span class="ml-4 py-2 inline-block col-span-9">{{ $staff?->personalDetail->getFullName() ?? 'N/A' }}</span>
+                  </p>
+                  <p class="font-normal grid grid-cols-12 px-2 border-b">
+                    <!-- Label for Position -->
+                    <span class="text-gray-400 col-span-2 inline-block border-r py-2">Position</span>
+                    <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->position ?? 'N/A' }}</span>
+                  </p>
+                  <p class="font-normal grid grid-cols-12 px-2 border-b">
+                    <!-- Label for Phone -->
+                    <span class="text-gray-400 col-span-2 inline-block border-r py-2">Phone</span>
+                    <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->phone ?? 'N/A' }}</span>
+                  </p>
+                  <p class="font-normal grid grid-cols-12 px-2 border-b">
+                    <!-- Label for Emergency Contact -->
+                    <span class="text-gray-400 col-span-2 inline-block border-r py-2">Emergency Contact</span>
+                    <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->emergency_contact ?? 'N/A' }}</span>
+                  </p>
+                  <p class="font-normal grid grid-cols-12 px-2 border-b">
+                    <!-- Label for Email -->
+                    <span class="text-gray-400 col-span-2 inline-block border-r py-2">Email</span>
+                    <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->email ?? 'N/A' }}</span>
+                  </p>
+                  <p class="font-normal grid grid-cols-12 px-2 border-b">
+                    <!-- Label for Department -->
+                    <span class="text-gray-400 col-span-2 inline-block border-r py-2">Department</span>
+                    <span class="ml-4 py-2 inline-block col-span-9">{{ $staff?->department?->name ?? 'N/A' }}</span>
+                  </p>
+                  <p class="font-normal grid grid-cols-12 px-2 border-b">
+                    <!-- Label for Photo -->
+                    <span class="text-gray-400 col-span-2 inline-block border-r py-2">Photo</span>
+                    <span class="ml-4 py-2 inline-block col-span-9">
+                      <img src="{{ $staff->getImage() }}" alt="{{ $staff?->personalDetail->getFullName() ?? 'Staff'}}" class="w-20 h-20 object-cover border-2 border-gray-300">
+                    </span>
+                  </p>
+                  @endforeach
+                </div>
+              </div>
+
+        </div>
       </div>
       <!-- Staff Members Section -->
 <!-- Staff Members Section -->
-@if($staffMembers->isNotEmpty())
-<div class="mt-8 break-inside-avoid py-2">
-  <h2 class="text-xl font-semibold text-blue-700 bg-gray-200 p-2 rounded">Staff Contacts</h2>
-  <div class="border-l border-r">
-    @foreach ($staffMembers as $staff)
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <!-- Label for Name -->
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Name</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff?->personalDetail->getFullName() ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <!-- Label for Position -->
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Position</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->position ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <!-- Label for Phone -->
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Phone</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->phone ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <!-- Label for Emergency Contact -->
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Emergency Contact</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->emergency_contact ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <!-- Label for Email -->
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Email</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->email ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <!-- Label for Department -->
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Department</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff?->department?->name ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <!-- Label for Image -->
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Photo</span>
-      <span class="ml-4 py-2 inline-block col-span-9">
-        <img src="{{ $staff->getImage() }}" alt="{{ $staff?->personalDetail->getFullName() ?? 'Staff'}}" class="w-20 h-20 object-cover border-2 border-gray-300">
-      </span>
-    </p>
-    @endforeach
-  </div>
-</div>
-@endif
+
 
 
     </div>

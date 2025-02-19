@@ -68,7 +68,7 @@
             </div>
             @if ($total_students > 0)
                 <div>
-                    <a href="{{ route('students.export') }}" 
+                    <a href="{{ route('students.export') }}"
                        class="flex items-center gap-2 bg-[#106c3b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -81,7 +81,7 @@
             @endif
         </div>
     </div>
-    
+
 
     <!-- Personnels -->
   <!-- Personnels -->
@@ -94,7 +94,7 @@
         </div>
         @if ($total_personnel > 0)
             <div>
-                <a href="{{ route('personnels.export') }}" 
+                <a href="{{ route('personnels.export') }}"
                    class="flex items-center gap-2 bg-[#106c3b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
                     <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -119,7 +119,7 @@
             </div>
             @if ($total_staff > 0)
                 <div>
-                    <a href="{{ route('staff.export') }}" 
+                    <a href="{{ route('staff.export') }}"
                        class="flex items-center gap-2 bg-[#106c3b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -174,7 +174,7 @@
             </div>
             @if ($total_events > 0)
                 <div>
-                    <a href="{{ route('events.export') }}" 
+                    <a href="{{ route('events.export') }}"
                        class="flex items-center gap-2 bg-[#106c3b] text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition">
                         <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                             <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
@@ -280,7 +280,7 @@
                                 <x-filament-actions::group :actions="[
                                     ($this->manageAction)(['record' => $medicalRecord->id]),
                                     ($this->sendSmsAction)(['record' => $medicalRecord->id]),
-                                  
+
                                     ($this->sendBloodEmailAlertAction)(['record' => $medicalRecord->id])
                                 ]" />
 

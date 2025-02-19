@@ -175,14 +175,14 @@
                     COURSES & SECTIONS
                     </a>
                 </li>
-                <li>
+                {{-- <li>
                     <a href="{{route('sections')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['sections'])}}">
 
                         <i class="fa-solid fa-book text-2xl"></i>
                      SECTIONS
                     </a>
-                </li>
+                </li> --}}
 
 
 
@@ -323,14 +323,14 @@
                         COURSES & SECTIONS
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="{{route('sections')}}"
                             class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['sections'])}}">
 
                             <i class="fa-solid fa-book text-2xl"></i>
                          SECTIONS
                         </a>
-                    </li>
+                    </li> --}}
 
 
 

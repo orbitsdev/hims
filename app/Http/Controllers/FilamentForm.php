@@ -167,7 +167,7 @@ class FilamentForm extends Controller
             Group::make()
                 ->relationship('personalDetail')
                 ->schema([
-                    
+
                     // Personal Details Section
                     Section::make('Personal Details')
                         ->columns([
@@ -181,45 +181,51 @@ class FilamentForm extends Controller
                                 ->columnSpan(3)
                                 ->required()
                                 ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()']),
-    
+
                             TextInput::make('middle_name')
                                 ->label('Middle Name')
                                 ->columnSpan(3)
                                 ->required()
                                 ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()']),
-    
+
                             TextInput::make('last_name')
                                 ->label('Last Name')
                                 ->columnSpan(3)
                                 ->required()
                                 ->extraAttributes(['x-on:input' => 'event.target.value = event.target.value.toUpperCase()']),
-    
+
                             DatePicker::make('birth_date')
                                 ->label('Birth Date')
                                 ->native(false)
                                 ->required()
+                                ->live()
+                                ->afterStateUpdated(function (Set $set, $state) {
+                                    if ($state) {
+                                        $age = now()->diffInYears(\Carbon\Carbon::parse($state));
+                                        $set('age', $age);
+                                    }
+                                })
                                 ->columnSpan(3),
-    
+
                             TextInput::make('age')
                                 ->label('Age')
                                 ->numeric()
                                 ->required()
-                                ->default(18)
                                 ->mask(999)
                                 ->columnSpan(2),
-    
+
                             Select::make('civil_status')
                                 ->label('Civil Status')
                                 ->options(FilamentForm::CIVIL_STATUS_OPTIONS)
                                 ->default('Single')
                                 ->columnSpan(3)
                                 ->searchable(),
-    
+
                             TextInput::make('birth_place')
                                 ->label('Birth Place')
                                 ->columnSpan(6),
                         ]),
-    
+
                     // Address & Location Section
                     Section::make('Address & Location')
                         ->columns([
@@ -233,7 +239,7 @@ class FilamentForm extends Controller
                                 ->required()
                                 ->columnSpan(6),
                         ]),
-    
+
                     // Contact Information Section
                     Section::make('Contact Information')
                         ->columns([
@@ -249,7 +255,7 @@ class FilamentForm extends Controller
                                 ->maxLength(15)
                                 ->columnSpan(3),
                         ]),
-    
+
                     // Profile Image Upload Section
                     Section::make('Profile Image')
                         ->schema([
@@ -264,7 +270,7 @@ class FilamentForm extends Controller
                 ]),
         ];
     }
-    
+
 
     public static function studentForm(): array
     {
@@ -290,7 +296,7 @@ class FilamentForm extends Controller
 
                             ->columnSpan(4)
                             ->searchable(),
-                       
+
                         TextInput::make('id_number')->label('ID Number')
                             ->required()
 
@@ -381,7 +387,7 @@ class FilamentForm extends Controller
                             }),
                         ]),
 
-                        
+
                         FileUpload::make('image')
                                 ->disk('public')
                                 ->directory('students')
@@ -396,7 +402,7 @@ class FilamentForm extends Controller
                         ...FilamentForm::personalDetailForm()
                     ]),
 
-                ]),
+                ])->skippable(),
 
 
         ];
@@ -707,7 +713,7 @@ class FilamentForm extends Controller
                                         // ->createOptionForm(FilamentForm::departmentForm())
                                         // ->createOptionUsing(function (array $data) {
                                         //     return Department::create($data)->id;
-              
+
                                         //   })
                                         // ,
 
@@ -1234,7 +1240,7 @@ class FilamentForm extends Controller
 
                     Select::make('department_id')
                         ->required()
-                       
+
                         ->label('BUILDING/DEPARTMENT')
                         ->options(Department::studentDepartment()->get()->map(function ($d) {
                             return ['name' => $d->getNameWithAbbreviation(), 'id' => $d->id];
@@ -1246,7 +1252,7 @@ class FilamentForm extends Controller
                             return Department::create($data)->id;
                         })
                         ,
-                        
+
 
 
 
@@ -1505,6 +1511,19 @@ class FilamentForm extends Controller
                             TextInput::make('email')->required()
                                                     ->columnSpan(3),
 
+                                                    DatePicker::make('birth_date')
+                                                    ->required()
+                                                    ->native(false)
+                                                    ->columnSpan(2)
+                                                    ->live()
+                                ->afterStateUpdated(function (Set $set, $state) {
+                                    if ($state) {
+                                        $age = now()->diffInYears(\Carbon\Carbon::parse($state));
+                                        $set('age', $age);
+                                    }
+                                })
+                                                    ,
+
                                                     TextInput::make('age')
                                                     ->required()
                                                     ->mask(999)
@@ -1521,10 +1540,7 @@ class FilamentForm extends Controller
                                 ->columnSpan(1),
 
 
-                            DatePicker::make('birth_date')
-                                ->required()
-                                ->native(false)
-                                ->columnSpan(2),
+
 
                             Select::make('civil_status')
                                 ->required()
@@ -1533,7 +1549,7 @@ class FilamentForm extends Controller
                                 ->default('Single')
                                 ->columnSpan(3)
                                 ->searchable(),
-                                
+
 
                             TextInput::make('birth_place')
                                 ->required()
@@ -1550,7 +1566,7 @@ class FilamentForm extends Controller
                                 ->required()
                                 ->columnSpan(3),
 
-                                
+
 
 
                         ]),

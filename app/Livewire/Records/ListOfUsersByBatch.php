@@ -102,10 +102,7 @@ class ListOfUsersByBatch extends Component implements HasForms, HasTable
                     ->button()
                     ->color('primary')
                     ->label('CREATE MEDICAL RECORD')
-                    ->fillForm([
-                        'name' => fake()->sentence(),
-
-                    ])
+                    
                     ->modalWidth('7xl')
 
                     // ->form(FilamentForm::medicalForm())

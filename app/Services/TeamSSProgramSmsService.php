@@ -2,8 +2,9 @@
 
 namespace App\Services;
 
-use Illuminate\Support\Facades\Http;
+use App\Jobs\SendSmsJob;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Http;
 
 class TeamSSProgramSmsService
 {
@@ -137,49 +138,64 @@ class TeamSSProgramSmsService
 
     public function sendBulkSmsWithDelay(array $numbers, string $message, int $delaySeconds = 3): array
 {
-    $responses = [];
-
-    // ✅ Ensure all phone numbers are correctly formatted
     $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
-    // dd($formattedNumbers);
 
-    // ✅ Debugging: Ensure all numbers are in "+63XXXXXXXXXX" format
-    Log::info('Formatted Phone Numbers', ['numbers' => $formattedNumbers]);
+    Log::info('Queueing SMS for numbers:', ['numbers' => $formattedNumbers]);
 
     foreach ($formattedNumbers as $index => $number) {
-        try {
-            $payload = [
-                "secret" => $this->apiSecret,
-                "mode" => "devices",
-                "device" => $this->deviceId,
-                "sim" => $this->sim,
-                "priority" => 1,
-                "phone" => $number, // ✅ Use correctly formatted number
-                "message" => $message
-            ];
-
-            Log::info("Sending SMS to: {$number}", ['payload' => $payload]);
-
-            // ✅ Send each message to single SMS URL
-            $response = Http::asForm()->post($this->singleSmsUrl, $payload);
-            $responseData = $response->json();
-
-            $responses[$number] = $responseData;
-
-            Log::info("SMS Response for {$number}", ['response' => $responseData]);
-
-            // ✅ Add delay only if there are more numbers left
-            if ($index < count($formattedNumbers) - 1) {
-                sleep($delaySeconds);
-            }
-        } catch (\Exception $e) {
-            Log::error("Failed to send SMS to {$number}", ['error' => $e->getMessage()]);
-            $responses[$number] = ['error' => true, 'message' => $e->getMessage()];
-        }
+        // Dispatch each SMS job with a delay
+        SendSmsJob::dispatch($number, $message)->delay(now()->addSeconds($index * $delaySeconds));
     }
 
-    return $responses;
+    return ['success' => true, 'message' => 'SMS has been queued for sending.'];
 }
+
+
+//     public function sendBulkSmsWithDelay(array $numbers, string $message, int $delaySeconds = 3): array
+// {
+//     $responses = [];
+
+//     // ✅ Ensure all phone numbers are correctly formatted
+//     $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
+//     // dd($formattedNumbers);
+
+//     // ✅ Debugging: Ensure all numbers are in "+63XXXXXXXXXX" format
+//     Log::info('Formatted Phone Numbers', ['numbers' => $formattedNumbers]);
+
+//     foreach ($formattedNumbers as $index => $number) {
+//         try {
+//             $payload = [
+//                 "secret" => $this->apiSecret,
+//                 "mode" => "devices",
+//                 "device" => $this->deviceId,
+//                 "sim" => $this->sim,
+//                 "priority" => 1,
+//                 "phone" => $number, // ✅ Use correctly formatted number
+//                 "message" => $message
+//             ];
+
+//             Log::info("Sending SMS to: {$number}", ['payload' => $payload]);
+
+//             // ✅ Send each message to single SMS URL
+//             $response = Http::asForm()->post($this->singleSmsUrl, $payload);
+//             $responseData = $response->json();
+
+//             $responses[$number] = $responseData;
+
+//             Log::info("SMS Response for {$number}", ['response' => $responseData]);
+
+//             // ✅ Add delay only if there are more numbers left
+//             if ($index < count($formattedNumbers) - 1) {
+//                 sleep($delaySeconds);
+//             }
+//         } catch (\Exception $e) {
+//             Log::error("Failed to send SMS to {$number}", ['error' => $e->getMessage()]);
+//             $responses[$number] = ['error' => true, 'message' => $e->getMessage()];
+//         }
+//     }
+
+//     return $responses;
+// }
 
 
 

@@ -139,6 +139,7 @@ class TeamSSProgramSmsService
 {
     $responses = [];
     $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers); // Format numbers
+    dd($formattedNumbers);
 
     foreach ($formattedNumbers as $index => $number) {
         try {
@@ -175,6 +176,55 @@ class TeamSSProgramSmsService
 }
 
 
+// <?php
+// function sendSMS($number, $message, $apiSecret, $device, $sim = 1) {
+//     $payload = [
+//         "secret" => $apiSecret,
+//         "mode" => "devices",
+//         "device" => $device,
+//         "sim" => $sim,
+//         "priority" => 1,
+//         "numbers" => $number,
+//         "message" => $message
+//     ];
+
+//     $cURL = curl_init("https://sms.teamssprogram.com/api/send/sms.bulk");
+//     curl_setopt($cURL, CURLOPT_RETURNTRANSFER, true);
+//     curl_setopt($cURL, CURLOPT_POSTFIELDS, $payload);
+//     $response = curl_exec($cURL);
+//     curl_close($cURL);
+
+//     return json_decode($response, true);
+// }
+
+// // Configuration
+// $apiSecret = "YOUR_API_SECRET"; // Replace with your actual API secret
+// $device = "00000000-0000-0000-d57d-f30cb6a89289"; // Replace with your device ID
+// $message = "Hello World!";
+// $delaySeconds = 3; // Delay between each SMS in seconds
+
+// // Numbers to send SMS to
+// $numbers = [
+//     "+639051234567",
+//     "+639123456789",
+//     "+639123456789"
+// ];
+
+// // Send SMS to each number with delay
+// foreach ($numbers as $index => $number) {
+//     // Send SMS
+//     $result = sendSMS($number, $message, $apiSecret, $device);
+
+//     // Log the result
+//     echo "Sending to $number: ";
+//     print_r($result);
+//     echo "\n";
+
+//     // Add delay if this is not the last number
+//     if ($index < count($numbers) - 1) {
+//         sleep($delaySeconds);
+//     }
+// }
 
 
 

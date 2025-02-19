@@ -42,7 +42,7 @@ class ReportController extends Controller
             $query->where('role', 'staff');
     })
     ->where('status', true)
-    ->with(['dapartment']) // Only active staff
+    ->with(['department']) // Only active staff
     ->get();
 
     Pdf::view('reports.medical-report',['record'=> $record, 'staffMembers' =>$staffMembers])->save($public_path);

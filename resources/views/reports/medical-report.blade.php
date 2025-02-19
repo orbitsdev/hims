@@ -170,9 +170,7 @@
         <tbody>
           @foreach ($staffMembers as $staff)
           <tr class="border-b">
-            <p>
-                {{$staff->getImage() }}
-            </p>
+           
             <td class="px-0.5">
               <img src="{{ $staff->getImage()  }}" alt="{{ $staff?->personalDetail->getFullName() ?? 'Staff' }}" class="w-16 h-16 object-cover rounded-full border border-gray-300">
             </td>

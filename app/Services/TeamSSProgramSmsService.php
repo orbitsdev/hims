@@ -141,37 +141,32 @@ class TeamSSProgramSmsService
     $responses = [];
 
     try {
-        // ✅ Format phone numbers correctly
+        // ✅ Ensure all phone numbers are correctly formatted
         $formattedNumbers = array_map([$this, 'formatPhoneNumber'], $numbers);
 
         foreach ($formattedNumbers as $index => $number) {
+            // ✅ API requires `phone`, not `numbers`
             $payload = [
                 "secret" => $this->apiSecret,
                 "mode" => "devices",
                 "device" => $this->deviceId,
-                "sim" => $this->sim,
-                "priority" => 1,
-                "numbers" => $number, // ✅ Correct field (single number per request)
+                "sim" => (string) $this->sim, // Ensure it's a string
+                "priority" => "1", // Ensure it's a string
+                "phone" => $number, // ✅ Correct field name (previously `numbers`)
                 "message" => $message
             ];
 
             Log::info("Sending SMS to: {$number}", ['payload' => $payload]);
 
-            // ✅ Send request using cURL like in your example
-            $cURL = curl_init($this->bulkSmsUrl);
-            curl_setopt($cURL, CURLOPT_RETURNTRANSFER, true);
-            curl_setopt($cURL, CURLOPT_POST, true);
-            curl_setopt($cURL, CURLOPT_POSTFIELDS, $payload);
+            // ✅ Use Laravel `Http::asForm()` instead of cURL for consistency
+            $response = Http::asForm()->post($this->singleSmsUrl, $payload);
+            $responseData = $response->json();
 
-            $response = curl_exec($cURL);
-            curl_close($cURL);
-
-            $responseData = json_decode($response, true);
             $responses[$number] = $responseData;
 
             Log::info("SMS Response for {$number}", ['response' => $responseData]);
 
-            // ✅ Add delay between requests (only if not the last number)
+            // ✅ Add delay only if not the last number
             if ($index < count($formattedNumbers) - 1) {
                 sleep($delaySeconds);
             }

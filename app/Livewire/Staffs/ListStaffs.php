@@ -40,7 +40,7 @@ class ListStaffs extends Component implements HasForms, HasTable
                 ->width(60)->height(60)
                 ->url(fn (Staff $record): null|string => $record->photo ?  Storage::disk('public')->url($record->photo) : null)
                 ->defaultImageUrl(url('/images/placeholder-image.jpg'))
-                ->openUrlInNewTab()    
+                ->openUrlInNewTab()
                 ->circular(),
                 // Tables\Columns\TextColumn::make('user.name')->formatStateUsing(function (Model $record) {
                 //     return $record->user->fullName() ?? '';
@@ -66,17 +66,17 @@ class ListStaffs extends Component implements HasForms, HasTable
                 ->wrap()
 
                     ->searchable(),
-                Tables\Columns\TextColumn::make('started_at')
-                    ->date()
-                    ->sortable(),
-                Tables\Columns\TextColumn::make('end_at')
-                    ->date()
-                    ->sortable(),
-                    ToggleColumn::make('status')
-                    
-                    ->afterStateUpdated(function ($record, $state) {
-                        FilamentForm::notification($state ?'Status set to Active' : 'Status set to in active');
-                    })
+                // Tables\Columns\TextColumn::make('started_at')
+                //     ->date()
+                //     ->sortable(),
+                // Tables\Columns\TextColumn::make('end_at')
+                //     ->date()
+                //     ->sortable(),
+                //     ToggleColumn::make('status')
+
+                //     ->afterStateUpdated(function ($record, $state) {
+                //         FilamentForm::notification($state ?'Status set to Active' : 'Status set to in active');
+                //     })
                 // Tables\Columns\TextColumn::make('created_at')
                 //     ->dateTime()
                 //     ->sortable()
@@ -87,7 +87,7 @@ class ListStaffs extends Component implements HasForms, HasTable
                 //     ->toggleable(isToggledHiddenByDefault: true),
             ])
             ->filters([
-                
+
             ])
             ->headerActions([
                 Action::make('create')
@@ -96,7 +96,7 @@ class ListStaffs extends Component implements HasForms, HasTable
                 ->color('primary')
                 ->label('New Staff')
                 ->icon('heroicon-s-plus')
-               
+
                 ->url(function(){
                     return route('staffs-create');
                 }),
@@ -117,17 +117,17 @@ class ListStaffs extends Component implements HasForms, HasTable
                     ->disabledForm()
                      ->slideOver()
                      ->closeModalByClickingAway(true)
-                     
-                    
+
+
                     ->modalWidth(MaxWidth::Full),
                      Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
                                 return route('staffs-edit', ['record'=> $record]);
                  }),
                     Tables\Actions\DeleteAction::make(),
                 ])->tooltip('MANAGEMENT'),
-               
-                
-              
+
+
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

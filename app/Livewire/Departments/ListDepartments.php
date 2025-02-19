@@ -14,10 +14,12 @@ use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Forms\Components\FileUpload;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -29,7 +31,7 @@ class ListDepartments extends Component implements HasForms, HasTable
     use InteractsWithTable;
 
 
-    
+
     public function table(Table $table): Table
     {
         return $table
@@ -45,24 +47,24 @@ class ListDepartments extends Component implements HasForms, HasTable
                 ->openUrlInNewTab()
                 ->circular()
                 ,
-                
+
                 Tables\Columns\TextColumn::make('name')->label('NAME')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('role')->label('GROUP')
                     ->searchable(),
                 Tables\Columns\TextColumn::make('abbreviation')->label('ABBREVIATION')
                     ->searchable(),
-                    
+
             ])
             ->filters([
                 //
             ])
             ->headerActions([
-               
+
                     CreateAction::make('create')
                     ->size('lg')
                     ->mutateFormDataUsing(function (array $data): array {
-                 
+
                         return $data;
                     })
                     ->icon('heroicon-s-sparkles')
@@ -71,17 +73,29 @@ class ListDepartments extends Component implements HasForms, HasTable
                     ->createAnother(false)
             ])
             ->actions([
-                ActionGroup::make([
-                    Tables\Actions\EditAction::make()->button()->form(FilamentForm::departmentForm())
+                Tables\Actions\EditAction::make()->form(FilamentForm::departmentForm())
                     ->hidden(function(Model $record){
                         return $record->name == 'ALL';
                     }) ->modalWidth('7xl'),
-                    Tables\Actions\DeleteAction::make()->button()->hidden(function(Model $record){
+                    Tables\Actions\DeleteAction::make()->hidden(function(Model $record){
                         return $record->name == 'ALL';
-                    }) ,
-                ]),
+                    })->before(function (DeleteAction $action,Model $record) {
+
+                        if ($record->hasRelatedRecords()) {
+                            Notification::make()
+                                ->title('Deletion Not Allowed')
+                                ->body('This department cannot be deleted because it has associated records.')
+                                ->danger()
+                                ->send();
+
+                                $action->halt();
+                                $action->cancel();
+                        }
+
+                    })
+                     ,
                 //edit actions
-               
+
                     // ->createAnother(false)
             ])
             ->bulkActions([

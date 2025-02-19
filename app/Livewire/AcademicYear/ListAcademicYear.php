@@ -10,9 +10,12 @@ use Illuminate\Contracts\View\View;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Contracts\HasTable;
+use Illuminate\Database\Eloquent\Model;
 use Filament\Forms\Components\TextInput;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -30,7 +33,7 @@ class ListAcademicYear extends Component implements HasForms, HasTable
             ->mask('9999-9999')
             ->default(AcademicYear::suggestion())
              ->columnSpanFull(),
-          
+
         ];
     }
 
@@ -41,14 +44,14 @@ class ListAcademicYear extends Component implements HasForms, HasTable
             ->columns([
                 Tables\Columns\TextColumn::make('name')->label('ACADEMIC YEAR')
                     ->searchable(),
-               
+
             ])
             ->headerActions([
-               
+
                 CreateAction::make('create')
                 ->size('lg')
                 ->mutateFormDataUsing(function (array $data): array {
-             
+
                     return $data;
                 })
                 ->icon('heroicon-s-sparkles')
@@ -57,19 +60,33 @@ class ListAcademicYear extends Component implements HasForms, HasTable
                 ->createAnother(false)
         ])
         ->actions([
-            ActionGroup::make([
-                Tables\Actions\EditAction::make()->form($this->academicForm())->modalWidth('7xl'),
-                Tables\Actions\DeleteAction::make(),
-            ]),
+            Tables\Actions\EditAction::make()->form($this->academicForm())->modalWidth('7xl'),
+            Tables\Actions\DeleteAction::make()
+
+            ->before(function (DeleteAction $action,Model $record) {
+
+                if ($record->hasRelatedRecords()) {
+                    Notification::make()
+                        ->title('Deletion Not Allowed')
+                        ->body('This academic year cannot be deleted because it has associated records, semesters, or events.')
+                        ->danger()
+                        ->send();
+
+                        $action->halt();
+                        $action->cancel();
+                }
+
+            }),
+           
             //edit actions
-          
+
                 // ->createAnother(false)
         ])
         ->bulkActions([
             Tables\Actions\BulkActionGroup::make([
-                BulkAction::make('delete')
-                    ->requiresConfirmation()
-                    ->action(fn (Collection $records) => $records->each->delete())
+                // BulkAction::make('delete')
+                //     ->requiresConfirmation()
+                //     ->action(fn (Collection $records) => $records->each->delete())
             ])
             ->label('ACTION')
             ,

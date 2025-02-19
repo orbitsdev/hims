@@ -26,11 +26,11 @@ class Department extends Model
     const ESO = 'ENGINEERING STUDENTS ORGANIZATION (ESO)';
 
     const LIST = [
-        //   User::ADMIN => User::ADMIN, 
-          Department::CCS => Department::CCS, 
-          Department::NABA => Department::NABA, 
-          Department::ESO => Department::ESO, 
-          
+        //   User::ADMIN => User::ADMIN,
+          Department::CCS => Department::CCS,
+          Department::NABA => Department::NABA,
+          Department::ESO => Department::ESO,
+
         ];
 
     public function students(){
@@ -43,7 +43,7 @@ class Department extends Model
         return $this->hasMany(Personnel::class);
     }
 
-    
+
     public function recordBatches(){
         return $this->hasMany(RecordBatch::class);
     }
@@ -56,9 +56,9 @@ class Department extends Model
         return $this->hasMany(Section::class);
     }
 
-   
 
-    
+
+
 
     public function getImage()
     {
@@ -73,10 +73,10 @@ class Department extends Model
     {
         $name = $this->name ?? '';
     $abbreviation = $this->abbreviation ? ' (' . $this->abbreviation . ')' : '';
-    
+
     return $name . $abbreviation;
     }
-    
+
 
     public function medicalRecords(){
         return $this->hasMany(MedicalRecord::class);
@@ -90,7 +90,7 @@ class Department extends Model
         return $this->belongsToMany(Event::class, 'department_events','department_id', 'event_id');
     }
 
-    
+
 
     public function departmentEvents(){
         return $this->hasMany(DepartmentEvent::class);
@@ -106,6 +106,16 @@ class Department extends Model
         return $query->where('role', User::PERSONNEL);
     }
 
+    public function hasRelatedRecords(): bool
+{
+    return $this->students()->exists() ||
+           $this->staffs()->exists() ||
+           $this->personnels()->exists() ||
+           $this->recordBatches()->exists() ||
+           $this->courses()->exists() ||
+           $this->medicalRecords()->exists() ||
+           $this->departmentEvents()->exists();
+}
 
-    
+
 }

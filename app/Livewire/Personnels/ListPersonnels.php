@@ -17,8 +17,10 @@ use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\Storage;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
@@ -45,7 +47,7 @@ class ListPersonnels extends Component implements HasForms, HasTable
                     return $record->user->fullName() ?? '';
                 })->searchable(),
 
-                
+
                 Tables\Columns\TextColumn::make('department.name')->label('DEPARTMENT')
                     ->searchable(),
             ])
@@ -64,7 +66,7 @@ class ListPersonnels extends Component implements HasForms, HasTable
                 }),
             ])
             ->actions([
-                
+
                 ActionGroup::make([
                     Action::make('view')
                 ->color('primary')
@@ -79,16 +81,17 @@ class ListPersonnels extends Component implements HasForms, HasTable
                 ->disabledForm()
                  ->slideOver()
                  ->closeModalByClickingAway(true)
-              
+
                 ->modalWidth(MaxWidth::SevenExtraLarge),
-                
+
                 // ->url(function(){
                 //     return route('create-student');
                 // }),
                 EditAction::make()->form(FilamentForm::staffForm())  ->modalWidth(MaxWidth::SevenExtraLarge),
-                Tables\Actions\DeleteAction::make(),
-                ])->tooltip('MANAGEMENT'),
+                Tables\Actions\DeleteAction::make()
                 
+                ])->tooltip('MANAGEMENT'),
+
             ])
             ->bulkActions([
                 Tables\Actions\BulkActionGroup::make([

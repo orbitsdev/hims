@@ -15,8 +15,10 @@ use Filament\Tables\Actions\BulkAction;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Contracts\HasTable;
 use Illuminate\Database\Eloquent\Model;
+use Filament\Notifications\Notification;
 use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Actions\CreateAction;
+use Filament\Tables\Actions\DeleteAction;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
@@ -37,12 +39,12 @@ class ListCourses extends Component implements HasForms, HasTable
                 Tables\Columns\TextColumn::make('abbreviation')
                     ->searchable(),
                     TextColumn::make('department.name'),
-                 
+
                     TextColumn::make('sections.name')
                     ->listWithLineBreaks()
                     ->limitList(3)
                     ->expandableLimitedList()
-                    
+
                 // Tables\Columns\TextColumn::make('created_at')
                 //     ->dateTime()
                 //     ->sortable()
@@ -67,7 +69,7 @@ class ListCourses extends Component implements HasForms, HasTable
                 ->color('primary')
                 ->label('New')
                 ->icon('heroicon-s-plus')
-               
+
                 ->url(function(){
                     return route('course-create');
                 }),
@@ -76,13 +78,26 @@ class ListCourses extends Component implements HasForms, HasTable
                 ActionGroup::make([
                     Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
                         return route('course-edit', ['record'=> $record]);}),
-                    Tables\Actions\DeleteAction::make('delete'),
+                    Tables\Actions\DeleteAction::make('delete')->before(function (DeleteAction $action,Model $record) {
+
+                        if ($record->hasSections()) {
+                            Notification::make()
+                                ->title('Deletion Failed')
+                                ->body('This course cannot be deleted because it has existing sections.')
+                                ->danger()
+                                ->send();
+
+                                $action->halt();
+                                $action->cancel();
+                        }
+
+                    }),
                 ]),
-             
-   
+
+
             ])
             ->bulkActions([
-    
+
                 Tables\Actions\BulkActionGroup::make([
                     BulkAction::make('delete')
                         ->requiresConfirmation()
@@ -90,7 +105,7 @@ class ListCourses extends Component implements HasForms, HasTable
                 ])
                 ->label('ACTION')
                 ,
-               
+
             ]);
     }
 

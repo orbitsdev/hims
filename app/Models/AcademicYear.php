@@ -53,7 +53,7 @@ class AcademicYear extends Model
     }
 
     return $query
-       
+
         ->whereHas('semesters', function ($query) use ($userId) {
 
             $query->whereHas('records.medicalRecords', function ($query) use ($userId) {
@@ -69,5 +69,13 @@ class AcademicYear extends Model
             }]);
         }]);
 }
+
+public function hasRelatedRecords(): bool
+{
+    return  
+           $this->records()->exists() ||
+           $this->events()->exists();
+}
+
 
 }

@@ -14,7 +14,7 @@ class Course extends Model
 {
     use HasFactory;
 
-    
+
     public function sections(){
         return $this->hasMany(Section::class);
     }
@@ -34,11 +34,16 @@ class Course extends Model
     {
         $name = $this->name ?? '';
     $abbreviation = $this->abbreviation ? ' (' . $this->abbreviation . ')' : '';
-    
+
     return $name . $abbreviation;
     }
 
     public function medicalRecords(){
         return $this->hasMany(MedicalRecord::class);
     }
+    public function hasSections(): bool
+{
+    return $this->sections()->exists();
+}
+
 }

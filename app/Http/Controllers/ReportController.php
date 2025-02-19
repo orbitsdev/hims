@@ -39,7 +39,7 @@ class ReportController extends Controller
     $public_path = public_path($filename);
 
     $staffMembers = Staff::whereHas('department', function($query){
-            $query->where('role', 'staff');
+            $query->where('role', 'Staff');
     })
     ->where('status', true)
     ->with(['department']) // Only active staff

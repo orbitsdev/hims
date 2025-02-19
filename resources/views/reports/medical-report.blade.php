@@ -159,7 +159,7 @@
   <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
     <div class="col-span-3 flex items-center py-2 border-r">
       <img src="{{$staff->getImage()}}"
-           alt="{{ $staff->->personalDetail->getFullName() ?? 'Staff'}}"
+           alt="{{ $staff->personalDetail->getFullName() ?? 'Staff'}}"
            class="w-12 h-12 object-cover rounded-full border border-gray-300">
     </div>
     <div class="col-span-9 py-2 ml-4">

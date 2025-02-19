@@ -153,42 +153,39 @@
 <!-- Staff Contacts Section -->
 @if($staffMembers->isNotEmpty())
 <div class="mb-2 break-inside-avoid py-2">
-  <h2 class="text-xl font-semibold text-green-700 bg-gray-200 p-2 rounded">STAFF CONTACTS</h2>
-  <div class="border-l border-r">
-    @foreach ($staffMembers as $staff)
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Name</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff?->personalDetail->getFullName() ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Position</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->position ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Phone</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->phone ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Emergency Contact</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->emergency_contact ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Email</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff->email ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Department</span>
-      <span class="ml-4 py-2 inline-block col-span-9">{{ $staff?->department?->name ?? 'N/A' }}</span>
-    </p>
-    <p class="font-normal grid grid-cols-12 px-2 border-b">
-      <span class="text-gray-400 col-span-2 inline-block border-r py-2">Photo</span>
-      <span class="ml-4 py-2 inline-block col-span-9">
-        <img src="{{ $staff->getImage() }}" alt="{{ $staff?->personalDetail->getFullName() ?? 'Staff'}}" class="w-20 h-20 object-cover border-2 border-gray-300">
-      </span>
-    </p>
-    @endforeach
+    <h2 class="text-xl font-semibold text-green-700 bg-gray-200 p-2 rounded">STAFF CONTACTS</h2>
+    <div class="border-l border-r">
+      <table class="w-full table-fixed">
+        <thead class="bg-gray-100 text-left">
+          <tr>
+            <th class="py-2 px-4 border-b text-gray-500 w-1/6">Photo</th>
+            <th class="py-2 px-4 border-b text-gray-500">Name</th>
+            <th class="py-2 px-4 border-b text-gray-500">Position</th>
+            <th class="py-2 px-4 border-b text-gray-500">Phone</th>
+            <th class="py-2 px-4 border-b text-gray-500">Emergency Contact</th>
+            <th class="py-2 px-4 border-b text-gray-500">Email</th>
+            <th class="py-2 px-4 border-b text-gray-500">Department</th>
+          </tr>
+        </thead>
+        <tbody>
+          @foreach ($staffMembers as $staff)
+          <tr class="border-b">
+            <td class="py-2 px-4">
+              <img src="{{ $staff->getImage() }}" alt="{{ $staff?->personalDetail->getFullName() ?? 'Staff' }}" class="w-16 h-16 object-cover rounded-full border border-gray-300">
+            </td>
+            <td class="py-2 px-4">{{ $staff?->personalDetail->getFullName() ?? 'N/A' }}</td>
+            <td class="py-2 px-4">{{ $staff->position ?? 'N/A' }}</td>
+            <td class="py-2 px-4">{{ $staff->phone ?? 'N/A' }}</td>
+            <td class="py-2 px-4">{{ $staff->emergency_contact ?? 'N/A' }}</td>
+            <td class="py-2 px-4">{{ $staff->email ?? 'N/A' }}</td>
+            <td class="py-2 px-4">{{ $staff?->department?->name ?? 'N/A' }}</td>
+          </tr>
+          @endforeach
+        </tbody>
+      </table>
+    </div>
   </div>
-</div>
+
 @endif
 
 

@@ -248,12 +248,12 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
 
 
 
-                  
+
                     Action::make('download')
                     ->color('primary')
                     ->icon('heroicon-s-arrow-down-tray')
                     ->tooltip('DONNLOAD REPORT')
-                   
+
                     ->label('DOWNLOAD PDF') // Consistent casing
                     ->size('lg')
                     ->url(function(Model $record){
@@ -270,17 +270,17 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->requiresConfirmation()
                     ->fillForm(function (Model $record) {
                         return [
-                            'to' => $record->phone, 
+                            'to' => $record->phone,
                         ];
                     })
                     ->form([
                         TextInput::make('to')
                             ->required()
-                            ->disabled() 
+                            ->disabled()
                             ->label('To'),
                         Textarea::make('message')
                             ->required()
-                            ->maxLength(153) 
+
                             ->label('Message'),
                     ])
                     ->action(function (Model $record, array $data) {
@@ -329,7 +329,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                         }
                     })
                     ->tooltip('SEND MESSAGE TO USER'),
-                    
+
                     Action::make('send-blood-email-alert')
                     ->tooltip('NOTIFY USER BP STATUS BY SENDING EMAIL')
                     ->label('SEND BP EMAIL ALERT')

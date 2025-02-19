@@ -132,17 +132,17 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                         ->form([
                             TextInput::make('to')
                                 ->required()
-                                ->disabled() 
+                                ->disabled()
                                 ->label('To'),
                             Textarea::make('message')
                                 ->required()
-                                ->maxLength(153) 
+
                                 ->label('Message'),
                         ])
                         ->fillForm(function (Model $record) {
                             // Determine the phone number from associated relationships
                             $phone = null;
-                    
+
                             if ($record->student && $record->student->personalDetail) {
                                 $phone = $record->student->personalDetail->phone;
                             }
@@ -152,17 +152,17 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                             if ($record->personnel && $record->personnel->personalDetail) {
                                 $phone = $record->personnel->personalDetail->phone;
                             }
-                    
+
                             return [
                                 'to' => $phone ?? $record->phone, // Default to $record->phone if no relationship matches
                             ];
                         })
                         ->action(function (Model $record, array $data) {
                             $smsService = new TeamSSProgramSmsService();
-                    
+
                             // Use the phone number from the form data
                             $number = null;
-                    
+
                             if ($record->student && $record->student->personalDetail) {
                                 $number = $record->student->personalDetail->phone;
                             }
@@ -174,7 +174,7 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                             }
 
                             $message = $data['message'];
-                    
+
                             // Validate the phone number
                             if (!$number) {
                                 Notification::make()
@@ -182,17 +182,17 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                                     ->danger()
                                     ->body('The phone number is missing or invalid.')
                                     ->send();
-                    
+
                                 Log::error('Phone number is missing or invalid. SMS not sent.');
                                 return;
                             }
-                    
+
                             try {
                                 // Send the SMS
                                 $response = $smsService->sendSms($number, $message);
-                    
+
                                 Log::info('TeamSSProgram SMS Response:', $response);
-                    
+
                                 if (isset($response['error']) && $response['error']) {
                                     Notification::make()
                                         ->title('SMS Failed')
@@ -208,7 +208,7 @@ class ListOfUserForIndividualScreening extends Component implements HasForms, Ha
                                 }
                             } catch (\Exception $e) {
                                 Log::error('Error Sending SMS: ' . $e->getMessage());
-                    
+
                                 Notification::make()
                                     ->title('SMS Failed')
                                     ->danger()

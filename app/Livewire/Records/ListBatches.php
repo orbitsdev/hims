@@ -92,7 +92,7 @@ class ListBatches extends Component implements HasForms, HasTable
                     })->hidden(function (Model $record) {
                         return $record->totalUserOfThisBatch() == 0;
                     }),
-                   
+
                     ActionGroup::make([
                         Action::make('notify')
                         ->label('SEND SMS')
@@ -101,7 +101,7 @@ class ListBatches extends Component implements HasForms, HasTable
                         ->form([
                             Textarea::make('message')
                                 ->required()
-                                ->maxLength(153),
+                               ,
                             CheckboxList::make('users')
                                 ->label('Select Users')
                                 ->required()
@@ -144,16 +144,16 @@ class ListBatches extends Component implements HasForms, HasTable
                             $smsService = new TeamSSProgramSmsService();
                             $message = $data['message'];
                             $validUsers = [];
-                
+
                             foreach ($data['users'] as $userId) {
                                 $user = User::find($userId);
-                
+
                                 // Ensure user exists and has a valid phone number
                                 $phoneNumber = $user->student?->personalDetail?->phone
                                     ?? $user->staff?->personalDetail?->phone
                                     ?? $user->personnel?->personalDetail?->phone
                                     ?? $user->phone; // Fallback to user's `phone` field
-                
+
                                 if ($phoneNumber) {
                                     $validUsers[] = [
                                         'user' => $user,
@@ -161,7 +161,7 @@ class ListBatches extends Component implements HasForms, HasTable
                                     ];
                                 }
                             }
-                
+
                             // If no valid users, notify and return
                             if (empty($validUsers)) {
                                 Notification::make()
@@ -171,18 +171,18 @@ class ListBatches extends Component implements HasForms, HasTable
                                     ->send();
                                 return;
                             }
-                
+
                             // Extract only phone numbers for bulk SMS
                             $phoneNumbers = array_map(fn($validUser) => $validUser['phone'], $validUsers);
-                
+
                             Log::info('Sending Bulk SMS to:', $phoneNumbers);
-                
+
                             try {
                                 // Send Bulk SMS
                                 $response = $smsService->sendBulkSms($phoneNumbers, $message);
-                
+
                                 Log::info('Bulk SMS Response:', $response);
-                
+
                                 if (isset($response['error']) && $response['error']) {
                                     Notification::make()
                                         ->title('SMS Failed')
@@ -211,8 +211,8 @@ class ListBatches extends Component implements HasForms, HasTable
                     //     Action::make('view')
                     //     ->icon('heroicon-o-eye')
                     // ->label('VIEW SENT SMS')
-    
-                   
+
+
 
 
                     // ->outlined()
@@ -224,12 +224,12 @@ class ListBatches extends Component implements HasForms, HasTable
                     //     ['record' => $record],
                     // ))
                     // ->modalWidth(MaxWidth::SevenExtraLarge)
-                    
+
                     ]),
 
-                       
-                    
-                
+
+
+
 
 
             ])

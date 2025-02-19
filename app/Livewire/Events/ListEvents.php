@@ -110,7 +110,7 @@ class ListEvents extends Component implements HasForms, HasTable
                 ->form([
                     Textarea::make('message')
                         ->required()
-                        ->maxLength(153)
+
                         ->hint('SMS MESSAGE'),
                     CheckboxList::make('departments')
                         ->required()
@@ -124,10 +124,10 @@ class ListEvents extends Component implements HasForms, HasTable
                 ->action(function (array $data) {
                     $smsService = new TeamSSProgramSmsService();
                     $message = $data['message'];
-            
+
                     // Retrieve users by selected departments
                     $users = User::departmentBelong($data['departments'])->get();
-            
+
                     if ($users->isEmpty()) {
                         Notification::make()
                             ->title('No Recipients')
@@ -136,7 +136,7 @@ class ListEvents extends Component implements HasForms, HasTable
                             ->send();
                         return;
                     }
-            
+
                     // Extract valid phone numbers
                     $phoneNumbers = $users->map(function ($user) {
                         if ($user->student && $user->student->personalDetail) {
@@ -150,7 +150,7 @@ class ListEvents extends Component implements HasForms, HasTable
                         }
                         return null;
                     })->filter()->toArray();
-            
+
                     if (empty($phoneNumbers)) {
                         Notification::make()
                             ->title('No Recipients')
@@ -159,15 +159,15 @@ class ListEvents extends Component implements HasForms, HasTable
                             ->send();
                         return;
                     }
-            
+
                     Log::info('Phone Numbers:', $phoneNumbers);
-            
+
                     try {
                         // Send bulk SMS
                         $response = $smsService->sendBulkSms($phoneNumbers, $message);
-            
+
                         Log::info('Bulk SMS Response:', $response);
-            
+
                         if (isset($response['error']) && $response['error']) {
                             Notification::make()
                                 ->title('SMS Failed')
@@ -190,7 +190,7 @@ class ListEvents extends Component implements HasForms, HasTable
                             ->send();
                     }
                 }),
-            
+
                 ActionGroup::make([
                     Action::make('view')
                         ->color('success')

@@ -105,17 +105,17 @@ class AdminDashboard extends Component implements HasForms, HasActions
         ->fillForm(function (array $arguments) {
             $medicalRecord = MedicalRecord::find($arguments['record']);
             return [
-                'to' => $medicalRecord->phone, 
+                'to' => $medicalRecord->phone,
             ];
         })
         ->form([
             TextInput::make('to')
                 ->required()
-                ->disabled() 
+                ->disabled()
                 ->label('To'),
             Textarea::make('message')
                 ->required()
-                ->maxLength(153) 
+
                 ->label('Message'),
         ])
         ->action(function(array $arguments,array $data){

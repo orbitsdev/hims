@@ -25,7 +25,7 @@
     </div>
     <div class="text-right">
       <p class="text-sm">Medical Report</p>
-      <p class="text-xs font-light">Generated: {{ date('Y-m-d') }}</p> 
+      <p class="text-xs font-light">Generated: {{ date('Y-m-d') }}</p>
     </div>
   </header>
 
@@ -115,7 +115,7 @@
                   @endif
               </span>
           </p>
-          
+
             <p class="font-normal grid grid-cols-12 px-2 border-b">
               <span class="text-gray-400 col-span-2 inline-block border-r py-2">Remarks:</span>
               <span class="ml-4 py-2 inline-block col-span-9">{{ $record->remarks??'' }}</span>
@@ -151,6 +151,30 @@
         </div>
         @endif
       </div>
+      <!-- Staff Members Section -->
+@if($staffMembers->isNotEmpty())
+<div class="mt-8 break-inside-avoid py-2">
+  <h2 class="text-xl font-semibold text-blue-700 bg-gray-200 p-2 rounded">Staff Contacts</h2>
+  @foreach ($staffMembers as $staff)
+  <div class="border-l font-normal grid grid-cols-12 px-2 border-b">
+    <div class="col-span-3 flex items-center py-2 border-r">
+      <img src="{{$staff->getImage()}}"
+           alt="{{ $staff->->personalDetail->getFullName() ?? 'Staff'}}"
+           class="w-12 h-12 object-cover rounded-full border border-gray-300">
+    </div>
+    <div class="col-span-9 py-2 ml-4">
+      <p><strong>{{ $staff?->personalDetail->getFullName() ?? 'N/A' }}</strong></p>
+      <p class="text-gray-600">Position: {{ $staff->position ?? 'N/A' }}</p>
+      <p class="text-gray-600">Phone: {{ $staff->phone ?? 'N/A' }}</p>
+      <p class="text-gray-600">Emergency Contact: {{ $staff->emergency_contact ?? 'N/A' }}</p>
+      <p class="text-gray-600">Email: {{ $staff->email ?? 'N/A' }}</p>
+      <p class="text-gray-600">Department: {{ $staff?->department?->name ?? 'N/A' }}</p>
+    </div>
+  </div>
+  @endforeach
+</div>
+@endif
+
     </div>
 
     <div class="text-center text-gray-600 mt-8">

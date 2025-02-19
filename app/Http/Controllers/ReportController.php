@@ -2,11 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Staff;
 use Faker\Provider\Medical;
+
 use App\Exports\StaffExport;
 
 use Illuminate\Http\Request;
-
 use App\Exports\EventsExport;
 use App\Models\FirstAidGuide;
 use App\Models\MedicalRecord;
@@ -20,27 +21,34 @@ use function Spatie\LaravelPdf\Support\pdf;
 
 class ReportController extends Controller
 {
-    
+
     public function viewMedicalReport(MedicalRecord $record){
          //  $record = MedicalRecord::first();
 
     return view('reports.medical-report-view',['record'=> $record]);
 
 
-   
+
     }
 
-   
+
     public function generatePdf(MedicalRecord $record)
-{       
+{
     //  $record = MedicalRecord::first();
     $filename = $record->fullName(). '-'. $record->record->academicYearAndSemester().'-MEDICAL-RECORD.pdf';
     $public_path = public_path($filename);
-    Pdf::view('reports.medical-report',['record'=> $record])->save($public_path);
+
+    $staffMembers = Staff::whereHas('department', function($query){
+            $query->where('role', 'staff');
+    })
+    ->where('status', true) // Only active staff
+    ->get();
+
+    Pdf::view('reports.medical-report',['record'=> $record, 'staffMembers' =>$staffMembers])->save($public_path);
 
 
     return response()->download($public_path)->deleteFileAfterSend(true);
-    
+
 }
 
 public function generateFirstAidPdf(FirstAidGuide $guide)
@@ -89,5 +97,5 @@ public function exportStudents()
         return Excel::download(new EmergencyContactsExport(), $filename);
     }
 
-   
+
 }

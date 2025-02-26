@@ -7,13 +7,13 @@
             <button @click="activeTab = 'students'"
                 class="px-4 py-2  m-0  rounded-t-sm "
                 :class="{ 'bg-white text-gray-900': activeTab === 'students' }">
-                Student Report
+                Students
             </button>
 
             <button @click="activeTab = 'personnel'"
                 class="px-4 py-2  m-0  rounded-t-sm "
                 :class="{ 'bg-white text-gray-900': activeTab === 'personnel' }">
-                Personnel Report
+                Personnels
             </button>
         </div>
 
@@ -23,10 +23,10 @@
                 {{-- @livewire('student-report') --}}
 
                 @livewire('student-list')
-        </div>
+            </div>
             <div x-show="activeTab === 'personnel'" x-cloak>
-                Studnr
-                {{-- @livewire('personnel-report') --}}
+                @livewire('personnel-list')
+
             </div>
         </div>
     </div>

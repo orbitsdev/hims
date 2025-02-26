@@ -42,6 +42,7 @@ use App\Livewire\Records\CreateRecord;
 use App\Livewire\Students\EditStudent;
 use App\Livewire\Students\ViewStudent;
 use App\Livewire\ViewSendNotification;
+use App\Livewire\PrintPersonnelDetails;
 use App\Livewire\Sections\ListSections;
 use App\Livewire\Students\ListStudents;
 use App\Livewire\Symptoms\ListSymptoms;
@@ -260,6 +261,7 @@ Route::middleware([
 
     Route::get('/print-medical-record/{record}', PrintMedicalRecord::class)->name('print-medical-record');
     Route::get('/print-student/{record}', PrintStudentDetails::class)->name('print-student');
+    Route::get('/print-personnel/{record}', PrintPersonnelDetails::class)->name('print-personnel');
 
 
     Route::middleware(['can:student-and-personnel'])->group(function () {

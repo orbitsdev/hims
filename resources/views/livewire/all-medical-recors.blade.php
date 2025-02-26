@@ -19,6 +19,15 @@
                             Condition:
                             <span class="font-medium">{{ $medicalRecord->condition->name ?? 'Not Specified' }}</span>
                         </p>
+                        <p class="text-sm text-gray-500">
+                            Academic Year:
+                           
+                            <span class="font-medium">{{ $medicalRecord->academic_year_name ?? 'N/A' }}</span>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Semester:
+                            <span class="font-medium">{{ $medicalRecord->semester_name ?? 'N/A' }}</span>
+                        </p>
                     </div>
                     <!-- Print Icon -->
                     <a href="{{ route('print-medical-record', ['record' => $medicalRecord]) }}" target="_blank"

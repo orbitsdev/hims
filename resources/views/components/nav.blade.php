@@ -400,6 +400,21 @@
                             SUGGESTION
                         </a>
                     </li>
+                    <a href="{{route('reports')}}"
+                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                'reports',
+
+
+
+                ])}}">
+                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+
+                {{-- <i class="fa-solid fa-lightbulb "></i> --}}
+                <i class="fa-solid fa-print text-2xl"></i>
+
+                {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
+                REPORTS
+            </a>
 
                 </ul>
             </li>

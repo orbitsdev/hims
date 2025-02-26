@@ -1,6 +1,7 @@
 
 <?php
 
+use App\Livewire\Reports;
 use App\Livewire\Dashboard;
 use App\Livewire\EventList;
 use App\Livewire\QueueMonitor;
@@ -24,6 +25,7 @@ use App\Livewire\Staffs\ListStaffs;
 use App\Livewire\Usesr\EditProfile;
 use App\Livewire\Courses\EditCourse;
 use App\Livewire\Events\CreateEvent;
+use App\Livewire\PrintMedicalRecord;
 use App\Livewire\Records\EditRecord;
 use App\Livewire\Staffs\CreateStaff;
 use App\Livewire\UserMedicalRecords;
@@ -81,7 +83,6 @@ use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
-use App\Livewire\Reports;
 
 /*
 |--------------------------------------------------------------------------
@@ -255,6 +256,8 @@ Route::middleware([
     Route::get('/emergency-contacts/export', [ReportController::class, 'exportEmergencyContacts'])->name('emergency-contacts.export');
 
     Route::get('first-aid-guide/{guide}', [ReportController::class, 'generateFirstAidPdf'])->name('first-aid-guide.pdf');
+
+    Route::get('/print-medical-record/{id}', PrintMedicalRecord::class)->name('print-medical-record');
 
 
     Route::middleware(['can:student-and-personnel'])->group(function () {

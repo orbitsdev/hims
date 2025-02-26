@@ -9,7 +9,7 @@
         <ul class="space-y-4">
             @foreach ($record->medicalRecords as $medicalRecord)
                 <li class="border-b pb-3">
-                    <a href="#" class="text-orange-600 hover:text-orange-800 text-lg font-semibold underline">
+                    <a href="{{route('print-medical-record',['id'=> $medicalRecord])}}" target="blan" class="text-orange-600 hover:text-orange-800 text-lg font-semibold underline">
                         {{ $medicalRecord->record_title ?? 'Untitled Record' }}
                     </a>
                     <p class="text-sm text-gray-500">

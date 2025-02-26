@@ -28,7 +28,7 @@ class ReportController extends Controller
     return view('reports.medical-report-view',['record'=> $record]);
 
 
-~
+
     }
 
 

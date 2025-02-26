@@ -60,21 +60,21 @@ class ListUser extends Component implements HasForms, HasTable
                     User::ADMIN => 'primary',
                     User::PERSONNEL => 'info',
                     User::STAFF => 'warning',
-                    User::STUDENT => 'success', 
+                    User::STUDENT => 'success',
                     default => 'gray',
                 })
                 ->searchable(),
 
-                
-              
+
+
                 Tables\Columns\TextColumn::make('created_at')->date(),
-                   
+
                 // ->toggleable(isToggledHiddenByDefault: true),
                 Tables\Columns\TextColumn::make('updated_at')
                 ->date(),
                     // ->toggleable(isToggledHiddenByDefault: true),
 
-                    
+
             ])
             ->filters([
                 SelectFilter::make('role')
@@ -85,28 +85,28 @@ class ListUser extends Component implements HasForms, HasTable
             ->headerActions([
 
 
-                Action::make('create')
-                ->size('lg')
-                ->color('primary')
-                ->icon('heroicon-s-user-plus')
-                ->button()
-                ->url(function(){
-                    return route('user-create');
-                }),
+            Action::make('create')
+            ->size('lg')
+            ->color('primary')
+            ->icon('heroicon-s-user-plus')
+            ->button()
+            ->url(function(){
+                return route('user-create');
+            }),
 
 
                 // CreateAction::make('create')
                 // ->mutateFormDataUsing(function (array $data): array {
-             
+
                 //     return $data;
                 // })
                 // ->icon('heroicon-s-user-plus')
                 // ->label('New Account')
                 // ->form([
-                    
-                
-                    
-                   
+
+
+
+
 
 
 
@@ -116,7 +116,7 @@ class ListUser extends Component implements HasForms, HasTable
 
 
 
-        
+
             ])
             ->actions([
                 ActionGroup::make([
@@ -133,18 +133,18 @@ class ListUser extends Component implements HasForms, HasTable
                     ->disabledForm()
                      ->slideOver()
                      ->closeModalByClickingAway(true)
-               
-                    
+
+
                     ->modalWidth(MaxWidth::Full),
                      Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
                                 return route('user-edit', ['record'=> $record]);
                  })  ,
-                             
-                   
+
+
                     Tables\Actions\DeleteAction::make(),
                 ])->tooltip('MANAGEMENT'),
-               
-   
+
+
             ])
             ->bulkActions([
 
@@ -155,7 +155,7 @@ class ListUser extends Component implements HasForms, HasTable
                 ])
                 ->label('ACTION')
                 ,
-               
+
             ]);
     }
 

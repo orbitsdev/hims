@@ -32,6 +32,7 @@ use App\Livewire\UserMedicalRecords;
 use Illuminate\Support\Facades\Auth;
 use App\Livewire\Courses\ListCourses;
 use App\Livewire\FirstAidDetailsPage;
+use App\Livewire\PrintStudentDetails;
 use App\Livewire\Records\ListBatches;
 use App\Livewire\Records\ListRecords;
 use Illuminate\Support\Facades\Route;
@@ -257,7 +258,8 @@ Route::middleware([
 
     Route::get('first-aid-guide/{guide}', [ReportController::class, 'generateFirstAidPdf'])->name('first-aid-guide.pdf');
 
-    Route::get('/print-medical-record/{id}', PrintMedicalRecord::class)->name('print-medical-record');
+    Route::get('/print-medical-record/{record}', PrintMedicalRecord::class)->name('print-medical-record');
+    Route::get('/print-student/{record}', PrintStudentDetails::class)->name('print-student');
 
 
     Route::middleware(['can:student-and-personnel'])->group(function () {

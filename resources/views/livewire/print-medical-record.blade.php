@@ -2,7 +2,7 @@
     <div class="container mx-auto py-6 px-4 max-w-3xl">
         <!-- Print Button -->
         <div class="text-right mb-4">
-            <button onclick="printDiv('printArea')" class="px-4 py-2 bg-blue-600 text-white rounded">
+            <button onclick="printDiv('printArea')" class="px-4 py-2 bg-gray-600 text-white rounded">
                 Print Report
             </button>
         </div>
@@ -17,14 +17,14 @@
 
             <!-- Patient Information -->
             <h3 class="text-xl font-semibold mb-4">Patient Information</h3>
-            <p class="text-md"><span class="font-medium">Full Name:</span> {{ $medicalRecord?->first_name }} {{ $medicalRecord?->middle_name }} {{ $medicalRecord?->last_name }}</p>
-            <p class="text-md"><span class="font-medium">Age:</span> {{ $medicalRecord->age ?? 'N/A' }}</p>
+            <p class="text-md"><span class="font-medium">Full Name:</span> {{ $record?->first_name }} {{ $record?->middle_name }} {{ $record?->last_name }}</p>
+            <p class="text-md"><span class="font-medium">Age:</span> {{ $record->age ?? 'N/A' }}</p>
             <p class="text-md"><span class="font-medium">Date of Birth:</span>
-                {{ $medicalRecord?->birth_date ? \Carbon\Carbon::parse($medicalRecord?->birth_date)->format('F d, Y') : 'N/A' }}
+                {{ $record?->birth_date ? \Carbon\Carbon::parse($record?->birth_date)->format('F d, Y') : 'N/A' }}
             </p>
-            <p class="text-md"><span class="font-medium">Phone:</span> {{ $medicalRecord->phone ?? 'N/A' }}</p>
-            <p class="text-md"><span class="font-medium">Email:</span> {{ $medicalRecord->email ?? 'N/A' }}</p>
-            <p class="text-md"><span class="font-medium">Address:</span> {{ $medicalRecord->address ?? 'N/A' }}</p>
+            <p class="text-md"><span class="font-medium">Phone:</span> {{ $record->phone ?? 'N/A' }}</p>
+            <p class="text-md"><span class="font-medium">Email:</span> {{ $record->email ?? 'N/A' }}</p>
+            <p class="text-md"><span class="font-medium">Address:</span> {{ $record->address ?? 'N/A' }}</p>
 
             <!-- Medical Examination Table -->
             <h3 class="text-xl font-semibold mt-6 mb-4">Medical Examination</h3>
@@ -32,47 +32,47 @@
                 <tr>
                     <td class="border border-gray-300 p-2">Date of Examination:</td>
                     <td class="border border-gray-300 p-2 font-medium">
-                        {{ $medicalRecord->date_of_examination ? \Carbon\Carbon::parse($medicalRecord->date_of_examination)->format('F d, Y') : 'N/A' }}
+                        {{ $record->date_of_examination ? \Carbon\Carbon::parse($record->date_of_examination)->format('F d, Y') : 'N/A' }}
                     </td>
                 </tr>
                 <tr>
                     <td class="border border-gray-300 p-2">Condition:</td>
-                    <td class="border border-gray-300 p-2 font-medium">{{ $medicalRecord->condition_name ?? 'Not Specified' }}</td>
+                    <td class="border border-gray-300 p-2 font-medium">{{ $record->condition_name ?? 'Not Specified' }}</td>
                 </tr>
                 <tr>
                     <td class="border border-gray-300 p-2">Physician:</td>
-                    <td class="border border-gray-300 p-2 font-medium">{{ $medicalRecord->physician_name ?? 'Unknown' }}</td>
+                    <td class="border border-gray-300 p-2 font-medium">{{ $record->physician_name ?? 'Unknown' }}</td>
                 </tr>
                 <tr>
                     <td class="border border-gray-300 p-2">Blood Pressure:</td>
-                    <td class="border border-gray-300 p-2 font-medium">{{ $medicalRecord->blood_pressure ?? 'N/A' }}</td>
+                    <td class="border border-gray-300 p-2 font-medium">{{ $record->blood_pressure ?? 'N/A' }}</td>
                 </tr>
                 <tr>
                     <td class="border border-gray-300 p-2">Temperature:</td>
-                    <td class="border border-gray-300 p-2 font-medium">{{ $medicalRecord->temperature ?? 'N/A' }}</td>
+                    <td class="border border-gray-300 p-2 font-medium">{{ $record->temperature ?? 'N/A' }}</td>
                 </tr>
                 <tr>
                     <td class="border border-gray-300 p-2">Heart Rate:</td>
-                    <td class="border border-gray-300 p-2 font-medium">{{ $medicalRecord->heart_rate ?? 'N/A' }}</td>
+                    <td class="border border-gray-300 p-2 font-medium">{{ $record->heart_rate ?? 'N/A' }}</td>
                 </tr>
                 <tr>
                     <td class="border border-gray-300 p-2">Allergies:</td>
-                    <td class="border border-gray-300 p-2 font-medium">{{ $medicalRecord->allergies ?? 'None Reported' }}</td>
+                    <td class="border border-gray-300 p-2 font-medium">{{ $record->allergies ?? 'None Reported' }}</td>
                 </tr>
                 <tr>
                     <td class="border border-gray-300 p-2">Past Illness:</td>
-                    <td class="border border-gray-300 p-2 font-medium">{{ $medicalRecord->past_illness ?? 'None' }}</td>
+                    <td class="border border-gray-300 p-2 font-medium">{{ $record->past_illness ?? 'None' }}</td>
                 </tr>
             </table>
 
             <!-- Additional Remarks -->
             <h3 class="text-xl font-semibold mt-6 mb-4">Remarks & Diagnosis</h3>
-            <p class="text-md">{{ $medicalRecord->remarks ?? 'No additional remarks.' }}</p>
+            <p class="text-md">{{ $record->remarks ?? 'No additional remarks.' }}</p>
 
             <!-- Release Info -->
             <h3 class="text-xl font-semibold mt-6 mb-4">Release Information</h3>
-            <p class="text-md"><span class="font-medium">Released by:</span> {{ $medicalRecord->release_by ?? 'N/A' }}</p>
-            <p class="text-md"><span class="font-medium">Final Diagnosis:</span> {{ $medicalRecord->specified_diagnoses ?? 'Pending' }}</p>
+            <p class="text-md"><span class="font-medium">Released by:</span> {{ $record->release_by ?? 'N/A' }}</p>
+            <p class="text-md"><span class="font-medium">Final Diagnosis:</span> {{ $record->specified_diagnoses ?? 'Pending' }}</p>
         </div>
     </div>
 

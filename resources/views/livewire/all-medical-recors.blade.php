@@ -1,27 +1,30 @@
-<div class="container mx-auto ">
-    <!-- Header Section -->
-    {{-- <div class="mb-6">
-        <h1 class="text-4xl font-bold text-gray-800">Medical Records</h1>
-    </div> --}}
-
+<div class="container mx-auto">
     <!-- Check if there are any medical records -->
     @if ($record->medicalRecords->isNotEmpty())
         <ul class="space-y-4">
             @foreach ($record->medicalRecords as $medicalRecord)
-                <li class="border-b pb-3">
-                    <a href="{{route('print-medical-record',['id'=> $medicalRecord])}}" target="blan" class="text-orange-600 hover:text-orange-800 text-lg font-semibold underline">
-                        {{ $medicalRecord->record_title ?? 'Untitled Record' }}
+                <li class="border-b pb-3 flex items-center justify-between">
+                    <div>
+                        <a href="{{ route('print-medical-record', ['record' => $medicalRecord]) }}" target="_blank"
+                            class="text-blue-600 hover:text-blue-800 text-lg font-semibold underline">
+                            {{ $medicalRecord->record_title ?? 'Untitled Record' }}
+                        </a>
+                        <p class="text-sm text-gray-500">
+                            Date of Examination:
+                            <span class="font-medium">
+                                {{ $medicalRecord->date_of_examination ? \Carbon\Carbon::parse($medicalRecord->date_of_examination)->format('F d, Y') : 'N/A' }}
+                            </span>
+                        </p>
+                        <p class="text-sm text-gray-500">
+                            Condition:
+                            <span class="font-medium">{{ $medicalRecord->condition->name ?? 'Not Specified' }}</span>
+                        </p>
+                    </div>
+                    <!-- Print Icon -->
+                    <a href="{{ route('print-medical-record', ['record' => $medicalRecord]) }}" target="_blank"
+                        class="text-gray-600 hover:text-gray-800">
+                        <i class="fas fa-print text-xl"></i>
                     </a>
-                    <p class="text-sm text-gray-500">
-                        Date of Examination:
-                        <span class="font-medium">
-                            {{ $medicalRecord->date_of_examination ? \Carbon\Carbon::parse($medicalRecord->date_of_examination)->format('F d, Y') : 'N/A' }}
-                        </span>
-                    </p>
-                    <p class="text-sm text-gray-500">
-                        Condition:
-                        <span class="font-medium">{{ $medicalRecord->condition_name ?? 'Not Specified' }}</span>
-                    </p>
                 </li>
             @endforeach
         </ul>

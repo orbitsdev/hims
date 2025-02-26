@@ -1726,13 +1726,13 @@ class FilamentForm extends Controller
                             Textarea::make('remarks')
                                 ->columnSpanFull()->rows(1),
 
-                            FileUpload::make('upload_image')
-                                ->disk('public')
-                                ->directory('events')
-                                ->image()
-                                ->imageEditor()
-                                // ->required()
-                                ->columnSpanFull(),
+                            // FileUpload::make('upload_image')
+                            //     ->disk('public')
+                            //     ->directory('events')
+                            //     ->image()
+                            //     ->imageEditor()
+                            //     // ->required()
+                            //     ->columnSpanFull(),
 
                         ]),
 

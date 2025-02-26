@@ -86,7 +86,7 @@ class StudentList extends Component implements HasForms, HasTable
 
                 ActionGroup::make([
                     Action::make('view')
-                    ->color('success')
+                    // ->color('success')
                     ->icon('heroicon-m-eye')
                     ->label('View')
                     ->modalContent(function (Student $record) {
@@ -101,9 +101,18 @@ class StudentList extends Component implements HasForms, HasTable
 
                     ->modalWidth(MaxWidth::Full),
 
+                    Action::make('print')
+                    ->size('lg')
+                    ->icon('heroicon-s-printer')
+                    ->label('Print Details')
+                    ->openUrlInNewTab()
+                    ->url(function(Model $record){
+                        return route('print-student',['record'=> $record]);
+                    }),
+
                     Action::make('View Medical Record')
-                    ->icon('heroicon-m-eye')
-                    ->label('View')
+                    ->icon('heroicon-s-printer')
+            ->label('Medical Records')
                     ->modalContent(function (Student $record) {
                         return view('livewire.all-medical-recors', ['record' => $record->user]);
                     })

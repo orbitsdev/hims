@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Students;
+namespace App\Livewire;
 
 use Filament\Tables;
 use App\Models\Student;
@@ -8,7 +8,6 @@ use Livewire\Component;
 use Filament\Tables\Table;
 use Filament\Actions\StaticAction;
 use Filament\Tables\Actions\Action;
-use Illuminate\Contracts\View\View;
 use Filament\Support\Enums\MaxWidth;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Tables\Actions\BulkAction;
@@ -19,15 +18,15 @@ use Filament\Tables\Actions\ActionGroup;
 use Filament\Tables\Columns\ImageColumn;
 use Filament\Tables\Enums\FiltersLayout;
 use Filament\Tables\Filters\SelectFilter;
-use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Tables\Concerns\InteractsWithTable;
 
-class ListStudents extends Component implements HasForms, HasTable
+class StudentList extends Component implements HasForms, HasTable
 {
     use InteractsWithForms;
     use InteractsWithTable;
+
 
     public function table(Table $table): Table
     {
@@ -82,17 +81,7 @@ class ListStudents extends Component implements HasForms, HasTable
                 ->preload()
                 //
             ],layout: FiltersLayout::AboveContent)
-            ->headerActions([
-                Action::make('view')
-                ->size('lg')
-                ->color('primary')
-                ->label('New Student')
-                ->icon('heroicon-s-plus')
 
-                ->url(function(){
-                    return route('create-student');
-                }),
-            ])
             ->actions([
 
                 ActionGroup::make([
@@ -111,10 +100,22 @@ class ListStudents extends Component implements HasForms, HasTable
                      ->closeModalByClickingAway(true)
 
                     ->modalWidth(MaxWidth::Full),
-                     Tables\Actions\Action::make('Edit')->icon('heroicon-s-pencil-square')->url(function(Model $record){
-                                return route('edit-student', ['record'=> $record]);
-                 }),
-                    Tables\Actions\DeleteAction::make(),
+
+                    Action::make('View Medical Record')
+                    ->icon('heroicon-m-eye')
+                    ->label('View')
+                    ->modalContent(function (Student $record) {
+                        return view('livewire.all-medical-recors', ['record' => $record->user]);
+                    })
+                    ->modalHeading('Medical Records')
+                    ->modalSubmitAction(false)
+                    ->modalCancelAction(fn (StaticAction $action) => $action->label('Close'))
+                    ->disabledForm()
+
+                     ->closeModalByClickingAway(true)
+
+                    ->modalWidth('7xl'),
+
                 ])->tooltip('MANAGEMENT'),
 
 
@@ -122,17 +123,11 @@ class ListStudents extends Component implements HasForms, HasTable
 
             ])
             ->bulkActions([
-                Tables\Actions\BulkActionGroup::make([
-                    BulkAction::make('delete')
-                        ->requiresConfirmation()
-                        ->action(fn (Collection $records) => $records->each->delete())
-                ])
-                ->label('ACTION')
-                ,            ]);
-    }
 
-    public function render(): View
+             ]);
+    }
+    public function render()
     {
-        return view('livewire.students.list-students');
+        return view('livewire.student-list');
     }
 }

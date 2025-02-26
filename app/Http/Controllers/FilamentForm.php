@@ -257,16 +257,16 @@ class FilamentForm extends Controller
                         ]),
 
                     // Profile Image Upload Section
-                    Section::make('Profile Image')
-                        ->schema([
-                            FileUpload::make('image')
-                                ->disk('public')
-                                ->directory('persondetails')
-                                ->image()
-                                ->imageEditor()
-                                ->columnSpanFull()
-                                ->label('Upload Image'),
-                        ]),
+                    // Section::make('Profile Image')
+                    //     ->schema([
+                    //         FileUpload::make('image')
+                    //             ->disk('public')
+                    //             ->directory('persondetails')
+                    //             ->image()
+                    //             ->imageEditor()
+                    //             ->columnSpanFull()
+                    //             ->label('Upload Image'),
+                    //     ]),
                 ]),
         ];
     }

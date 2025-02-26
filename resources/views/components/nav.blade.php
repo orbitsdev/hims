@@ -1,4 +1,4 @@
-<div class="custom-scrollbar w-[20rem] bg-[#06603A] px-6 pb-2 flex-shrink-0 h-full overflow-y-auto relative">
+<div class="custom-scrollbar w-[20rem] bg-[#06603A] px-6 pb-2 flex-shrink-0 h-full overflow-y-auto relative border-l-4 ">
 
     <div class="w-4 h-full bg-[#064F32] top-0 left-0 bottom-0 absolute"></div>
     <div class="h-8"></div>
@@ -22,7 +22,7 @@
                     <x-dropdown-link href="{{Auth::user()->getImage()}}" target="_blank">
                         View Image
                     </x-dropdown-link>
-                    <x-dropdown-link href="{{ route('edit-profile',['record'=> Auth::user()]) }}">
+                    <x-dropdown-link href="~">
                         Edit Profile
                     </x-dropdown-link>
                     <form method="POST" action="{{ route('logout') }}" x-data>
@@ -248,6 +248,24 @@
                         BLOOD PREASSURE LEVELS
                     </a>
                 </li> --}}
+
+
+                <a href="{{route('reports')}}"
+                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                'reports',
+
+
+
+                ])}}">
+                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+
+                {{-- <i class="fa-solid fa-lightbulb "></i> --}}
+                <i class="fa-solid fa-print text-2xl"></i>
+
+                {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
+                REPORTS
+            </a>
+        </li>
             </ul>
         </li>
         @endcan

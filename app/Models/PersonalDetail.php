@@ -13,7 +13,7 @@ class PersonalDetail extends Model
 {
 
 
-    
+
 
     use HasFactory;
     public function personaldetailable(): MorphTo
@@ -40,6 +40,10 @@ class PersonalDetail extends Model
     {
         return ($this->first_name ?? '') . ($this->middle_name?? '') . '' . ($this->last_name ?? '') . '';
     }
+    public function getFullNameAttribute()
+    {
+        return ($this->first_name ?? '') . ($this->middle_name?? '') . '' . ($this->last_name ?? '') . '';
+    }
 
-    
+
 }

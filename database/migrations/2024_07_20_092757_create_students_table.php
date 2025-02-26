@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('students', function (Blueprint $table) {
             $table->id();
-            
+
             $table->foreignId('user_id')->nullable();
             $table->foreignId('course_id')->nullable();
             $table->foreignId('section_id')->nullable();
@@ -26,6 +26,7 @@ return new class extends Migration
         });
     }
 
+    
     /**
      * Reverse the migrations.
      */

@@ -81,6 +81,7 @@ use App\Livewire\MedicalRecords\CreateMedicalRecord;
 use App\Livewire\Records\CreateMedicalRecordByBatch;
 use App\Livewire\Notifications\EventsAnouncmentSMSStatus;
 use App\Livewire\Records\ListOfUserForIndividualScreening;
+use App\Livewire\Reports;
 
 /*
 |--------------------------------------------------------------------------
@@ -146,7 +147,7 @@ Route::middleware([
     Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
     Route::middleware('can:admin-and-staff')->group(function () {
         Route::get('/users', ListUser::class)->name('users');
-      
+
         // Route::get('/user/edit/{record}', EditProfile::class)->name('edit-profile');
         Route::get('/user-create', CreateUser::class)->name('user-create');
         Route::get('/user-edit/{record}', EditUser::class)->name('user-edit');
@@ -205,6 +206,7 @@ Route::middleware([
 
         Route::get('/medical-record/create/{record}/{user}', CreateMedicalRecord::class)->name('medical-record-create');
         Route::get('/medical-record/by-batch/create/{record}/{user}', CreateMedicalRecordByBatch::class)->name('medical-record-create-by-batch');
+        Route::get('/reports',Reports::class)->name('reports');
     });
 
     // SYSTEM SUERS

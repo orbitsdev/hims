@@ -89,7 +89,7 @@ class ListPersonnels extends Component implements HasForms, HasTable
                 // }),
                 EditAction::make()->form(FilamentForm::staffForm())  ->modalWidth(MaxWidth::SevenExtraLarge),
                 Tables\Actions\DeleteAction::make()
-                
+
                 ])->tooltip('MANAGEMENT'),
 
             ])

@@ -39,11 +39,11 @@ class StudentList extends Component implements HasForms, HasTable
             ->query(Student::query())
             ->columns([
 
-                ImageColumn::make('image')
+                ImageColumn::make('user.profile_photo_path')
                 ->disk('public')
                 ->label('Profile')
                 ->width(60)->height(60)
-                ->url(fn (Student $record): null|string => $record->image ?  Storage::disk('public')->url($record->image) : null)
+
                 ->defaultImageUrl(url('/images/placeholder-image.jpg'))
                 ->openUrlInNewTab()
                 ->circular(),

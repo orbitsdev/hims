@@ -35,14 +35,14 @@ class StaffList extends Component implements HasForms, HasTable
         return $table
             ->query(Staff::query())
             ->columns([
-                ImageColumn::make('photo')
-                    ->disk('public')
-                    ->label('Photo')
-                    ->width(60)->height(60)
-                    ->url(fn (Staff $record): null|string => $record->photo ? Storage::disk('public')->url($record->photo) : null)
-                    ->defaultImageUrl(url('/images/placeholder-image.jpg'))
-                    ->openUrlInNewTab()
-                    ->circular(),
+                ImageColumn::make('user.profile_photo_path')
+                ->disk('public')
+                ->label('Profile')
+                ->width(60)->height(60)
+
+                ->defaultImageUrl(url('/images/placeholder-image.jpg'))
+                ->openUrlInNewTab()
+                ->circular(),
 
                 Tables\Columns\TextColumn::make('name')->label('NAME')
                     ->searchable(isIndividual: true),

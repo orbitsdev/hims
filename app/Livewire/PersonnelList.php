@@ -29,14 +29,14 @@ class PersonnelList extends Component implements HasForms, HasTable
         return $table
             ->query(Personnel::query())
             ->columns([
-                ImageColumn::make('image')
-                    ->disk('public')
-                    ->label('Profile')
-                    ->width(60)->height(60)
-                    ->url(fn (Personnel $record): null|string => $record->image ? Storage::disk('public')->url($record->image) : null)
-                    ->defaultImageUrl(url('/images/placeholder-image.jpg'))
-                    ->openUrlInNewTab()
-                    ->circular(),
+                ImageColumn::make('user.profile_photo_path')
+                ->disk('public')
+                ->label('Profile')
+                ->width(60)->height(60)
+
+                ->defaultImageUrl(url('/images/placeholder-image.jpg'))
+                ->openUrlInNewTab()
+                ->circular(),
 
                 Tables\Columns\TextColumn::make('user.name')
                     ->searchable()
@@ -54,7 +54,7 @@ class PersonnelList extends Component implements HasForms, HasTable
             ], layout: FiltersLayout::AboveContent)
             ->actions([
                 ActionGroup::make([
-               
+
                         Action::make('view')
                     ->color('primary')
                     ->label('View')

@@ -235,8 +235,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
 
                 ActionGroup::make([
                     Action::make('edit')
-                    ->color('primary')
-                    ->icon('heroicon-s-pencil-square')
+                                       ->icon('heroicon-s-pencil-square')
                     ->tooltip('Update Medical Recurd')
                     // Identifier should be unique and camelCase
                         ->label('UPDATE RECORD') // Consistent casing
@@ -246,15 +245,22 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                             return route('medical-record-edit', ['record' => $record]);
                         }),
 
-
+                        Action::make('Print Medical Record')
+                        ->size('lg')
+                        ->icon('heroicon-s-printer')
+                        ->label('PRINT MEDICAL RECORD')
+                        ->openUrlInNewTab()
+                        ->url(function(Model $record){
+                            return route('print-medical-record',['record'=> $record]);
+                        }),
 
 
                     Action::make('download')
-                    ->color('primary')
+
                     ->icon('heroicon-s-arrow-down-tray')
                     ->tooltip('DONNLOAD REPORT')
 
-                    ->label('DOWNLOAD PDF') // Consistent casing
+                    ->label('DOWNLOAD AS PDF ') // Consistent casing
                     ->size('lg')
                     ->url(function(Model $record){
                         return route('reports.medical-record',['record'=> $record]);
@@ -265,7 +271,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     Action::make('sms')
                     ->label('SEND SMS')
                     ->icon('heroicon-s-chat-bubble-left-ellipsis')
-                    ->color('info')
+
                     ->size('lg')
                     ->requiresConfirmation()
                     ->fillForm(function (Model $record) {
@@ -334,7 +340,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
                     ->tooltip('NOTIFY USER BP STATUS BY SENDING EMAIL')
                     ->label('SEND BP EMAIL ALERT')
                     ->icon('heroicon-s-exclamation-circle')
-                    ->color('info')
+
                     ->size('lg')
                     ->requiresConfirmation()
                    ->action(function (Model $record) {
@@ -347,7 +353,7 @@ class ListMedicalRecord extends Component implements HasForms, HasTable
 
 
 
-                    Tables\Actions\DeleteAction::make()->label('DELETE'),
+                    Tables\Actions\DeleteAction::make()->label('DELETE')->color('gray'),
                 ])->hidden(function (Model $record) {
 
 

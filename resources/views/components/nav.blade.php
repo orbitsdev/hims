@@ -88,6 +88,25 @@
                     </a>
                 </li>
                 <li>
+
+
+                    <a href="{{route('reports')}}"
+                    class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                'reports',
+
+
+
+                ])}}">
+                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+
+                {{-- <i class="fa-solid fa-lightbulb "></i> --}}
+                <i class="fa-solid fa-print text-2xl"></i>
+
+                {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
+                PRINT REPORTS
+            </a>
+        </li>
+                <li>
                     <a href="{{route('users')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['users','user-create','user-edit'])}}">
                         {{-- <svg class="h-6 w-6 shrink-0 text-tory-blue-600" fill="none" viewBox="0 0 24 24"
@@ -249,22 +268,6 @@
                     </a>
                 </li> --}}
 
-
-                <a href="{{route('reports')}}"
-                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
-                'reports',
-
-
-
-                ])}}">
-                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
-
-                {{-- <i class="fa-solid fa-lightbulb "></i> --}}
-                <i class="fa-solid fa-print text-2xl"></i>
-
-                {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
-                REPORTS
-            </a>
         </li>
             </ul>
         </li>
@@ -288,6 +291,29 @@
                        DASHBOARD
                     </a>
                 </li>
+
+
+                <li>
+
+
+                    <a href="{{route('reports')}}"
+                    class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
+                'reports',
+
+
+
+                ])}}">
+                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
+
+                {{-- <i class="fa-solid fa-lightbulb "></i> --}}
+                <i class="fa-solid fa-print text-2xl"></i>
+
+                {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
+                PRINT REPORTS
+            </a>
+        </li>
+
+
                 <li>
                     <a href="{{route('students')}}"
                         class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),['students','create-student','edit-student','view-student'])}}">
@@ -400,21 +426,7 @@
                             SUGGESTION
                         </a>
                     </li>
-                    <a href="{{route('reports')}}"
-                class="{{RouteManager::isCurrentPage(Session::get('current_route_name'),[
-                'reports',
 
-
-
-                ])}}">
-                {{-- <i class="fa-solid fa-building-columns text-2xl"></i> --}}
-
-                {{-- <i class="fa-solid fa-lightbulb "></i> --}}
-                <i class="fa-solid fa-print text-2xl"></i>
-
-                {{-- <i class="fa-solid fa-briefcase-medical "></i> --}}
-                REPORTS
-            </a>
 
                 </ul>
             </li>

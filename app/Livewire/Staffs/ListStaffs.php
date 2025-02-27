@@ -34,11 +34,11 @@ class ListStaffs extends Component implements HasForms, HasTable
         return $table
             ->query(Staff::query())
             ->columns([
-                ImageColumn::make('photo')
+                ImageColumn::make('user.profile_photo_path')
                 ->disk('public')
-                ->label('PHOTO')
+                ->label('Profile')
                 ->width(60)->height(60)
-                ->url(fn (Staff $record): null|string => $record->photo ?  Storage::disk('public')->url($record->photo) : null)
+
                 ->defaultImageUrl(url('/images/placeholder-image.jpg'))
                 ->openUrlInNewTab()
                 ->circular(),

@@ -1,7 +1,7 @@
 <div class="flex w-full bg-gray-100 h-full p-6">
     <!-- Image Section -->
     <a href="{{ $record->user->getImage() }}" class="h-96 w-96 mb-16 mr-6" target="_blank">
-        <img class="object-cover h-full w-full" src="{{ $record->getImage() }}" alt="Profile Image">
+        <img class="object-cover h-full w-full" src="{{ $record->user->getImage() }}" alt="Profile Image">
     </a>
 
     <!-- Details Section -->
@@ -29,7 +29,7 @@
             </dl>
         </div>
 
-     
+
         @if ($record->personalDetail)
             <x-personal-detail :record="$record->personalDetail" />
         @endif

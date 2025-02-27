@@ -17,20 +17,36 @@
 
         <!-- Student Information -->
         <h3 class="text-xl font-semibold mb-4">Personal Information</h3>
-        <p class="text-md"><span class="font-medium">Full Name:</span>
-            {{ $record->personalDetail->first_name ?? 'N/A' }}
-            {{ $record->personalDetail->middle_name ?? '' }}
-            {{ $record->personalDetail->last_name ?? 'N/A' }}
-        </p>
-        <p class="text-md"><span class="font-medium">Maiden Name:</span> {{ $record->personalDetail->maiden_name ?? 'N/A' }}</p>
-        <p class="text-md"><span class="font-medium">Age:</span> {{ $record->personalDetail->age ?? 'N/A' }}</p>
-        <p class="text-md"><span class="font-medium">Civil Status:</span> {{ $record->personalDetail->civil_status ?? 'N/A' }}</p>
-        <p class="text-md"><span class="font-medium">Date of Birth:</span>
-            {{ $record->personalDetail->birth_date ? \Carbon\Carbon::parse($record->personalDetail->birth_date)->format('F d, Y') : 'N/A' }}
-        </p>
-        <p class="text-md"><span class="font-medium">Birth Place:</span> {{ $record->personalDetail->birth_place ?? 'N/A' }}</p>
-        <p class="text-md"><span class="font-medium">Address:</span> {{ $record->personalDetail->address ?? 'N/A' }}</p>
-        <p class="text-md"><span class="font-medium">Phone:</span> {{ $record->personalDetail->phone ?? 'N/A' }}</p>
+
+        <!-- Student Details with Profile Image on the Right -->
+        <div class="grid grid-cols-2 gap-4 items-start">
+            <!-- Left Side - Student Details -->
+            <div>
+                <p class="text-md"><span class="font-medium">Full Name:</span>
+                    {{ $record->personalDetail->first_name ?? 'N/A' }}
+                    {{ $record->personalDetail->middle_name ?? '' }}
+                    {{ $record->personalDetail->last_name ?? 'N/A' }}
+                </p>
+               
+                <p class="text-md"><span class="font-medium">Age:</span> {{ $record->personalDetail->age ?? 'N/A' }}</p>
+                <p class="text-md"><span class="font-medium">Civil Status:</span> {{ $record->personalDetail->civil_status ?? 'N/A' }}</p>
+                <p class="text-md"><span class="font-medium">Date of Birth:</span>
+                    {{ $record->personalDetail->birth_date ? \Carbon\Carbon::parse($record->personalDetail->birth_date)->format('F d, Y') : 'N/A' }}
+                </p>
+                <p class="text-md"><span class="font-medium">Birth Place:</span> {{ $record->personalDetail->birth_place ?? 'N/A' }}</p>
+                <p class="text-md"><span class="font-medium">Address:</span> {{ $record->personalDetail->address ?? 'N/A' }}</p>
+                <p class="text-md"><span class="font-medium">Phone:</span> {{ $record->personalDetail->phone ?? 'N/A' }}</p>
+            </div>
+
+            <!-- Right Side - Profile Image (Aligned) -->
+            @if ($record->user->profile_photo_path)
+                <div class="flex justify-center">
+                    <img src="{{ $record->user->getImage() }}"
+                        alt="Student Photo"
+                        class="w-32 h-32 object-cover rounded-md border">
+                </div>
+            @endif
+        </div>
 
         <!-- Academic Information -->
         <h3 class="text-xl font-semibold mt-6 mb-4">Academic Information</h3>
@@ -38,14 +54,6 @@
         <p class="text-md"><span class="font-medium">Department:</span> {{ $record->department?->name ?? 'N/A' }}</p>
         <p class="text-md"><span class="font-medium">Course:</span> {{ $record->course?->name ?? 'N/A' }}</p>
         <p class="text-md"><span class="font-medium">Section:</span> {{ $record->section?->name ?? 'N/A' }}</p>
-
-        <!-- Student Photo -->
-        @if ($record->image)
-            <div class="mt-6">
-                <h3 class="text-xl font-semibold mb-4">Student Photo</h3>
-                <img src="{{ asset($record->image) }}" alt="Student Photo" class="w-32 h-32 object-cover rounded-md border">
-            </div>
-        @endif
     </div>
 </div>
 

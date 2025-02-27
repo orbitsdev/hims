@@ -17,14 +17,30 @@
 
             <!-- Patient Information -->
             <h3 class="text-xl font-semibold mb-4">Patient Information</h3>
-            <p class="text-md"><span class="font-medium">Full Name:</span> {{ $record?->first_name }} {{ $record?->middle_name }} {{ $record?->last_name }}</p>
-            <p class="text-md"><span class="font-medium">Age:</span> {{ $record->age ?? 'N/A' }}</p>
-            <p class="text-md"><span class="font-medium">Date of Birth:</span>
-                {{ $record?->birth_date ? \Carbon\Carbon::parse($record?->birth_date)->format('F d, Y') : 'N/A' }}
-            </p>
-            <p class="text-md"><span class="font-medium">Phone:</span> {{ $record->phone ?? 'N/A' }}</p>
-            <p class="text-md"><span class="font-medium">Email:</span> {{ $record->email ?? 'N/A' }}</p>
-            <p class="text-md"><span class="font-medium">Address:</span> {{ $record->address ?? 'N/A' }}</p>
+
+            <!-- Patient Details with Profile Image in a Proper 2x2 Layout -->
+            <div class="grid grid-cols-2 gap-4 items-start">
+                <!-- Left Side - Patient Details -->
+                <div>
+                    <p class="text-md"><span class="font-medium">Full Name:</span> {{ $record?->first_name }} {{ $record?->middle_name }} {{ $record?->last_name }}</p>
+                    <p class="text-md"><span class="font-medium">Age:</span> {{ $record->age ?? 'N/A' }}</p>
+                    <p class="text-md"><span class="font-medium">Date of Birth:</span>
+                        {{ $record?->birth_date ? \Carbon\Carbon::parse($record?->birth_date)->format('F d, Y') : 'N/A' }}
+                    </p>
+                    <p class="text-md"><span class="font-medium">Phone:</span> {{ $record->phone ?? 'N/A' }}</p>
+                    <p class="text-md"><span class="font-medium">Email:</span> {{ $record->email ?? 'N/A' }}</p>
+                    <p class="text-md"><span class="font-medium">Address:</span> {{ $record->address ?? 'N/A' }}</p>
+                </div>
+
+                <!-- Right Side - Profile Image (Centered) -->
+                @if ($record->user->profile_photo_path)
+                    <div class="flex justify-center">
+                        <img src="{{ asset('storage/' . $record->user->profile_photo_path) }}"
+                            alt="Patient Photo"
+                            class="w-32 h-32 object-cover rounded-md border">
+                    </div>
+                @endif
+            </div>
 
             <!-- Medical Examination Table -->
             <h3 class="text-xl font-semibold mt-6 mb-4">Medical Examination</h3>
@@ -86,5 +102,4 @@
             document.body.innerHTML = originalContents;
         }
     </script>
-
 </div>

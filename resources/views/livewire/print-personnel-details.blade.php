@@ -17,16 +17,24 @@
 
         <!-- Personnel Information -->
         <h3 class="text-xl font-semibold mb-4">Personnel Information</h3>
-        <p class="text-md"><span class="font-medium">Full Name:</span> {{ $record->user->name ?? 'N/A' }}</p>
-        <p class="text-md"><span class="font-medium">Department:</span> {{ $record->department->name ?? 'N/A' }}</p>
 
-        <!-- Personnel Photo -->
-        @if ($record->image)
-            <div class="mt-6">
-                <h3 class="text-xl font-semibold mb-4">Personnel Photo</h3>
-                <img src="{{ asset($record->image) }}" alt="Personnel Photo" class="w-32 h-32 object-cover rounded-md border">
+        <!-- Personnel Details with Profile Image in a Proper 2x2 Layout -->
+        <div class="grid grid-cols-2 gap-4 items-start">
+            <!-- Left Side - Personnel Details -->
+            <div>
+                <p class="text-md"><span class="font-medium">Full Name:</span> {{ $record->user->name ?? 'N/A' }}</p>
+                <p class="text-md"><span class="font-medium">Department:</span> {{ $record->department->name ?? 'N/A' }}</p>
             </div>
-        @endif
+
+            <!-- Right Side - Profile Image (Aligned) -->
+            @if ($record->user->profile_photo_path)
+                <div class="flex justify-center">
+                    <img src="{{ $record->user->getImage() }}"
+                        alt="Personnel Photo"
+                        class="w-32 h-32 object-cover rounded-md border">
+                </div>
+            @endif
+        </div>
     </div>
 </div>
 

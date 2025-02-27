@@ -597,7 +597,7 @@ class FilamentForm extends Controller
                         ...FilamentForm::personalDetailForm()
                     ]),
 
-                ]),
+                ])->skippable(),
 
 
 
@@ -648,23 +648,17 @@ class FilamentForm extends Controller
             Wizard::make([
                 Wizard\Step::make('STAFF DETAILS')
                     ->schema([
-                        Section::make('')
-                        ->columns([
-                            'sm' => 3,
-                            'xl' => 6,
-                            '2xl' => 9,
-                        ])
-                        ->schema([
 
 
-                            FileUpload::make('photo')
-                                ->disk('public')
-                                ->directory('staffs')
-                                ->image()
-                                ->imageEditor()
-                                // ->required()
-                                ->columnSpanFull()
-                                ->label('PHOTO'),
+
+                            // FileUpload::make('photo')
+                            //     ->disk('public')
+                            //     ->directory('staffs')
+                            //     ->image()
+                            //     ->imageEditor()
+                            //     // ->required()
+                            //     ->columnSpanFull()
+                            //     ->label('PHOTO'),
                             Section::make('')
                                 ->columns([
                                     'sm' => 3,
@@ -765,14 +759,16 @@ class FilamentForm extends Controller
                                 ]),
 
 
-                        ]),
+
                     ]),
                 Wizard\Step::make('Personal Details')
                     ->schema([
                         ...FilamentForm::personalDetailForm()
                     ]),
 
-                ]),
+                ])
+                ->skippable()
+                ,
 
 
 

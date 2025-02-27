@@ -4,6 +4,7 @@
 use App\Livewire\Reports;
 use App\Livewire\Dashboard;
 use App\Livewire\EventList;
+use App\Livewire\PrintStaff;
 use App\Livewire\QueueMonitor;
 use App\Livewire\RoleSelection;
 use App\Livewire\AdminDashboard;
@@ -42,6 +43,7 @@ use App\Livewire\Records\CreateRecord;
 use App\Livewire\Students\EditStudent;
 use App\Livewire\Students\ViewStudent;
 use App\Livewire\ViewSendNotification;
+use App\Livewire\PrintEmergencyContact;
 use App\Livewire\PrintPersonnelDetails;
 use App\Livewire\Sections\ListSections;
 use App\Livewire\Students\ListStudents;
@@ -49,6 +51,7 @@ use App\Livewire\Symptoms\ListSymptoms;
 use Filament\Tables\Actions\EditAction;
 use App\Livewire\Emergency\ListContacts;
 use App\Livewire\ListBloodPressureLevel;
+use App\Livewire\PrintEmergencyContacts;
 use App\Livewire\PublicEmergencyContact;
 use App\Livewire\Students\CreateStudent;
 use App\Livewire\User\CreateStudentForm;
@@ -262,6 +265,10 @@ Route::middleware([
     Route::get('/print-medical-record/{record}', PrintMedicalRecord::class)->name('print-medical-record');
     Route::get('/print-student/{record}', PrintStudentDetails::class)->name('print-student');
     Route::get('/print-personnel/{record}', PrintPersonnelDetails::class)->name('print-personnel');
+    Route::get('/print-staff/{record}', PrintStaff::class)->name('print-staff');
+    Route::get('/print-emergency-contacts', PrintEmergencyContact::class)->name('print-emergency-contacts');
+    // Route::get('/print-emergency-contacts', PrintEmergencyContacts::class)->name('print-emergency-contacts');
+
 
 
     Route::middleware(['can:student-and-personnel'])->group(function () {

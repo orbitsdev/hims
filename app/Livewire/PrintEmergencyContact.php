@@ -5,19 +5,19 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\EmergencyContact;
 
-class Reports extends Component
+class PrintEmergencyContact extends Component
 {
-
-
     public $contacts;
 
-    public function mount(){
+    public function mount()
+    {
+        // Fetch all emergency contacts
         $this->contacts = EmergencyContact::orderBy('name', 'asc')->get();
     }
-
-
     public function render()
     {
-        return view('livewire.reports');
+        return view('livewire.print-emergency-contact',[
+            'contacts' => $this->contacts
+        ]);
     }
 }

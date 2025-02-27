@@ -137,7 +137,7 @@ class StudentList extends Component implements HasForms, HasTable
                 ->outlined()
                 ->icon('heroicon-s-printer')
                 ->label('Print Details')
-                ->openUrlInNewTab()
+                 ->openUrlInNewTab()
                 ->url(function(Model $record){
                     return route('print-student',['record'=> $record]);
                 }),
@@ -167,6 +167,7 @@ class StudentList extends Component implements HasForms, HasTable
 
 
             ])
+            ->openRecordUrlInNewTab()
             ->bulkActions([
 
              ]);

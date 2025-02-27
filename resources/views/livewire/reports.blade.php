@@ -53,21 +53,15 @@
 
             <div x-show="activeTab === 'emergency_contacts'" x-cloak>
                 <div class="container mx-auto py-6 px-4 max-w-5xl">
-                    <!-- Print Button -->
-                    <div class="text-right mb-4">
-                        <a href="{{ route('print-emergency-contacts') }}" target="_blank"
-                            class="px-4 py-2 bg-gray-600 text-white rounded">
-                            <i class="fas fa-print"></i> Go To Full Page For Print
-                        </a>
-                    </div>
+                   
 
                     <!-- Emergency Contact List -->
                     <div id="printArea" class="border p-6 bg-white">
                         <!-- Header with Logo -->
-                        <div class="text-center mb-6">
-                            <img src="{{ asset('images/sksu1.png') }}" alt="University Logo" class="mx-auto w-20">
-                            <h2 class="text-2xl font-bold">Emergency Contacts List</h2>
-                            <p class="text-sm text-gray-600">Generated on {{ now()->format('F d, Y') }}</p>
+                        <div class="text-right mb-4">
+                            <button onclick="printDiv('printArea')" class="px-4 py-2 bg-gray-600 text-white rounded">
+                                <i class="fas fa-print"></i> Print Emergency Contacts
+                            </button>
                         </div>
 
                         <!-- Emergency Contacts Table -->
@@ -108,5 +102,14 @@
             </div>
         </div>
     </div>
-
+    <script>
+        function printDiv(divName) {
+            var printContents = document.getElementById(divName).innerHTML;
+            var originalContents = document.body.innerHTML;
+            document.body.innerHTML = printContents;
+            window.print();
+            document.body.innerHTML = originalContents;
+            location.reload();
+        }
+    </script>
 </x-admin-layout>
